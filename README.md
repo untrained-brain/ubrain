@@ -64,4 +64,5 @@ code by hand. The science is in the textbook *The Untrained Brain* (in preparati
 
 Copyright 2026 Hong Jeong. The examples, documentation and profiles are under the
 Apache License 2.0 (`LICENSE`); the ubrain package is distributed compiled, under
-`LICENSE-BINARY` (free for education, research and personal non-commercial use).
+`LICENSE-BINARY`: free for any use, commercial included; you may ship it unmodified inside
+what you build, but not republish it on its own, modify it or reverse-engineer it.
