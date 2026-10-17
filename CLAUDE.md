@@ -7,7 +7,8 @@ itself is distributed compiled; its source is not part of this repository.
 ```
 examples/   01_bandit, 02_memory, 03_clip_words, g1_walker, g1_explorer
 docs/       quickstart, concepts, labs (five), teachers
-wheels/     the compiled ubrain package, one wheel per platform and Python version
+wheels/     the compiled ubrain package: Windows x64, macOS (Apple Silicon and Intel),
+            Linux x86_64 (glibc 2.28+), each for Python 3.11, 3.12 and 3.13
 ```
 
 - `uv run examples/<name>.py` installs ubrain from `wheels/` and runs; extras:
