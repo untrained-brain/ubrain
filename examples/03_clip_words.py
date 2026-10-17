@@ -33,6 +33,8 @@ def main() -> None:
     from ubrain.extras.clip import CLIP
     clip = CLIP("text")
     vocab = sorted(set(WORDS) | set(SENTENCE))
+    print(f"certifying CLIP's codes for {len(vocab)} words (about half a minute on a laptop) ...",
+          flush=True)
     print(certify(clip, vocab, d=512, ks=(4, 8, 16), n_trials=2000).summary())
     sense = Sense.fit(clip, vocab, d=512)
     body = Manifest("example/listener", "none", (
