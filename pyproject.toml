@@ -1,0 +1,17 @@
+# The ubrain labs: examples, documentation and the compiled ubrain package (wheels/).
+# `uv run examples/01_bandit.py` installs everything on first use.
+
+[project]
+name = "ubrain-labs"
+version = "0.6.0"
+description = "Examples, labs and manual for ubrain, the Untrained Brain"
+requires-python = "==3.12.*"
+dependencies = ["ubrain==0.6.0.dev0"]
+
+[project.optional-dependencies]
+vision = ["ubrain[vision]==0.6.0.dev0"]      # CLIP as a sense (torch, transformers)
+video = ["imageio[ffmpeg]>=2.30"]            # g1_explorer.py --record
+
+[tool.uv]
+package = false
+find-links = ["wheels"]                      # the compiled ubrain package ships here

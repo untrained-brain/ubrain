@@ -1,0 +1,32 @@
+ubrain Binary Licence (pre-release)
+Copyright 2026 Hong Jeong. All rights reserved.
+
+This licence covers the compiled ubrain package (the wheel files, and the "ubrain"
+Python package they install). It does not cover the examples, documentation and
+profiles in this repository, which are under the Apache License 2.0 (LICENSE).
+
+1. Permission. You may install and use the compiled ubrain package, free of charge,
+   for education, research and personal non-commercial projects, and you may
+   publish results, programs and teaching material that use it.
+
+2. Restrictions. You may not:
+   (a) redistribute the compiled package, or make it available to others, except
+       inside your own course, lab or research group for the purposes in clause 1;
+   (b) decompile, disassemble or otherwise reverse-engineer it, or attempt to
+       recover its source code, except to the extent the law expressly permits
+       despite this restriction;
+   (c) use it in a commercial product or service without written permission from
+       the copyright holder.
+
+3. The laws the package implements are published in the author's papers and
+   textbook; this licence restricts the use of this implementation, not of those
+   ideas.
+
+4. No warranty. The package is provided "as is", without warranty of any kind,
+   express or implied. The copyright holder is not liable for any claim, damages or
+   other liability arising from its use.
+
+5. This licence ends automatically if you break its terms. Pre-release versions may
+   change their licence at a later release.
+
+For any use not covered here, contact the copyright holder.
