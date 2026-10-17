@@ -35,9 +35,38 @@ only one.)
 The body is a separate package, [ubrain-mujoco](https://github.com/untrained-brain/ubrain-mujoco):
 clone it next to `ubrain` and run `uv sync` in it once.
 
+## Use it in your own code
+
+ubrain ships as compiled wheels in `wheels/` (Windows, macOS, Linux; Python 3.11-3.13).
+Install it into your project from this folder -- with uv, record the folder in your
+project's `pyproject.toml` and add ubrain:
+
+```toml
+[tool.uv]
+find-links = ["/path/to/ubrain/wheels"]
+```
+
+```bash
+uv add "ubrain==0.6.0.dev0"
+# or with pip:  pip install "ubrain==0.6.0.dev0" --find-links /path/to/ubrain/wheels
+```
+
+```python
+from ubrain import Brain, Channel, Manifest, profile
+body = Manifest("my-app", "v1", (Channel("situation", "event", 3),
+                                 Channel("reward", "reward", 1),
+                                 Channel("action", "choice", 2)))
+brain = Brain(profile("player"), body)
+action = brain.tick({"situation": [1, 0, 0], "reward": None})["action"]
+```
+
+The full guide -- profiles, your own anatomy, plugging in a model, connecting a robot --
+is [Using ubrain in your own code](docs/using.md).
+
 ## The manual
 
 - [Quickstart](docs/quickstart.md): install, run, what you are looking at
+- [Using ubrain in your own code](docs/using.md): install from the wheels, write your own
 - [Concepts](docs/concepts.md): regions, wiring, bodies, codecs and certificates
 - [Labs](docs/labs/README.md): five laboratory sessions with exercises
 - [For teachers](docs/teachers.md): running the labs with a class

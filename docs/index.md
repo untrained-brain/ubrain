@@ -4,6 +4,7 @@
 plugs into trained AI models as senses and into bodies as its interface.
 
 - [Quickstart](quickstart.md) -- install and run in five minutes
+- [Using ubrain in your own code](using.md) -- install from the wheels, write your own
 - [Concepts](concepts.md) -- regions, wiring, bodies, codecs and certificates
 - [Labs](labs/README.md) -- five laboratory sessions with exercises
 - [For teachers](teachers.md) -- running the labs with a class
