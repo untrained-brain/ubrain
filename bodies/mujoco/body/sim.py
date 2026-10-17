@@ -257,18 +257,42 @@ class MujocoSim:
         self._renderer.update_scene(self.data, camera=HEAD_CAMERA)
         return np.asarray(self._renderer.render()).copy()
 
+    def render_chase(self, width: int = 640, height: int = 360, *, body: str = "torso_link",
+                     distance: float = 3.6, azimuth: float = 15.0, elevation: float = -18.0) -> np.ndarray:
+        """RGB uint8 (height, width, 3) from a camera that follows the robot from behind
+        and to one side -- for people watching (videos, demos), never for the brain:
+        no reply carries it. Its own renderer, so the head camera's is undisturbed."""
+        r = getattr(self, "_chase_renderer", None)
+        if r is not None and (r.height, r.width) != (height, width):
+            r.close()
+            r = None
+        if r is None:
+            r = mujoco.Renderer(self.model, height=height, width=width)
+            self._chase_renderer, self._renderer_thread = r, threading.get_ident()
+            cam = mujoco.MjvCamera()
+            cam.type = mujoco.mjtCamera.mjCAMERA_TRACKING
+            cam.trackbodyid = mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_BODY, body)
+            cam.distance, cam.azimuth, cam.elevation = distance, azimuth, elevation
+            self._chase_cam = cam
+        r.update_scene(self.data, camera=self._chase_cam)
+        return np.asarray(r.render()).copy()
+
     def close_renderer(self) -> None:
         """Release the OpenGL context. Must run on the thread that created it:
         a GLFW context destroyed from another thread aborts the process, so a
         foreign-thread call is refused (and reported) rather than attempted.
         The bridge closes the renderer at the end of each client session, in
         its own serving thread, so nothing is left for shutdown."""
-        if self._renderer is None:
+        if self._renderer is None and getattr(self, "_chase_renderer", None) is None:
             return
         if threading.get_ident() != self._renderer_thread:
             raise RuntimeError("close_renderer() must be called on the thread that rendered")
-        self._renderer.close()
-        self._renderer = None
+        if self._renderer is not None:
+            self._renderer.close()
+            self._renderer = None
+        if getattr(self, "_chase_renderer", None) is not None:
+            self._chase_renderer.close()
+            self._chase_renderer = None
 
     def close(self) -> None:
         self.close_renderer()

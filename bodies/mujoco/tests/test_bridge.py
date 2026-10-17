@@ -94,3 +94,25 @@ def test_image_request_renders_or_is_reported():
             assert img.shape == (48, 64, 3)
     finally:
         srv.shutdown()
+
+
+def test_the_follow_camera_records_frames_and_their_ticks(tmp_path):
+    """--record-chase: raw frames and their ticks, written when the session ends;
+    nothing of it reaches a reply."""
+    import json
+    rec = str(tmp_path / "walk")
+    srv = BodyServer(port=0, seed=0, record_chase=rec, chase_every=2).start()
+    try:
+        with BodyClient(srv.host, srv.port) as c:
+            c.reset(0)
+            for _ in range(8):
+                s = c.act("stand")
+                assert "chase" not in json.dumps(s)
+    except RuntimeError as e:
+        srv.shutdown()
+        pytest.skip(f"renderer unavailable: {e}")
+    srv.shutdown()
+    meta = json.loads((tmp_path / "walk.json").read_text())
+    n = len(meta["ticks"])
+    assert n == 4 and all(t % 2 == 0 for t in meta["ticks"])
+    assert (tmp_path / "walk.rgb").stat().st_size == n * meta["width"] * meta["height"] * 3

@@ -6,10 +6,10 @@ name = "ubrain-labs"
 version = "0.6.0"
 description = "Examples, labs and manual for ubrain, the Untrained Brain"
 requires-python = ">=3.11,<3.14"           # the versions ubrain is compiled for
-dependencies = ["ubrain==0.6.0.dev1"]
+dependencies = ["ubrain==0.6.0.dev2"]
 
 [project.optional-dependencies]
-vision = ["ubrain[vision]==0.6.0.dev1"]      # CLIP as a sense (torch, transformers)
+vision = ["ubrain[vision]==0.6.0.dev2"]      # CLIP as a sense (torch, transformers)
 video = ["imageio[ffmpeg]>=2.30"]            # g1_explorer.py --record
 
 [tool.uv]

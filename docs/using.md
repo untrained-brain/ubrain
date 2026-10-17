@@ -26,21 +26,21 @@ find-links = ["/path/to/ubrain/wheels"]
 Then add ubrain and check it:
 
 ```bash
-uv add "ubrain==0.6.0.dev1"
+uv add "ubrain==0.6.0.dev2"
 uv run python -c "import ubrain; print(ubrain.__version__)"
 ```
 
 Keep `find-links` in `pyproject.toml` (rather than passing `--find-links` to `uv add`
 once): uv needs it every time it re-solves your dependencies, for example when you
-add another package. For CLIP as a sense: `uv add "ubrain[vision]==0.6.0.dev1"`.
+add another package. For CLIP as a sense: `uv add "ubrain[vision]==0.6.0.dev2"`.
 
 **With pip**, in a virtual environment:
 
 ```bash
-pip install "ubrain==0.6.0.dev1" --find-links /path/to/ubrain/wheels
+pip install "ubrain==0.6.0.dev2" --find-links /path/to/ubrain/wheels
 ```
 
-(Version 0.6.0.dev1 is a pre-release, so name it exactly as above. When ubrain is on
+(Version 0.6.0.dev2 is a pre-release, so name it exactly as above. When ubrain is on
 PyPI, `pip install ubrain` will be enough.)
 
 ## 2. A brain in a few lines

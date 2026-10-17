@@ -10,6 +10,7 @@ an optional gallery scene, and the tick bridge -- a small TCP server a brain tal
 uv sync                                          # once: MuJoCo 3.12, numpy, the menagerie
 uv run python -m body.bridge --port 5555         # serve the body
 uv run python -m body.bridge --head-camera --gallery scenes/gallery_cc0 --viewer
+uv run python -m body.bridge --record-chase out/walk     # a camera following the robot -> out/walk.rgb + .json (videos)
 uv run pytest
 ```
 

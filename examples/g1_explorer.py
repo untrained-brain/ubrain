@@ -54,69 +54,126 @@ def fovea(frame: np.ndarray) -> tuple[np.ndarray, float, str]:
 
 
 class Recorder:
-    """The robot's-eye video: each glance becomes a frame -- the head camera with the
-    attended half boxed, what it takes the picture to be, and the episode so far as
-    thumbnails -- then a closing sequence of the recall, slot by slot. MP4 through
-    imageio[ffmpeg] when installed, else an animated GIF (Pillow alone)."""
+    """The demonstration video. While walking it keeps each glance (the head camera's
+    frame, the attended half, what CLIP takes it for, the episode so far) with the
+    body's tick. At the end it composes, at 25 frames a second, the robot seen from a
+    camera following it (recorded by the body: --record-chase) beside its mind: the
+    eye with its attended half boxed, CLIP's guess, and the memory filling up; then
+    the recall, slot by slot. Without the follow camera it writes the eye-only video.
+    MP4 through imageio[ffmpeg] when installed, else an animated GIF (Pillow alone)."""
 
-    W, H, EYE = 1280, 720, 560
+    W, H = 1600, 900
+    FPS = 25
 
     def __init__(self, pictures, names):
-        from PIL import Image, ImageFont
-        self.Image = Image
-        self.thumbs = {n: Image.open(p).convert("RGB").resize((96, 96)) for p, n in zip(pictures, names)}
+        from PIL import Image, ImageDraw, ImageFont
+        self.Image, self.ImageDraw = Image, ImageDraw
+        self.pics = {n: Image.open(p).convert("RGB") for p, n in zip(pictures, names)}
         try:
-            self.font = ImageFont.load_default(size=26)
-            self.small = ImageFont.load_default(size=18)
+            self.big = ImageFont.load_default(size=30)
+            self.font = ImageFont.load_default(size=24)
+            self.small = ImageFont.load_default(size=15)
         except TypeError:                                  # Pillow < 10.1
-            self.font = self.small = ImageFont.load_default()
-        self.frames = []
+            self.big = self.font = self.small = ImageFont.load_default()
+        self.glances: list[dict] = []
+        self.written: list[str] = []
+        self.recalled: list[str] = []
+        self.frames: list = []
 
-    def _canvas(self):
-        from PIL import ImageDraw
-        im = self.Image.new("RGB", (self.W, self.H), (18, 22, 30))
-        return im, ImageDraw.Draw(im)
-
-    def _memory(self, im, d, stored, top=360, title="memory (one episode)"):
-        d.text((640, top - 40), title, fill=(200, 200, 200), font=self.small)
-        for i, n in enumerate(stored):
-            x, y = 640 + (i % 6) * 104, top + (i // 6) * 130
-            im.paste(self.thumbs[n], (x, y))
-            d.text((x, y + 100), f"{i}: {n}", fill=(220, 220, 220), font=self.small)
-
-    def glance(self, frame, side, guess, run, stored, t):
-        im, d = self._canvas()
-        eye = self.Image.fromarray(frame).resize((self.EYE, self.EYE))
-        im.paste(eye, (40, 80))
-        x0 = 40 if side == "left" else 40 + self.EYE // 2
-        d.rectangle([x0, 80, x0 + self.EYE // 2, 80 + self.EYE], outline=(255, 210, 0), width=4)
-        d.text((40, 30), f"the G1's head camera   t = {t / 50:5.1f} s", fill=(230, 230, 230), font=self.font)
-        d.text((640, 90), "looks like:", fill=(180, 180, 180), font=self.font)
-        d.text((640, 130), f"{guess}  ({run}/{STEADY})", fill=(255, 210, 0), font=self.font)
-        im.paste(self.thumbs[guess].resize((150, 150)), (900, 80))
-        self._memory(im, d, stored)
-        self.frames.append(np.asarray(im))
+    def glance(self, frame, side, guess, run, stored, tick):
+        self.glances.append({"tick": int(tick), "frame": frame, "side": side, "guess": guess,
+                             "run": run, "stored": list(stored)})
 
     def recall(self, stored, recalled):
-        for k in range(len(recalled) + 1):
-            im, d = self._canvas()
-            d.text((40, 30), "walk over. the cue recalls each slot of the episode:", fill=(230, 230, 230),
-                   font=self.font)
-            self._memory(im, d, stored, top=120, title="written while walking")
-            self._memory(im, d, recalled[:k], top=430, title="recalled")
-            for _ in range(3):
-                self.frames.append(np.asarray(im))
+        self.written, self.recalled = list(stored), list(recalled)
 
-    def save(self, path: Path, fps: int = 5) -> Path:
+    # -- drawing ---------------------------------------------------------------
+    def _thumb(self, name, size):
+        return self.pics[name].resize((size, size))
+
+    def _strip(self, im, d, names, y, size=66, title="memory: one episode, written as it walks"):
+        d.text((40, y - 26), title, fill=(190, 190, 190), font=self.small)
+        for i, n in enumerate(names):
+            x = 40 + i * (size + 8)
+            im.paste(self._thumb(n, size), (x, y))
+            d.text((x, y + size + 2), f"{i}:{n}"[:11], fill=(210, 210, 210), font=self.small)
+
+    def _mind(self, im, d, g, x0=1040, y0=70, eye=360):
+        d.text((x0, y0 - 40), "the robot's eye", fill=(230, 230, 230), font=self.font)
+        im.paste(self.Image.fromarray(g["frame"]).resize((eye, eye)), (x0, y0))
+        bx = x0 if g["side"] == "left" else x0 + eye // 2
+        d.rectangle([bx, y0, bx + eye // 2, y0 + eye], outline=(255, 210, 0), width=4)
+        d.text((x0, y0 + eye + 14), "CLIP: looks like", fill=(180, 180, 180), font=self.font)
+        d.text((x0, y0 + eye + 46), f"{g['guess']}   ({g['run']}/{STEADY} steady)",
+               fill=(255, 210, 0), font=self.font)
+        im.paste(self._thumb(g["guess"], 120), (x0 + eye - 120, y0 + eye + 14))
+
+    def _walk_frame(self, chase, tick, g):
+        im = self.Image.new("RGB", (self.W, self.H), (18, 22, 30))
+        d = self.ImageDraw.Draw(im)
+        d.text((40, 24), f"Unitree G1 with an untrained brain   t = {tick / 50:5.1f} s",
+               fill=(235, 235, 235), font=self.big)
+        im.paste(self.Image.fromarray(chase).resize((960, 540)), (40, 70))
+        if g is not None:
+            self._mind(im, d, g)
+        self._strip(im, d, g["stored"] if g else [], 680)
+        return np.asarray(im)
+
+    def _recall_frames(self):
+        out = []
+        for k in range(len(self.recalled) + 1):
+            im = self.Image.new("RGB", (self.W, self.H), (18, 22, 30))
+            d = self.ImageDraw.Draw(im)
+            d.text((40, 24), "Walk over. A cue recalls each slot of the one episode:",
+                   fill=(235, 235, 235), font=self.big)
+            self._strip(im, d, self.written, 180, size=66, title="written while walking")
+            self._strip(im, d, self.recalled[:k], 420, size=66, title="recalled from the episode")
+            if k == len(self.recalled):
+                same = sum(a == b for a, b in zip(self.written, self.recalled))
+                d.text((40, 620), f"{same} of {len(self.written)} recalled exactly; seen once, never trained.",
+                       fill=(255, 210, 0), font=self.font)
+            hold = self.FPS * (3 if k == len(self.recalled) else 1) // 2
+            out += [np.asarray(im)] * hold
+        return out
+
+    def compose(self, chase_base: str | None) -> int:
+        """Build the frames; returns how many came from the follow camera."""
+        import json
+        meta = Path(chase_base + ".json") if chase_base else None
+        if meta is not None and meta.is_file():
+            info = json.loads(meta.read_text(encoding="utf-8"))
+            w, h, ticks = info["width"], info["height"], info["ticks"]
+            raw = np.fromfile(chase_base + ".rgb", dtype=np.uint8)
+            chase = raw.reshape(len(ticks), h, w, 3)
+            gi = -1
+            for i, tick in enumerate(ticks):
+                while gi + 1 < len(self.glances) and self.glances[gi + 1]["tick"] <= tick:
+                    gi += 1
+                self.frames.append(self._walk_frame(chase[i], tick, self.glances[gi] if gi >= 0 else None))
+            n_chase = len(ticks)
+        else:                                          # the eye alone, one frame per glance
+            for g in self.glances:
+                im = self.Image.new("RGB", (self.W, self.H), (18, 22, 30))
+                d = self.ImageDraw.Draw(im)
+                self._mind(im, d, g, x0=40, y0=70, eye=560)
+                self._strip(im, d, g["stored"], 760)
+                self.frames += [np.asarray(im)] * (self.FPS // 5)
+            n_chase = 0
+        self.frames += self._recall_frames()
+        return n_chase
+
+    def save(self, path: Path) -> Path:
         path = Path(path)
         try:
             import imageio.v2 as iio
-            iio.mimwrite(path.with_suffix(".mp4"), self.frames, fps=fps, macro_block_size=8)
+            # quality 5: about 5 MB for a 45-second walk at 1600x900, light enough for a web page
+            iio.mimwrite(path.with_suffix(".mp4"), self.frames, fps=self.FPS, macro_block_size=8,
+                         quality=5)
             return path.with_suffix(".mp4")
         except Exception:
-            ims = [self.Image.fromarray(f).resize((640, 360)) for f in self.frames]
+            ims = [self.Image.fromarray(f).resize((800, 450)) for f in self.frames[::5]]
             ims[0].save(path.with_suffix(".gif"), save_all=True, append_images=ims[1:],
-                        duration=int(1000 / fps), loop=0)
+                        duration=int(5000 / self.FPS), loop=0)
             return path.with_suffix(".gif")
 
 
@@ -151,7 +208,8 @@ def main(argv=None) -> int:
     print(certify(clip, pictures, d=D, ks=(4, 8, 12, 16, 21), n_trials=2000).summary(), flush=True)
 
     rec = Recorder(pictures, names) if a.record else None
-    proc, _ = _start_body(a.port, viewer=a.viewer, head_camera=True, gallery=True)
+    chase = str(Path(a.record).resolve()) + "_chase" if a.record else None
+    proc, _ = _start_body(a.port, viewer=a.viewer, head_camera=True, gallery=True, record_chase=chase)
     try:
         client = None
         for _ in range(50):
@@ -190,7 +248,7 @@ def main(argv=None) -> int:
                     senses["camera"] = half
                     stored.append(guess)
                 if rec is not None:
-                    rec.glance(frame, side, guess, run, stored, t)
+                    rec.glance(frame, side, guess, run, stored, state["tick"])
             if not state["upright"]:
                 print(f"fell at tick {t}", flush=True)
                 break
@@ -208,6 +266,11 @@ def main(argv=None) -> int:
             recalled.append(names[out["remembered"]])
         dt = time.perf_counter() - t0
         client.close()
+        if chase:                                  # the body writes its recording as the session ends
+            for _ in range(100):
+                if Path(chase + ".json").is_file():
+                    break
+                time.sleep(0.1)
     finally:
         kill_tree(proc)
 
@@ -222,7 +285,11 @@ def main(argv=None) -> int:
           "pictures in order")
     if rec is not None:
         rec.recall(stored, recalled)
-        print("video:", rec.save(Path(a.record)), f"({len(rec.frames)} frames)")
+        n_chase = rec.compose(chase)
+        print("video:", rec.save(Path(a.record)), f"({len(rec.frames)} frames, "
+              f"{n_chase} from the follow camera)")
+        for ext in (".rgb", ".json"):                  # the raw recording, now in the video
+            Path(chase + ext).unlink(missing_ok=True)
     return 0
 
 

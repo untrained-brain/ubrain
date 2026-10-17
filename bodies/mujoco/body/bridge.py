@@ -31,14 +31,22 @@ from body.sim import CONTROL_HZ, SIMULATOR, MujocoSim, gallery_layout
 
 __all__ = ["BodyServer", "main"]
 
+CHASE_W, CHASE_H = 640, 360          # the follow camera's frame size
+
 
 class BodyServer:
     """Owns one MujocoSim and serves it over TCP. `port=0` picks a free port."""
 
     def __init__(self, host: str = "127.0.0.1", port: int = 0, robot: str | RobotSpec = "g1",
                  entry: str | None = None, seed: int = 0, head_camera: bool = False,
-                 viewer: bool = False, gallery=None):
+                 viewer: bool = False, gallery=None, record_chase: str | None = None,
+                 chase_every: int = 2):
         self.spec = robots.get(robot)
+        # the follow camera's recording (for videos; never in a reply): raw RGB frames
+        # appended to <record_chase>.rgb, their ticks and size in <record_chase>.json
+        self._chase_path, self._chase_every = record_chase, max(1, int(chase_every))
+        self._chase_ticks: list[int] = []
+        self._chase_file = None
         self.sim = MujocoSim(self.spec, entry, seed=seed, head_camera=head_camera, gallery=gallery)
         self.ctl = Controller(self.sim)
         self.manifest = manifest(self.spec, self.sim.entry, gallery=self.sim.gallery)
@@ -140,11 +148,29 @@ class BodyServer:
                     self.sim.step(ctrl)
                     self.sim.clear_push()
                     self._heard, self._tone_next = self._tone_next, False
+                if self._chase_path and self.sim.tick % self._chase_every == 0:
+                    self._record_chase()
                 return self.state(msg.get("want_contact", False), msg.get("want_image", False),
                                   msg.get("image_size")), False
             return {"type": "bye"}, True
         except Exception as e:  # a malformed request must not kill the body
             return protocol.error(f"{type(e).__name__}: {e}"), False
+
+    def _record_chase(self) -> None:
+        frame = self.sim.render_chase(CHASE_W, CHASE_H)
+        if self._chase_file is None:
+            self._chase_file = open(self._chase_path + ".rgb", "wb")
+        self._chase_file.write(np.ascontiguousarray(frame).tobytes())
+        self._chase_ticks.append(int(self.sim.tick))
+
+    def _finish_chase(self) -> None:
+        if self._chase_file is None:
+            return
+        import json
+        self._chase_file.close()
+        self._chase_file = None
+        with open(self._chase_path + ".json", "w", encoding="utf-8") as f:
+            json.dump({"width": CHASE_W, "height": CHASE_H, "ticks": self._chase_ticks}, f)
 
     # -- viewer ------------------------------------------------------------
     @staticmethod
@@ -182,6 +208,7 @@ class BodyServer:
         finally:
             # The OpenGL context belongs to this thread; release it here, never
             # from shutdown() on another thread (that aborts the process).
+            self._finish_chase()
             self.sim.close_renderer()
 
     def serve_forever(self) -> None:
@@ -225,12 +252,16 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--entry", default=None)
     ap.add_argument("--head-camera", action="store_true")
     ap.add_argument("--viewer", action="store_true", help="show the body in MuJoCo's passive viewer")
+    ap.add_argument("--record-chase", default=None, metavar="PATH",
+                    help="record a camera following the robot (for videos): PATH.rgb + PATH.json")
+    ap.add_argument("--chase-every", type=int, default=2, help="record every N ticks (2: 25 fps)")
     ap.add_argument("--gallery", default=None,
                     help="a folder of .png pictures to stand along the walking line (the gallery scene)")
     a = ap.parse_args(argv)
     gallery = sorted(str(f) for f in Path(a.gallery).glob("*.png")) if a.gallery else None
     srv = BodyServer(a.host, a.port, robot=a.robot, entry=a.entry, seed=a.seed, head_camera=a.head_camera,
-                     viewer=a.viewer, gallery=gallery)
+                     viewer=a.viewer, gallery=gallery, record_chase=a.record_chase,
+                     chase_every=a.chase_every)
     print(f"body {srv.digest} ({SIMULATOR}/{srv.spec.name}) serving on {srv.host}:{srv.port} "
           f"(mujoco {srv.manifest['mujoco']}, menagerie {srv.manifest['menagerie_commit'][:8]})", flush=True)
     try:
