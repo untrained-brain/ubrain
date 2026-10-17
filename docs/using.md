@@ -136,14 +136,14 @@ brain = Brain(profile("observer"), body, codecs={"camera": sense})
 
 ## 5. Connect a robot
 
-A body that runs in its own process (the MuJoCo G1 from ubrain-mujoco) is reached
+A body that runs in its own process (the MuJoCo G1 in `bodies/mujoco`) is reached
 through `ubrain.bodies`:
 
 ```python
 from ubrain.bodies import BodyClient, start_body
 from ubrain import manifest_from_hello_03
 
-proc, port = start_body()                      # finds ubrain-mujoco beside your folder
+proc, port = start_body()          # finds bodies/mujoco (or set UBRAIN_BODY to the body's folder)
 body = BodyClient("127.0.0.1", port)
 manifest = manifest_from_hello_03(body.hello)
 ```

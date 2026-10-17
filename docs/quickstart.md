@@ -47,12 +47,10 @@ example says how to fetch it.
 
 ## 5. Put the brain in a robot
 
-The body is its own package. Clone it beside ubrain and set it up once:
+The body is in `bodies/mujoco`, with its own environment. Set it up once:
 
 ```bash
-cd ..
-git clone https://github.com/untrained-brain/ubrain-mujoco
-cd ubrain-mujoco && uv sync && cd ../ubrain
+cd bodies/mujoco && uv sync && cd ../..      # once: MuJoCo and the G1 (a few minutes)
 ```
 
 Then:

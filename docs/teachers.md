@@ -6,8 +6,7 @@
   [uv](https://docs.astral.sh/uv/getting-started/installation/). No GPU. About 3 GB of
   disk for labs 3-5 (torch and CLIP).
 - **Access.** While the repositories are private, add each student's GitHub account
-  to the `untrained-brain` organisation's `ubrain` and `ubrain-mujoco` repositories with
-  **read** access (Settings -> Collaborators and teams). After the public release no
+  to the `untrained-brain` organisation's `ubrain` repository with **read** access (Settings -> Collaborators and teams). After the public release no
   account is needed.
 - **The CLIP checkpoint** (labs 3 and 5) is fetched once per machine:
   `uv run --extra vision python -c "from huggingface_hub import snapshot_download; snapshot_download('openai/clip-vit-base-patch32')"`

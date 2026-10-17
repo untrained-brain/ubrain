@@ -32,8 +32,8 @@ only one.)
 | `g1_walker.py` | the brain in a Unitree G1 humanoid: it walks, predicts its body, learns to brace | the body |
 | `g1_explorer.py` | the G1 walks past a gallery of photos and remembers what it saw | the body, `--extra vision` |
 
-The body is a separate package, [ubrain-mujoco](https://github.com/untrained-brain/ubrain-mujoco):
-clone it next to `ubrain` and run `uv sync` in it once.
+The robot body ships in this repository, in `bodies/mujoco` (its own environment: MuJoCo,
+the G1, the photo gallery). Set it up once with `cd bodies/mujoco && uv sync`.
 
 ## Use it in your own code
 
@@ -95,3 +95,5 @@ Copyright 2026 Hong Jeong. The examples, documentation and profiles are under th
 Apache License 2.0 (`LICENSE`); the ubrain package is distributed compiled, under
 `LICENSE-BINARY`: free for any use, commercial included; you may ship it unmodified inside
 what you build, but not republish it on its own, modify it or reverse-engineer it.
+The robot body in `bodies/mujoco` is Apache-2.0, with third-party parts under their own
+licences (its `NOTICE`).

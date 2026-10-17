@@ -5,12 +5,10 @@ reflex from a cue.
 
 ## Setup (once)
 
-Clone the body beside ubrain and set it up:
+The body is in `bodies/mujoco`; set it up once, from the ubrain folder:
 
 ```bash
-cd ..
-git clone https://github.com/untrained-brain/ubrain-mujoco
-cd ubrain-mujoco && uv sync && cd ../ubrain
+cd bodies/mujoco && uv sync && cd ../..      # once: MuJoCo and the G1 (a few minutes)
 ```
 
 ## Run

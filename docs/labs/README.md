@@ -3,7 +3,7 @@
 Five sessions, each about 90 minutes. Each lab runs one example, explains the law
 behind what you see, and ends with exercises: some ask you to predict a number
 before you measure it. The first three need only a laptop; labs 4 and 5 need the
-robot body (ubrain-mujoco).
+robot body (`bodies/mujoco`, set up once with `uv sync` there).
 
 | lab | region | example | needs |
 |---|---|---|---|

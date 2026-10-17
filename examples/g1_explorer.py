@@ -5,11 +5,11 @@
     uv run --extra vision --extra video examples/g1_explorer.py --headless --seconds 40 --record walk
 
 The `vision` extra brings CLIP (torch); `video` the MP4 writer. It needs the body: a
-checkout of ubrain-mujoco beside ubrain, `uv sync`ed once.
+the body in bodies/mujoco, `uv sync`ed once.
 
 What happens:
   * the body serves the gallery scene (21 CC0 photos along the walking line, see
-    ubrain-mujoco's scenes/gallery_cc0) and a head camera;
+    bodies/mujoco/scenes/gallery_cc0) and a head camera;
   * the brain is `ubrain.Brain` with the `explorer` profile -- the walker's cerebellum
     and the hippocampal episode -- and CLIP plugged into its camera channel through a
     `Sense` fitted on the gallery's pictures (its vocabulary: what a memory is

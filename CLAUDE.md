@@ -13,6 +13,6 @@ wheels/     the compiled ubrain package: Windows x64, macOS (Apple Silicon and I
 
 - `uv run examples/<name>.py` installs ubrain from `wheels/` and runs; extras:
   `--extra vision` (CLIP), `--extra video` (MP4 recording).
-- The robot examples need the body package, ubrain-mujoco, beside this folder.
+- The robot examples need the body, `bodies/mujoco` (its own environment: `uv sync` there once).
 - Examples and docs: Apache-2.0 (LICENSE). The compiled package: LICENSE-BINARY.
 - Report problems as issues with the command you ran and its full output.

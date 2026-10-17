@@ -1,0 +1,41 @@
+# bodies/mujoco (robot_mujoco in the research repository) -- the MuJoCo body for ubrain: menagerie robots (the
+# Unitree G1 first, under robots/), sensors, motor primitives and the tick
+# bridge. A SEPARATE environment from the engine on purpose: the engine's
+# uv.lock pins numpy 2.2.6 and is the record of what its results were computed
+# under; this stack needs MuJoCo 3.12 and numpy 2.5.x. Never install this into
+# the engine's .venv. `uv sync` here builds its own. One environment serves
+# every robot in the pinned menagerie; a second simulator (robot_isaac/) is a
+# sibling folder with its own.
+#
+# Runtime pins are exact (==) and the lock is committed, as in the engine: the
+# body's manifest (body/manifest.py) records them per tick so a cell computed
+# against one body is never served for another. Encoders (CLIP, ...) are not here:
+# they plug into the brain, as ubrain codecs.
+
+[project]
+name = "robot-mujoco"
+version = "0.4.0"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+description = "The MuJoCo body for ubrain: menagerie robots, proprioception, motor primitives, a head camera, the tick bridge"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "mujoco==3.12.0",
+    "mujoco-menagerie==2026.9.0",
+    "numpy==2.5.2",
+]
+
+[dependency-groups]
+# Tooling only -- never touches a result, so a range is acceptable here.
+dev = ["pytest>=8,<9"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["body", "robots"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

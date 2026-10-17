@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+.pytest_cache/
+*.egg-info/
+renders/
+*.png
+*.mp4
+# the gallery scene's pictures are assets, not renders (CC0; see their PROVENANCE.json)
+!scenes/gallery_cc0/*.png

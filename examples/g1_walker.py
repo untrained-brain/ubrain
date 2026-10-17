@@ -3,10 +3,10 @@
     uv run examples/g1_walker.py                  # viewer + keyboard
     uv run examples/g1_walker.py --headless --seconds 10 --vx 0.5
 
-It needs the body: a checkout of ubrain-mujoco beside ubrain, `uv sync`ed once
+It needs the body, bodies/mujoco in this repository, `uv sync`ed once
 (see ubrain.bodies.find_body).
 
-It starts the MuJoCo body (ubrain-mujoco, its own environment) as a child process
+It starts the MuJoCo body (bodies/mujoco, its own environment) as a child process
 and drives the brain, `ubrain.Brain` with the `walker` profile, against it at 50 Hz
 in wall-clock time. It
 is a runner, not a second brain. The brain's cerebellum predicts every tick
