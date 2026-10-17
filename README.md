@@ -30,6 +30,7 @@ only one.)
 | `02_memory.py` | one-shot memory of an episode; recall falls with load exactly as certified | nothing |
 | `03_clip_words.py` | CLIP plugged in as a sense: the brain hears a sentence and recalls it | `--extra vision` |
 | `g1_walker.py` | the brain in a Unitree G1 humanoid: it walks, predicts its body, learns to brace | the body |
+| `g1_bracing.py` | a tone, then a push: muted it falls every time; braced, the cerebellum learns to stay up | the body |
 | `g1_explorer.py` | the G1 walks past a gallery of photos and remembers what it saw | the body, `--extra vision` |
 
 The robot body ships in this repository, in `bodies/mujoco` (its own environment: MuJoCo,

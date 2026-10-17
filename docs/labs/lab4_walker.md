@@ -49,5 +49,8 @@ exactly that time. This is eyeblink conditioning, in a humanoid.
    Is the difference what you expected?
 3. The brain only hears the tone; it never "feels" the push directly, only its
    consequences in the body. Why is that the right design for a brain?
-4. **Going further:** headless runs (`--headless --seconds 30 --vx 0.5`) print the same
+4. Run `uv run examples/g1_bracing.py`: the same push at 250 N, scripted, first with bracing
+   muted, then with a fresh brain bracing. Count the falls in each. Does the braced robot
+   stay up from the first push? Why not? (Add `--extra video ... --record bracing` for a video.)
+5. **Going further:** headless runs (`--headless --seconds 30 --vx 0.5`) print the same
    line without a window. Run three speeds and plot `pred` against time.
