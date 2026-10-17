@@ -10,7 +10,7 @@ robot body (`bodies/mujoco`, set up once with `uv sync` there).
 | [1. Learning from reward](lab1_striatum.md) | striatum | `01_bandit.py` | nothing |
 | [2. One-shot memory and its capacity](lab2_hippocampus.md) | hippocampus | `02_memory.py` | nothing |
 | [3. Plugging in a trained model](lab3_codecs.md) | codecs + hippocampus | `03_clip_words.py` | `--extra vision` |
-| [4. A brain in a body](lab4_walker.md) | cerebellum | `g1_walker.py` | the body |
+| [4. A brain in a body](lab4_walker.md) ([slides](lab4_slides.html)) | cerebellum | `lab_cerebellum.py` | the body |
 | [5. Seeing and remembering](lab5_explorer.md) | all of the above | `g1_explorer.py` | the body, `--extra vision` |
 
 **The habit these labs teach:** write your prediction down before you run. A brain

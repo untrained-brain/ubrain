@@ -5,6 +5,10 @@ the result. You will work with its two parts: the **forward model**, which predi
 the body moves, and the **brace**, which learns a timed counter-move to a push it hears
 coming.
 
+**Slides:** [lab4_slides.html](lab4_slides.html) -- the cerebellum, the G1 connection
+and the code, from the first class. Open the file from your clone in a browser (arrow keys
+to move, F for full screen); GitHub shows it only as source.
+
 ## Before the class (at home, about 10 minutes)
 
 ```bash
