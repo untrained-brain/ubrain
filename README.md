@@ -47,8 +47,8 @@ find-links = ["/path/to/ubrain/wheels"]
 ```
 
 ```bash
-uv add "ubrain==0.6.0.dev0"
-# or with pip:  pip install "ubrain==0.6.0.dev0" --find-links /path/to/ubrain/wheels
+uv add "ubrain==0.6.0.dev1"
+# or with pip:  pip install "ubrain==0.6.0.dev1" --find-links /path/to/ubrain/wheels
 ```
 
 ```python
@@ -87,7 +87,7 @@ action = brain.tick({"situation": s, "reward": r})["action"]
 
 ## Status
 
-Pre-release, 0.6.0.dev0. The regions are certified copies from a research engine in
+Pre-release, 0.6.0.dev1. The regions are certified copies from a research engine in
 which every law is registered before it is measured; ubrain never changes a region's
 code by hand. The science is in the textbook *The Untrained Brain* (in preparation).
 
