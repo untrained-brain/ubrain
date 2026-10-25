@@ -1,9 +1,9 @@
-"""body -- the MuJoCo body for brain_simulator, generic over the robot.
+"""body -- the MuJoCo body for ubrain, generic over the robot.
 
-The brain (brain_simulator/) never imports this package. It talks to it across a
-process boundary through the tick bridge (body/bridge.py) using the protocol in
-body/protocol.py; body/client.py is the dependency-free reference client the
-engine's `embody/` adapter mirrors. Which robot is the body is a `RobotSpec`
+The brain never imports this package. It talks to it across a process boundary
+through the tick bridge (body/bridge.py) using the protocol in body/protocol.py;
+body/client.py is the dependency-free reference client, which ubrain carries as
+`ubrain.bodies`, byte for byte. Which robot is the body is a `RobotSpec`
 from `robots/` (`robots/g1` first); nothing under `body/` names a robot.
 
 Modules:

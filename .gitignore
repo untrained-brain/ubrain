@@ -2,3 +2,6 @@
 __pycache__/
 *.mp4
 *.gif
+# what examples/lab_cerebellum.py writes into the working folder (one row per run; the last curve)
+results.csv
+last_run.json

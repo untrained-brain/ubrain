@@ -58,7 +58,7 @@ class Command:
 
 HZ = 50
 DT = 1.0 / HZ
-PUSH_N = 265.0          # k2's front push
+PUSH_N = 265.0          # the push from the front, newtons
 PUSH_DELAY = 10         # ticks from the tone to the push (0.2 s)
 
 

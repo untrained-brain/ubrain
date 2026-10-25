@@ -5,14 +5,16 @@ Untrained Brain, together with the compiled ubrain package (`wheels/`). The pack
 itself is distributed compiled; its source is not part of this repository.
 
 ```
-examples/   01_bandit, 02_memory, 03_clip_words, g1_walker, g1_explorer
-docs/       quickstart, concepts, labs (five), teachers
+examples/   01_bandit, 02_memory, 03_clip_words, 04_blackjack, 05_frozenlake, check_setup,
+            g1_walker, g1_bracing, g1_explorer, lab_cerebellum
+docs/       quickstart, using, concepts, labs (five), teachers
 wheels/     the compiled ubrain package: Windows x64, macOS (Apple Silicon and Intel),
             Linux x86_64 (glibc 2.28+), each for Python 3.11, 3.12 and 3.13
 ```
 
 - `uv run examples/<name>.py` installs ubrain from `wheels/` and runs; extras:
-  `--extra vision` (CLIP), `--extra video` (MP4 recording).
+  `--extra vision` (CLIP), `--extra game` (Gymnasium), `--extra video` (MP4 recording),
+  `--extra plot` (matplotlib).
 - The robot examples need the body, `bodies/mujoco` (its own environment: `uv sync` there once).
 - Examples and docs: Apache-2.0 (LICENSE). The compiled package: LICENSE-BINARY.
 - Report problems as issues with the command you ran and its full output.

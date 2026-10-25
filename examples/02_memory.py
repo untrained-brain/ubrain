@@ -9,7 +9,7 @@ item the sense knows. The more items share the vector, the more they interfere.
 
 Here the sense is the null codec, white Gaussian codes; `certify` says, before
 anything is stored, how often the first item of a k-item episode comes back
-(EC-MIX-02's law). Then the brain is run, and the two are set side by side.
+(the law, evaluated on these codes). Then the brain is run, and the two are set side by side.
 """
 
 

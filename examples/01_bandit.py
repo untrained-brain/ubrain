@@ -8,8 +8,7 @@ moves it toward each outcome by the three-factor rule, Q <- Q + eta (r - Q), and
 releases actions by the Go race: each action's unit runs to threshold at a rate
 proportional to its value, so action a wins with probability Q_a / sum_b Q_b.
 
-Two laws, each measured in the research engine (BG-LRN-01, BG-SEL-01/02) and
-checked here:
+Two laws, each measured in the research engine and checked here:
   * the values converge to the payoff probabilities, Q_a -> p_a (slowly for actions
     the race rarely picks: few outcomes to learn from);
   * so choice settles at p_a / sum_b p_b: MATCHING, not "always the best" -- the
@@ -55,8 +54,9 @@ def main() -> None:
     for s in range(S):
         print("  " + "  ".join(f"{x:.2f}" for x in alloc[s]) + "          "
               + "  ".join(f"{x:.2f}" for x in PAY[s] / PAY[s].sum()))
-    print("\nTry: set eta in profiles/player.toml higher or lower, or change PAY. How fast do the "
-          "values settle, and how close is choice to the prediction?")
+    print("\nTry: a higher or lower eta (w = profile(\"player\"); "
+          "w.regions[\"basal_ganglia.striatum\"][\"eta\"] = 0.01; Brain(w, ...)), or change PAY. "
+          "How fast do the values settle, and how close is choice to the prediction?")
 
 
 if __name__ == "__main__":

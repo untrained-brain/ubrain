@@ -3,7 +3,7 @@
 through. Adding a robot is adding a package here and its name to ROBOTS --
 `body/` does not change.
 
-The menagerie pinned in the lock carries 68 models (humanoids: unitree_h1,
+The menagerie pinned in uv.lock carries 68 models (humanoids: unitree_h1,
 booster_t1, fourier_n1, apptronik_apollo, berkeley_humanoid, pal_talos,
 robotis_op3; quadrupeds: unitree_go1/go2/a1, boston_dynamics_spot,
 anybotics_anymal_b/c; arms and hands: franka_fr3, universal_robots_ur5e,

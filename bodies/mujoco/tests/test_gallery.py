@@ -10,13 +10,13 @@ import pytest
 from body.manifest import gallery_digest, manifest, manifest_digest
 from body.sim import MujocoSim, gallery_layout
 
-SCENES = Path(__file__).resolve().parents[2] / "brain_simulator" / "experiment" / "cache" / "scenes"
+SCENES = Path(__file__).resolve().parents[1] / "scenes" / "gallery_cc0"
 
 
 def _images(tmp_path, n=6):
-    """Pictures for the gallery: the lab's rendered objects when present, else
+    """Pictures for the gallery: the body's own CC0 pictures when present, else
     small PNGs written here (a PNG is all a texture needs)."""
-    found = sorted(SCENES.glob("obj_*.png"))[:n]
+    found = sorted(SCENES.glob("*.png"))[:n]
     if len(found) == n:
         return [str(f) for f in found]
     import struct

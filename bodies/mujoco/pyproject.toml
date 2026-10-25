@@ -1,15 +1,14 @@
-# bodies/mujoco (robot_mujoco in the research repository) -- the MuJoCo body for ubrain: menagerie robots (the
-# Unitree G1 first, under robots/), sensors, motor primitives and the tick
-# bridge. A SEPARATE environment from the engine on purpose: the engine's
-# uv.lock pins numpy 2.2.6 and is the record of what its results were computed
-# under; this stack needs MuJoCo 3.12 and numpy 2.5.x. Never install this into
-# the engine's .venv. `uv sync` here builds its own. One environment serves
-# every robot in the pinned menagerie; a second simulator (robot_isaac/) is a
-# sibling folder with its own.
+# bodies/mujoco -- the MuJoCo body for ubrain: menagerie robots (the Unitree G1
+# first, under robots/), sensors, motor primitives and the tick bridge. A SEPARATE
+# environment from the brain's on purpose: the brain needs only numpy, this stack
+# needs MuJoCo 3.12 and numpy 2.5.x, and the two meet only over the tick bridge.
+# Never install this into the brain's environment; `uv sync` here builds its own.
+# One environment serves every robot in the pinned menagerie; a second simulator
+# would be a sibling folder with its own.
 #
-# Runtime pins are exact (==) and the lock is committed, as in the engine: the
-# body's manifest (body/manifest.py) records them per tick so a cell computed
-# against one body is never served for another. Encoders (CLIP, ...) are not here:
+# Runtime pins are exact (==) and uv.lock is committed: the body's manifest
+# (body/manifest.py) records the versions, so a result computed against one body
+# is never mistaken for another's. Encoders (CLIP, ...) are not here:
 # they plug into the brain, as ubrain codecs.
 
 [project]

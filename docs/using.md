@@ -26,21 +26,28 @@ find-links = ["/path/to/ubrain/wheels"]
 Then add ubrain and check it:
 
 ```bash
-uv add "ubrain==0.6.0.dev2"
+uv add "ubrain==0.14.0.dev1"
 uv run python -c "import ubrain; print(ubrain.__version__)"
 ```
 
 Keep `find-links` in `pyproject.toml` (rather than passing `--find-links` to `uv add`
 once): uv needs it every time it re-solves your dependencies, for example when you
-add another package. For CLIP as a sense: `uv add "ubrain[vision]==0.6.0.dev2"`.
+add another package. The extras, each only when you need it:
+
+| extra | what it brings | for |
+|---|---|---|
+| `vision` | torch, transformers (CLIP) | CLIP as a sense: `uv add "ubrain[vision]==0.14.0.dev1"` |
+| `game` | Gymnasium | a game as the body (`ubrain.bodies.gym`) |
+| `video` | imageio with ffmpeg | recording the robot examples as MP4 |
+| `plot` | matplotlib | the lab plots |
 
 **With pip**, in a virtual environment:
 
 ```bash
-pip install "ubrain==0.6.0.dev2" --find-links /path/to/ubrain/wheels
+pip install "ubrain==0.14.0.dev1" --find-links /path/to/ubrain/wheels
 ```
 
-(Version 0.6.0.dev2 is a pre-release, so name it exactly as above. When ubrain is on
+(Version 0.14.0.dev1 is a pre-release, so name it exactly as above. When ubrain is on
 PyPI, `pip install ubrain` will be enough.)
 
 ## 2. A brain in a few lines
@@ -77,9 +84,26 @@ manifest must provide. Each profile ships with ubrain:
 | profile | regions | your body must provide |
 |---|---|---|
 | `player` | striatum | `situation` (event), `reward` (reward), `action` (choice) |
+| `chooser` | hippocampal store that acts + striatum + hand-over | the player's channels |
 | `observer` | hippocampus | `camera` (codec), `recall` (event), `boundary` (event), `memory` (command), `remembered` (choice) |
+| `rememberer` | hippocampus + cortex | the observer's channels plus `recollect` (event), `recollection` (command), `recollected` (choice) |
+| `holder` | prefrontal buffer | `camera` (codec), `recall`, `idle`, `clear` (events), `memory` (command), `remembered` (choice) |
+| `attender` | salience gate + mode controller + hippocampus + cortex | the rememberer's channels (no `boundary`: an idle moment ends the episode) plus `mode` (choice, 2) |
+| `modulated` | thalamus + the three neuromodulators + salience gate + mode controller + cortex + striatum | `routes`, `goal` (vectors), `attend` (event), `camera`, `known` (codecs), `recollect` (event), `situation`, `reward`; out `workspace`, `attended`, `recollection`, `recollected`, `mode`, `action` |
 | `walker` | cerebellum (forward model, brace) | a legged body's `proprio`, `tone`, `goal`, `walk`, `offsets` |
+| `adapter` | walker + walking adaptation | the walker's channels plus `clamp` (flag) |
 | `explorer` | walker + hippocampus | the walker's channels plus the observer's |
+
+To see a profile's exact wiring, print it: `print(profile("chooser"))`, or read the TOML
+files in the folder `python -c "import ubrain.wiring as w; print(w.PROFILES)"` names.
+To change one parameter without a file of your own, edit the loaded profile before
+building the brain:
+
+```python
+w = profile("player")
+w.regions["basal_ganglia.striatum"]["eta"] = 0.01      # a slower learner
+brain = Brain(w, body)
+```
 
 ## 3. Your own anatomy
 
@@ -134,7 +158,35 @@ brain = Brain(profile("observer"), body, codecs={"camera": sense})
 
 `examples/03_clip_words.py` is the whole program.
 
-## 5. Connect a robot
+## 5. Play a game
+
+Any Gymnasium game whose observations and actions are discrete is a body, through
+`ubrain.bodies.gym` (the `game` extra):
+
+```python
+import gymnasium as gym
+from ubrain import Brain, profile
+from ubrain.bodies.gym import GymBody, play
+
+body = GymBody(gym.make("Blackjack-v1", sab=True), reward_range=(-1, 1), reward="return")
+brain = Brain(profile("player"), body.manifest)
+returns = body.run(brain, episodes=1000, seed=0)     # one summed reward per episode
+body.close(brain)                                    # the last outcome reaches the brain
+```
+
+`reward_range` maps the game's rewards onto [0, 1], where the brain reads them.
+`reward="step"` passes every step's reward; `reward="return"` passes nothing inside an
+episode and its total after it -- with the `chooser` profile, which credits every choice
+of the episode, that values each move by how the episode ended. `play(env, policy,
+episodes)` runs a brainless baseline to compare with. A tuple of discrete observations
+(Blackjack's) becomes one situation index; continuous observations are refused.
+
+The brain learns a value from the outcome that follows a choice, not from the value of
+the state it leads to, so a reward many moves away from the choice that earned it is
+out of reach of the `player` on its own. `examples/04_blackjack.py` and
+`examples/05_frozenlake.py` show both what works and where it stops.
+
+## 6. Connect a robot
 
 A body that runs in its own process (the MuJoCo G1 in `bodies/mujoco`) is reached
 through `ubrain.bodies`:
@@ -149,6 +201,45 @@ manifest = manifest_from_hello_03(body.hello)
 ```
 
 `examples/g1_walker.py` shows the full loop.
+
+## 7. Save, load and watch a brain (since 0.14)
+
+A brain learns all its life, so its state is its knowledge. Save it, and load it
+against the same body (and the same codecs, if it has senses):
+
+```python
+from ubrain import Brain
+from ubrain.state import read_header
+
+path = brain.save("player.ubrain.npz")
+print(read_header(path))                 # format, ubrain version, wiring, body, ticks, codecs
+again = Brain.load(path, body)           # continues bit for bit where `brain` stopped
+```
+
+Loading refuses, with a `ubrain.state.StateError` saying why, a different body, a codec
+that is not the one the state was learned with, or a file of another schema.
+`examples/11_save_and_load.py` shows the continuation and every refusal.
+
+A brain can also describe itself. `datasheet_text(brain)` lists its figures in closed
+form (an episode's capacity, the buffer's count, the cortex's capacity or horizon, the
+brace's lead, the striatum's time constant), each with the conditions it holds under;
+`health(brain)` sets what a region holds now against its law; `observe(brain)` returns
+read-only copies of each region's state; and `monitor_manifest(brain)` with
+`monitor(brain)` turn that state into channels, so that one brain can watch another.
+
+```python
+from ubrain.datasheet import datasheet_text
+from ubrain.observe import health, observe
+
+print(datasheet_text(brain))
+for row in health(brain):
+    print(row)
+```
+
+The figures are first-order laws. At a small dimension (d near 100) a measurement
+lands at or a little above them; the cortex's capacity assumes distinct items (copies of
+one item add crosstalk together). `examples/12_monitor_and_datasheet.py` sets each
+figure beside a measurement.
 
 ## Where next
 
