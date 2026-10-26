@@ -31,8 +31,14 @@ tests/
 
 - **The body's identity is a digest** of its code and robot files (`python -m
   body.manifest`). Any change to `body/*.py` or `robots/**` gives a new body; bump
-  `body/__init__.py`'s version with it. These files are `-text` in `.gitattributes`
-  so every checkout hashes the same bytes -- leave that be.
+  the version with it -- ONE number, in `body/__init__.py` and `pyproject.toml`
+  alike (a test holds it) -- and regenerate `body.lock` (`uv run python -m
+  body.manifest --lock`; a test fails while it is stale). These files are `-text` in
+  `.gitattributes` so every checkout hashes the same bytes -- leave that be.
+- **A body is a release.** `body.lock` holds the manifest, the digest and the
+  release tag `body-mujoco-<version>-<digest>` that a saved brain names to get this
+  body back; the tag is made when ubrain's repository is published. The manifest
+  reports the licences of what the body runs (not part of the digest).
 - **The brain never feels privileged state.** Forces the experimenter applies, true
   poses and masses are never in a reply; the brain senses only consequences.
 - **`protocol.py` and `client.py` are copied byte for byte into ubrain** (and checked

@@ -38,7 +38,7 @@ only one.)
 | `08_attention.py` | the salience gate writes only what is novel, at the false-alarm rate it was set to; the modes switch | nothing |
 | `09_memory_and_habit.py` | memory acts from one experience, the striatum catches up and overtakes; the hand-over follows the better | nothing |
 | `10_neuromodulators.py` | noradrenaline sets what counts as novel, serotonin how long the striatum waits for a reward | nothing |
-| `11_save_and_load.py` | a brain saved and loaded continues exactly where it stopped, and refuses another body | nothing |
+| `11_save_and_load.py` | a brain saved and loaded continues exactly where it stopped; the file names what it needs (body release, senses, lineage), the sense comes back from the codec model alone, another body is refused; its model card | nothing |
 | `12_monitor_and_datasheet.py` | a brain's datasheet (its capacities in closed form), its health, and a brain watching a brain | nothing |
 | `g1_walker.py` | the brain in a Unitree G1 humanoid: it walks, predicts its body, learns to brace | the body |
 | `lab_cerebellum.py` | change the G1's cerebellum (sparseness, learning rates, the tone's trace) and measure it | the body |
