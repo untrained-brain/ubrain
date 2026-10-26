@@ -174,6 +174,8 @@ class MujocoSim:
 
     # -- state -------------------------------------------------------------
     def reset(self, seed: int = 0) -> None:
+        from body.worldspec import arrange
+        self.arrangement = arrange(self.world, self.model, seed)    # the day's things in their slots
         mujoco.mj_resetDataKeyframe(self.model, self.data, self.key_home)
         self.data.ctrl[:] = self.home_ctrl
         mujoco.mj_forward(self.model, self.data)

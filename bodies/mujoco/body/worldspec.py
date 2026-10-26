@@ -20,7 +20,10 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Callable
 
-__all__ = ["Room", "Thing", "Junction", "WorldSpec", "world_files", "world_digest", "truth"]
+import numpy as np
+
+__all__ = ["Room", "Thing", "Junction", "Slot", "WorldSpec", "world_files", "world_digest", "truth",
+           "arrangement", "arrange"]
 
 
 @dataclass(frozen=True)
@@ -64,6 +67,20 @@ class Junction:
 
 
 @dataclass(frozen=True)
+class Slot:
+    """A place a thing can stand (a picture's hook): the world's change schedule says which
+    thing stands in each slot on a given day (the reset's seed)."""
+    x: float
+    y: float
+    z: float
+    yaw: float
+
+
+HIDDEN_Z = -10.0                       # where a thing not hung today waits (below the floor, unseen)
+SCHEDULE_DAYS = 30                     # the schedule announced in the truth
+
+
+@dataclass(frozen=True)
 class WorldSpec:
     name: str
     doc: str
@@ -75,6 +92,8 @@ class WorldSpec:
     licenses: dict = field(default_factory=dict)
     light: tuple[float, float] = (0.5, 0.8)        # headlight ambient, diffuse
     data_files: tuple[str, ...] = ()               # files outside the package it shows (pictures)
+    slots: tuple[Slot, ...] = ()                   # where movable things can stand
+    schedule: Callable | None = None               # seed -> the thing index standing in each slot
 
     def room_of(self, x: float, y: float) -> str | None:
         for r in self.rooms:
@@ -116,4 +135,37 @@ def truth(spec: WorldSpec | None) -> dict:
             "things": [{"index": t.index, "name": t.name, "kind": t.kind, "room": t.room,
                         "x": t.x, "y": t.y, "z": t.z, "yaw": t.yaw, "file": t.file} for t in spec.things],
             "junctions": [{"name": j.name, "x": j.x, "y": j.y, "rooms": list(j.rooms)} for j in spec.junctions],
+            "slots": [{"x": sl.x, "y": sl.y, "z": sl.z, "yaw": sl.yaw} for sl in spec.slots],
+            "schedule": {str(d): arrangement(spec, d) for d in range(SCHEDULE_DAYS)} if spec.slots else {},
             "licenses": dict(spec.licenses)}
+
+
+def arrangement(spec: WorldSpec | None, seed: int) -> list[int]:
+    """Which thing stands in each slot on the day `seed` (empty for a world without slots)."""
+    if spec is None or not spec.slots or spec.schedule is None:
+        return []
+    return [int(i) for i in spec.schedule(int(seed))]
+
+
+def arrange(spec: WorldSpec | None, model, seed: int) -> list[int]:
+    """Hang the day's things: each movable thing's geom (named `thing<index>`) is moved to
+    its slot, or below the floor when it is not hung today. World state, set at reset -- not
+    identity: the schedule is the world's code, so the digest names it already."""
+    import mujoco
+    arr = arrangement(spec, seed)
+    if not arr:
+        return arr
+    where = {thing: slot for slot, thing in zip(spec.slots, arr)}
+    for t in spec.things:
+        if t.kind != "picture":
+            continue
+        gid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_GEOM, f"thing{t.index}")
+        if gid < 0:
+            continue
+        sl = where.get(t.index)
+        if sl is None:
+            model.geom_pos[gid] = (0.0, 0.0, HIDDEN_Z)
+        else:
+            model.geom_pos[gid] = (sl.x, sl.y, sl.z)
+            model.geom_quat[gid] = (np.cos(sl.yaw / 2), 0.0, 0.0, np.sin(sl.yaw / 2))
+    return arr

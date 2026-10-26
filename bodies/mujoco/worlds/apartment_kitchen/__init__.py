@@ -83,6 +83,8 @@ SPEC = WorldSpec(
     licenses={"pictures": "CC0 (scenes/gallery_cc0/PROVENANCE.json)", "world": "Apache-2.0",
               "kitchen": "RoboCasa: code MIT, assets CC BY 4.0 (kitchen_L001_S002/ATTRIBUTION.md)"},
     data_files=A.SPEC.data_files,
+    slots=A.SLOTS,
+    schedule=A.schedule,
 )
 
 
@@ -93,4 +95,5 @@ def make(kitchen_dir: Path, views: str) -> WorldSpec:
     return WorldSpec(name=f"apartment_kitchen:{kitchen_dir.name}", doc=SPEC.doc, package=SPEC.package,
                      rooms=ROOMS, things=A.SPEC.things + _appliances(kitchen_dir, views), junctions=JUNCTIONS,
                      build=lambda mjspec, spec: build(mjspec, spec, kitchen_dir / "kitchen.xml"),
-                     licenses=SPEC.licenses, data_files=SPEC.data_files)
+                     licenses=SPEC.licenses, data_files=SPEC.data_files, slots=A.SLOTS,
+                     schedule=A.schedule)

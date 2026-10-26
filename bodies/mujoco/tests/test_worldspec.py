@@ -16,8 +16,9 @@ from body.worldspec import truth, world_digest
 def test_the_apartment_builds_rooms_doors_and_things():
     w = worlds.get("apartment")
     assert [r.name for r in w.rooms] == ["hall", "living", "study"]
-    assert len(w.things) == 15 and len(w.junctions) == 2
-    assert all(w.room_of(t.x, t.y) == t.room for t in w.things)
+    assert len(w.things) == 21 and len(w.slots) == 15 and len(w.junctions) == 2
+    hung = [t for t in w.things if t.room]                         # day 0: the first fifteen
+    assert [t.index for t in hung] == list(range(15)) and all(w.room_of(t.x, t.y) == t.room for t in hung)
     sim = MujocoSim("g1", world="apartment", head_camera=True)
     for name in ("wall_left", "door_hall_living_l", "floor_study", "thing0", "thing14"):
         assert mujoco.mj_name2id(sim.model, mujoco.mjtObj.mjOBJ_GEOM, name) >= 0, name
@@ -38,7 +39,8 @@ def test_the_truth_goes_to_the_experimenter_not_into_the_manifest():
     try:
         with BodyClient("127.0.0.1", srv.port) as c:
             h = c.hello
-            assert h["world"]["name"] == "apartment" and len(h["world"]["things"]) == 15
+            assert h["world"]["name"] == "apartment" and len(h["world"]["things"]) == 21
+            assert len(h["world"]["slots"]) == 15 and h["world"]["schedule"]["0"] == list(range(15))
             assert "things" not in json.dumps(h["manifest"])            # the brain's record has no truth
     finally:
         srv.shutdown()
@@ -71,3 +73,22 @@ def test_the_line_keeper_is_part_of_the_bodys_identity_and_holds_the_line():
             assert abs(float(srv.sim.data.qpos[1])) < 0.15         # the line held (W0: 0.40 drift without)
     finally:
         srv.shutdown()
+
+
+def test_the_change_schedule_rehangs_the_pictures_at_reset():
+    import numpy as np
+    from body.worldspec import arrangement
+    w = worlds.get("apartment")
+    d0, d3 = arrangement(w, 0), arrangement(w, 3)
+    assert d0 == list(range(15)) and len(set(d3)) == 15 and d3 != d0 and arrangement(w, 3) == d3
+    sim = MujocoSim("g1", world="apartment")
+    gid = lambda i: mujoco.mj_name2id(sim.model, mujoco.mjtObj.mjOBJ_GEOM, f"thing{i}")
+    sim.reset(3)
+    for slot, i in zip(w.slots, d3):                                # each of the day's pictures on its hook
+        assert np.allclose(sim.model.geom_pos[gid(i)], (slot.x, slot.y, slot.z))
+    for i in set(range(21)) - set(d3):                               # the others hidden
+        assert sim.model.geom_pos[gid(i)][2] < -5
+    sim.reset(0)
+    assert np.allclose(sim.model.geom_pos[gid(0)], (w.slots[0].x, w.slots[0].y, w.slots[0].z))
+    assert sim.arrangement == d0
+    sim.close()

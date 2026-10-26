@@ -18,7 +18,7 @@ from pathlib import Path
 import mujoco
 import numpy as np
 
-from body.worldspec import Junction, Room, Thing, WorldSpec
+from body.worldspec import Junction, Room, Slot, Thing, WorldSpec
 
 HERE = Path(__file__).resolve().parent
 PICTURES = HERE.parents[1] / "scenes" / "gallery_cc0"
@@ -35,17 +35,40 @@ FLOORS = {"hall": (0.55, 0.50, 0.45), "living": (0.45, 0.52, 0.60), "study": (0.
 
 ROOMS = tuple(Room(name, X0 + i * ROOM_LEN, -HALF_W, X0 + (i + 1) * ROOM_LEN, HALF_W)
               for i, name in enumerate(("hall", "living", "study")))
-_FILES = sorted(PICTURES.glob("*.png"))[:len(ROOMS) * PER_ROOM]
+_FILES = sorted(PICTURES.glob("*.png"))                  # all 21: fifteen hang on a given day
+N_SLOTS = len(ROOMS) * PER_ROOM
+
+
+def _slot(k: int) -> Slot:
+    room = ROOMS[k // PER_ROOM]
+    side = 1.0 if k % 2 == 0 else -1.0
+    return Slot(room.x0 + FIRST + STEP * (k % PER_ROOM), side * SIDE, Z, side * YAW)
+
+
+SLOTS = tuple(_slot(k) for k in range(N_SLOTS))
+
+
+def schedule(seed: int) -> list[int]:
+    """The change schedule (2026-10-26, stage 2): which picture hangs in each slot on day
+    `seed`. Day 0 is the first fifteen in order (the layout of W1-W3); every other day a
+    seeded choice of fifteen of the 21, in a seeded order -- days differ, so a night has
+    something to keep and a morning something new."""
+    if int(seed) == 0:
+        return list(range(N_SLOTS))
+    rng = np.random.default_rng([20261026, int(seed)])
+    return [int(i) for i in rng.choice(len(_FILES), size=N_SLOTS, replace=False)]
 
 
 def _things() -> tuple[Thing, ...]:
+    """All 21 pictures; the pose in the truth is day 0's (a picture not hung then: hidden)."""
+    day0 = {t: k for k, t in enumerate(schedule(0))}
     out = []
-    for k, f in enumerate(_FILES):
-        room = ROOMS[k // PER_ROOM]
-        j = k % PER_ROOM
-        side = 1.0 if k % 2 == 0 else -1.0
-        out.append(Thing(index=k, name=f.stem.split("_", 1)[1], kind="picture", room=room.name,
-                         x=room.x0 + FIRST + STEP * j, y=side * SIDE, z=Z, yaw=side * YAW, picture=f.name,
+    for i, f in enumerate(_FILES):
+        k = day0.get(i)
+        sl = SLOTS[k] if k is not None else Slot(0.0, 0.0, -10.0, 0.0)
+        room = ROOMS[k // PER_ROOM].name if k is not None else ""
+        out.append(Thing(index=i, name=f.stem.split("_", 1)[1], kind="picture", room=room,
+                         x=sl.x, y=sl.y, z=sl.z, yaw=sl.yaw, picture=f.name,
                          file=f"scenes/gallery_cc0/{f.name}"))
     return tuple(out)
 
@@ -114,4 +137,6 @@ SPEC = WorldSpec(
     build=build,
     licenses={"pictures": "CC0 (scenes/gallery_cc0/PROVENANCE.json)", "world": "Apache-2.0"},
     data_files=tuple(str(f) for f in _FILES),
+    slots=SLOTS,
+    schedule=schedule,
 )
