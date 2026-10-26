@@ -5,7 +5,18 @@ change between them. Each region is certified against the law it was built to
 follow before it ships; a version adds regions or capabilities, and never moves a
 certified number.
 
-## 0.15.0.dev1 (in development)
+## 0.16.0.dev1 (in development)
+
+- **The `companion` profile**: the explorer's cerebellum under the attender's memory
+  system with the striatum behind it, for a brain that lives in one body for days --
+  the day one episode (ended by the application's `boundary`, consolidated then), the
+  camera written directly (the application segments events), the salience gate's
+  verdict an output (`novel`). Measured on CLIP codes before it was wired: the gate's
+  white-code threshold judged half of 12 fresh pictures familiar, so the gate does
+  not stand before the episode here; that null on real codes is open upstream.
+- `observe()`: the cortex's tick count is reported as `ticks` (it was `writes`).
+
+## 0.15.0.dev1
 
 - **A saved brain names what it needs** (`ubrain.state`, schema 2; UBI-11, UBI-8).
   The file carries the body's own record (its versions, how it was launched, the
