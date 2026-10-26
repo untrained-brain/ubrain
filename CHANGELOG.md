@@ -5,7 +5,18 @@ change between them. Each region is certified against the law it was built to
 follow before it ships; a version adds regions or capabilities, and never moves a
 certified number.
 
-## 0.18.0.dev1 (in development)
+## 0.19.0.dev1 (in development)
+
+- **Region instances**: a wiring may name `base@tag` (`hippocampus.episode@route`) -- a second
+  copy of a region, the same code and certifying laws, its own state and ports.
+- **An episode is memory, not a stream**: `Brain.body_reset()` (a fall, a trip home) no longer
+  empties `hippocampus.episode`; only its `boundary` event ends it, as `body_reset`'s own rule
+  says ("what was learned is kept"). Found by the gallery companion's routes.
+- The `companion` profile gains a route episode (`route_item`, `recall_route`, `route_boundary`
+  -> `route_memory`, `route_remembered`): skills taken and things seen, in order, recalled
+  to walk the way back to a thing.
+
+## 0.18.0.dev1
 
 - `start_body(keep_line=True)`: the body's experimenter holds the walk on its line (harness,
   keyed into the body's digest; the brain never sees the pose); `start_body_for` relaunches it.
