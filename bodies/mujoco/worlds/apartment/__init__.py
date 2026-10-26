@@ -1,6 +1,6 @@
 """The apartment: the first world with structure (2026-10-26).
 
-Three rooms in a row -- hall, living room, study -- joined by doorways on the walking
+Three rooms in a row, 7 m each -- hall, living room, study -- joined by doorways on the walking
 line, so a robot walking straight passes through every door; fifteen of the gallery's
 CC0 pictures hang in them, five per room, alternately left and right, turned toward the
 approaching walker (the gallery's measured geometry: 0.65 m off the line, yaw 0.6).
@@ -23,10 +23,13 @@ from body.worldspec import Junction, Room, Thing, WorldSpec
 HERE = Path(__file__).resolve().parent
 PICTURES = HERE.parents[1] / "scenes" / "gallery_cc0"
 
-ROOM_LEN, HALF_W = 6.0, 1.6           # each room 6 m along the line, 3.2 m wide
+ROOM_LEN, HALF_W = 7.0, 1.6           # each room 7 m along the line, 3.2 m wide
 DOOR_HALF, WALL_H, WALL_T = 0.6, 2.4, 0.08
 X0 = -1.0                             # the hall starts behind the robot's start
 PER_ROOM = 5
+FIRST, STEP = 2.0, 1.2               # a picture's place in its room: the first 2 m in, then every
+                                     # 1.2 m -- the gallery's measured spacing (W0: at 0.9 m two pictures
+                                     # share the view and the fovea attends one; guitar and owl never seen)
 SIDE, YAW, Z, HALF = 0.65, 0.6, 1.05, 0.45     # the gallery's panel geometry
 FLOORS = {"hall": (0.55, 0.50, 0.45), "living": (0.45, 0.52, 0.60), "study": (0.52, 0.58, 0.45)}
 
@@ -42,7 +45,8 @@ def _things() -> tuple[Thing, ...]:
         j = k % PER_ROOM
         side = 1.0 if k % 2 == 0 else -1.0
         out.append(Thing(index=k, name=f.stem.split("_", 1)[1], kind="picture", room=room.name,
-                         x=room.x0 + 1.4 + 1.0 * j, y=side * SIDE, z=Z, yaw=side * YAW, picture=f.name))
+                         x=room.x0 + FIRST + STEP * j, y=side * SIDE, z=Z, yaw=side * YAW, picture=f.name,
+                         file=f"scenes/gallery_cc0/{f.name}"))
     return tuple(out)
 
 
@@ -59,8 +63,9 @@ def _box(parent, name, pos, size, rgba, collide=True):
     return g
 
 
-def build(mjspec, spec: "WorldSpec") -> None:
-    """Walls, doorways, floors and the pictures, added to the robot's model."""
+def build(mjspec, spec: "WorldSpec", end_wall: bool = True) -> None:
+    """Walls, doorways, floors and the pictures, added to the robot's model. A world that
+    continues past the study (`apartment_kitchen`) builds without the end wall."""
     mjspec.visual.headlight.ambient = [spec.light[0]] * 3
     mjspec.visual.headlight.diffuse = [spec.light[1]] * 3
     wb = mjspec.worldbody
@@ -71,17 +76,24 @@ def build(mjspec, spec: "WorldSpec") -> None:
         _box(wb, f"wall_{s}", (X0 + length / 2, sign * (HALF_W + WALL_T), WALL_H / 2),
              (length / 2, WALL_T, WALL_H / 2), wall)
     _box(wb, "wall_back", (X0 - WALL_T, 0.0, WALL_H / 2), (WALL_T, HALF_W + 2 * WALL_T, WALL_H / 2), wall)
-    _box(wb, "wall_end", (x_end + WALL_T, 0.0, WALL_H / 2), (WALL_T, HALF_W + 2 * WALL_T, WALL_H / 2), wall)
+    if end_wall:
+        _box(wb, "wall_end", (x_end + WALL_T, 0.0, WALL_H / 2), (WALL_T, HALF_W + 2 * WALL_T, WALL_H / 2), wall)
     jamb = (HALF_W - DOOR_HALF) / 2
     for j in spec.junctions:                                    # cross walls with a doorway
+        if j.x > x_end + 1e-6:
+            continue
         for s, sign in (("l", 1.0), ("r", -1.0)):
             _box(wb, f"{j.name}_{s}", (j.x, sign * (DOOR_HALF + jamb), WALL_H / 2),
                  (WALL_T, jamb, WALL_H / 2), wall)
         _box(wb, f"{j.name}_lintel", (j.x, 0.0, WALL_H - 0.2), (WALL_T, DOOR_HALF, 0.2), wall)
     for r in spec.rooms:                                        # a floor colour per room (visual only)
+        if r.name not in FLOORS:
+            continue
         _box(wb, f"floor_{r.name}", ((r.x0 + r.x1) / 2, 0.0, 0.001), ((r.x1 - r.x0) / 2, HALF_W, 0.001),
              (*FLOORS[r.name], 1.0), collide=False)
     for t in spec.things:                                       # the pictures (visual only)
+        if t.picture is None:
+            continue
         tex = mjspec.add_texture()
         tex.name, tex.type, tex.file = f"thing_tex{t.index}", mujoco.mjtTexture.mjTEXTURE_2D, str(PICTURES / t.picture)
         mat = mjspec.add_material()

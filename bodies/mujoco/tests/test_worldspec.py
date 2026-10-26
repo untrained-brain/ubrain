@@ -43,3 +43,31 @@ def test_the_truth_goes_to_the_experimenter_not_into_the_manifest():
     finally:
         srv.shutdown()
     assert truth(None) == {}
+
+
+def test_the_kitchen_is_the_fourth_room():
+    w = worlds.get("apartment_kitchen")
+    assert [r.name for r in w.rooms] == ["hall", "living", "study", "kitchen"] and len(w.junctions) == 3
+    names = [t.name for t in w.things if t.kind == "appliance"]
+    assert set(names) == {"sink", "dishwasher", "stove", "microwave", "fridge"}
+    assert all(w.room_of(t.x, t.y) == "kitchen" for t in w.things if t.kind == "appliance")
+    sim = MujocoSim("g1", world="apartment_kitchen")
+    assert mujoco.mj_name2id(sim.model, mujoco.mjtObj.mjOBJ_BODY, "kitchen/fridge_main_group_main") >= 0
+    assert mujoco.mj_name2id(sim.model, mujoco.mjtObj.mjOBJ_BODY, "kitchen/wall_left_room_main") < 0
+    sim.close()
+
+
+def test_the_line_keeper_is_part_of_the_bodys_identity_and_holds_the_line():
+    assert manifest_digest(manifest("g1", harness="keep-line")) != manifest_digest(manifest("g1"))
+    srv = BodyServer(port=0, world="apartment", keep_line=True).start()
+    try:
+        with BodyClient("127.0.0.1", srv.port) as c:
+            idx = c.primitives["walk_offset"]["index"]
+            n = c.primitives["walk_offset"]["n_params"] - 3
+            c.reset(0)
+            for _ in range(1000):                                   # 20 s at 0.5 m/s
+                st = c.act(idx, [0.5, 0.0, 0.0] + [0.0] * n)
+            assert st["upright"]
+            assert abs(float(srv.sim.data.qpos[1])) < 0.15         # the line held (W0: 0.40 drift without)
+    finally:
+        srv.shutdown()

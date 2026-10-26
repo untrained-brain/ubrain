@@ -12,7 +12,7 @@ from body.worldspec import WorldSpec
 
 __all__ = ["WORLDS", "get"]
 
-WORLDS = ("apartment",)
+WORLDS = ("apartment", "apartment_kitchen")
 
 
 def get(world: str | WorldSpec | None) -> WorldSpec | None:

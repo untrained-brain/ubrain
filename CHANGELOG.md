@@ -5,7 +5,13 @@ change between them. Each region is certified against the law it was built to
 follow before it ships; a version adds regions or capabilities, and never moves a
 certified number.
 
-## 0.17.0.dev1 (in development)
+## 0.18.0.dev1 (in development)
+
+- `start_body(keep_line=True)`: the body's experimenter holds the walk on its line (harness,
+  keyed into the body's digest; the brain never sees the pose); `start_body_for` relaunches it.
+  The MuJoCo body gains `apartment_kitchen`: the apartment with a RoboCasa kitchen (CC BY 4.0).
+
+## 0.17.0.dev1
 
 - **A body can live in a world** (the MuJoCo body 0.9.0: `worlds/`, a `WorldSpec` beside the
   robot -- rooms, doors, things and their truth for the experimenter, never the brain):

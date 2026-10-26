@@ -1,10 +1,10 @@
 {
   "body": "mujoco/g1",
-  "digest": "4b4b16a85885",
+  "digest": "31166cc789b8",
   "manifest": {
     "body_version": "0.9.0",
     "simulator": "mujoco",
-    "package_digest": "f9aca0ed515c",
+    "package_digest": "454991491f54",
     "robot": "g1",
     "robot_digest": "b780efd0d8ee",
     "mujoco": "3.12.0",
@@ -16,6 +16,7 @@
     "gallery": "none",
     "world": "none",
     "world_digest": "none",
+    "harness": "none",
     "licenses": {
       "body": "Apache-2.0",
       "menagerie": "BSD-3-Clause",
@@ -24,7 +25,7 @@
   },
   "release": {
     "repo": "https://github.com/untrained-brain/ubrain",
-    "tag": "body-mujoco-0.9.0-4b4b16a85885",
+    "tag": "body-mujoco-0.9.0-31166cc789b8",
     "path": "bodies/mujoco"
   },
   "environment": {

@@ -42,7 +42,7 @@ class BodyServer:
     def __init__(self, host: str = "127.0.0.1", port: int = 0, robot: str | RobotSpec = "g1",
                  entry: str | None = None, seed: int = 0, head_camera: bool = False,
                  viewer: bool = False, gallery=None, record_chase: str | None = None,
-                 chase_every: int = 2, world=None):
+                 chase_every: int = 2, world=None, keep_line: bool = False):
         self.spec = robots.get(robot)
         # the follow camera's recording (for videos; never in a reply): raw RGB frames
         # appended to <record_chase>.rgb, their ticks and size in <record_chase>.json
@@ -51,7 +51,12 @@ class BodyServer:
         self._chase_file = None
         self.sim = MujocoSim(self.spec, entry, seed=seed, head_camera=head_camera, gallery=gallery, world=world)
         self.ctl = Controller(self.sim)
-        self.manifest = manifest(self.spec, self.sim.entry, gallery=self.sim.gallery, world=self.sim.world)
+        # the experimenter's line-keeper (harness, 2026-10-26): while walking forward, a turn
+        # rate that brings the body back to the line y = 0 along +x, from its TRUE pose --
+        # privileged, the harness's; the brain never receives it, it only feels the turn
+        self.keep_line = bool(keep_line)
+        self.manifest = manifest(self.spec, self.sim.entry, gallery=self.sim.gallery, world=self.sim.world,
+                                 harness="keep-line" if self.keep_line else "none")
         self.digest = manifest_digest(self.manifest)
         self._sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -116,6 +121,20 @@ class BodyServer:
                             "b64": base64.b64encode(np.ascontiguousarray(img).tobytes()).decode()}
         return msg
 
+    LINE_GAIN_Y, LINE_GAIN_YAW, LINE_MAX = 1.2, 1.5, 0.5     # rad/s per m, per rad; the cap
+
+    def _kept(self, primitive: int, params: list) -> list:
+        """The walk command with the line-keeper's turn added (walking forward only)."""
+        if self.spec.primitives[int(primitive)].name not in ("walk", "walk_offset") or len(params) < 3                 or float(params[0]) <= 0.0:
+            return params
+        q = self.sim.data.qpos
+        w, x, y, z = (float(v) for v in q[3:7])
+        yaw = np.arctan2(2 * (w * z + x * y), 1 - 2 * (y * y + z * z))
+        turn = float(np.clip(-self.LINE_GAIN_Y * float(q[1]) - self.LINE_GAIN_YAW * yaw, -self.LINE_MAX, self.LINE_MAX))
+        out = list(params)
+        out[2] = float(out[2]) + turn
+        return out
+
     def handle(self, msg: dict) -> tuple[dict, bool]:
         """Reply for one request; the bool says whether the connection ends."""
         try:
@@ -142,7 +161,10 @@ class BodyServer:
             if t == "act":
                 self._show()          # the viewer's drag force lands in xfrc_applied here
                 with self._locked():
-                    ctrl = self.ctl.ctrl(msg["primitive"], msg.get("params", []), self.sim.tick)
+                    params = msg.get("params", [])
+                    if self.keep_line:
+                        params = self._kept(msg["primitive"], params)
+                    ctrl = self.ctl.ctrl(msg["primitive"], params, self.sim.tick)
                     tick = self.sim.tick
                     for a, b, f in self._pushes:          # the experimenter's scheduled pushes
                         if a <= tick < b:
@@ -262,13 +284,15 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--chase-every", type=int, default=2, help="record every N ticks (2: 25 fps)")
     ap.add_argument("--world", default=None, choices=worlds.WORLDS,
                     help="a world from worlds/ (rooms, doors, things); default: the bare scene")
+    ap.add_argument("--keep-line", action="store_true",
+                    help="the experimenter's line-keeper: hold the walk on y = 0 (harness, from the true pose)")
     ap.add_argument("--gallery", default=None,
                     help="a folder of .png pictures to stand along the walking line (the gallery scene)")
     a = ap.parse_args(argv)
     gallery = sorted(str(f) for f in Path(a.gallery).glob("*.png")) if a.gallery else None
     srv = BodyServer(a.host, a.port, robot=a.robot, entry=a.entry, seed=a.seed, head_camera=a.head_camera,
                      viewer=a.viewer, gallery=gallery, record_chase=a.record_chase,
-                     chase_every=a.chase_every, world=a.world)
+                     chase_every=a.chase_every, world=a.world, keep_line=a.keep_line)
     print(f"body {srv.digest} ({SIMULATOR}/{srv.spec.name}) serving on {srv.host}:{srv.port} "
           f"(mujoco {srv.manifest['mujoco']}, menagerie {srv.manifest['menagerie_commit'][:8]})", flush=True)
     try:

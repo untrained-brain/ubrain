@@ -58,6 +58,7 @@ KEYED = (
     "gallery",
     "world",
     "world_digest",
+    "harness",
 )
 
 
@@ -123,7 +124,8 @@ def licenses(spec: RobotSpec) -> dict:
     return out
 
 
-def manifest(robot: str | RobotSpec = "g1", entry: str | None = None, gallery=None, world=None) -> dict:
+def manifest(robot: str | RobotSpec = "g1", entry: str | None = None, gallery=None, world=None,
+             harness: str = "none") -> dict:
     """The body's identity as a plain dict (JSON-serialisable)."""
     import worlds
     from body.worldspec import world_digest
@@ -144,6 +146,7 @@ def manifest(robot: str | RobotSpec = "g1", entry: str | None = None, gallery=No
         "gallery": gallery_digest(gallery),
         "world": wspec.name if wspec is not None else "none",
         "world_digest": world_digest(wspec),
+        "harness": harness,
         "platform": platform.platform(),
         "licenses": licenses(spec) | ({f"world:{k}": v for k, v in wspec.licenses.items()} if wspec else {}),
     }

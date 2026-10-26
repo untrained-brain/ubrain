@@ -48,6 +48,9 @@ class Thing:
     z: float
     yaw: float
     picture: str | None = None
+    file: str | None = None        # what shows it to the eyes, relative to the body's root (a
+    #                               # picture file, or a view rendered from the world): the
+    #                               # experimenter's vocabulary, announced in the truth
 
 
 @dataclass(frozen=True)
@@ -83,7 +86,7 @@ class WorldSpec:
 def world_files(spec: WorldSpec) -> tuple[Path, ...]:
     """The world package's code and data, sorted, then the files it shows."""
     root = Path(importlib.import_module(spec.package).__file__).resolve().parent
-    own = sorted((p for p in root.rglob("*") if p.is_file() and p.suffix in (".py", ".json", ".xml", ".png")
+    own = sorted((p for p in root.rglob("*") if p.is_file() and p.suffix.lower() in (".py", ".json", ".xml", ".png", ".obj", ".stl", ".msh", ".jpg", ".jpeg")
                   and "__pycache__" not in p.parts), key=lambda p: p.relative_to(root).as_posix())
     return tuple(own) + tuple(Path(f) for f in spec.data_files)
 
@@ -111,6 +114,6 @@ def truth(spec: WorldSpec | None) -> dict:
     return {"name": spec.name,
             "rooms": [{"name": r.name, "x0": r.x0, "y0": r.y0, "x1": r.x1, "y1": r.y1} for r in spec.rooms],
             "things": [{"index": t.index, "name": t.name, "kind": t.kind, "room": t.room,
-                        "x": t.x, "y": t.y, "z": t.z, "yaw": t.yaw} for t in spec.things],
+                        "x": t.x, "y": t.y, "z": t.z, "yaw": t.yaw, "file": t.file} for t in spec.things],
             "junctions": [{"name": j.name, "x": j.x, "y": j.y, "rooms": list(j.rooms)} for j in spec.junctions],
             "licenses": dict(spec.licenses)}

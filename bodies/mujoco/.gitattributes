@@ -3,3 +3,4 @@
 # same body differently (2026-10-17: c6ab37285ed0 against ad2862b87d4f).
 body/*.py -text
 robots/** -text
+worlds/** -text

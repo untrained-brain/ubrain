@@ -1,0 +1,396 @@
+{
+ "layout": 1,
+ "style": 2,
+ "seed": 0,
+ "mujoco": "3.3.1",
+ "robocasa": "1.0.1",
+ "ngeom": 677,
+ "nbody": 135,
+ "nmesh": 66,
+ "ntex": 54,
+ "fixtures": [
+  {
+   "name": "wall_room",
+   "class": "Wall",
+   "pos": [
+    2.75,
+    0.02,
+    1.5
+   ]
+  },
+  {
+   "name": "wall_backing_room",
+   "class": "Wall",
+   "pos": [
+    2.75,
+    0.14,
+    1.38
+   ]
+  },
+  {
+   "name": "wall_left_room",
+   "class": "Wall",
+   "pos": [
+    -0.02,
+    -1.5,
+    1.5
+   ]
+  },
+  {
+   "name": "wall_left_backing_room",
+   "class": "Wall",
+   "pos": [
+    -0.14,
+    -1.5,
+    1.38
+   ]
+  },
+  {
+   "name": "wall_right_room",
+   "class": "Wall",
+   "pos": [
+    5.52,
+    -1.5,
+    1.5
+   ]
+  },
+  {
+   "name": "wall_right_backing_room",
+   "class": "Wall",
+   "pos": [
+    5.64,
+    -1.5,
+    1.38
+   ]
+  },
+  {
+   "name": "wall_front_room",
+   "class": "Wall",
+   "pos": [
+    2.75,
+    -3.02,
+    1.5
+   ]
+  },
+  {
+   "name": "wall_front_backing_room",
+   "class": "Wall",
+   "pos": [
+    2.75,
+    -3.14,
+    1.38
+   ]
+  },
+  {
+   "name": "floor_room",
+   "class": "Floor",
+   "pos": [
+    2.75,
+    -1.5,
+    -0.02
+   ]
+  },
+  {
+   "name": "floor_backing_room",
+   "class": "Floor",
+   "pos": [
+    2.75,
+    -1.5,
+    -0.14
+   ]
+  },
+  {
+   "name": "outlet_room",
+   "class": "WallAccessory",
+   "pos": [
+    4.1,
+    0.0,
+    1.2
+   ]
+  },
+  {
+   "name": "outlet_2_room",
+   "class": "WallAccessory",
+   "pos": [
+    2.0,
+    0.0,
+    1.2
+   ]
+  },
+  {
+   "name": "light_switch_room",
+   "class": "WallAccessory",
+   "pos": [
+    2.5,
+    0.0,
+    1.2
+   ]
+  },
+  {
+   "name": "light_switch_2_room",
+   "class": "WallAccessory",
+   "pos": [
+    2.61,
+    0.0,
+    1.2
+   ]
+  },
+  {
+   "name": "sink_main_group",
+   "class": "Sink",
+   "pos": [
+    1.25,
+    -0.33,
+    0.969
+   ]
+  },
+  {
+   "name": "counter_main_main_group",
+   "class": "Counter",
+   "pos": [
+    1.5,
+    -0.325,
+    0.46
+   ]
+  },
+  {
+   "name": "stove_main_group",
+   "class": "Stove",
+   "pos": [
+    3.155,
+    -0.368,
+    0.46
+   ]
+  },
+  {
+   "name": "counter_right_main_group",
+   "class": "Counter",
+   "pos": [
+    3.91,
+    -0.325,
+    0.46
+   ]
+  },
+  {
+   "name": "fridge_main_group",
+   "class": "FridgeBottomFreezer",
+   "pos": [
+    4.65,
+    -0.433,
+    0.875
+   ]
+  },
+  {
+   "name": "cab_1_main_group",
+   "class": "SingleCabinet",
+   "pos": [
+    0.5,
+    -0.2,
+    1.85
+   ]
+  },
+  {
+   "name": "cab_2_main_group",
+   "class": "HingeCabinet",
+   "pos": [
+    1.25,
+    -0.2,
+    1.85
+   ]
+  },
+  {
+   "name": "cab_main_main_group",
+   "class": "HingeCabinet",
+   "pos": [
+    2.25,
+    -0.2,
+    1.85
+   ]
+  },
+  {
+   "name": "microwave_main_group",
+   "class": "Microwave",
+   "pos": [
+    3.155,
+    -0.239,
+    1.606
+   ]
+  },
+  {
+   "name": "cab_micro_main_group",
+   "class": "HingeCabinet",
+   "pos": [
+    3.155,
+    -0.2,
+    2.066
+   ]
+  },
+  {
+   "name": "cab_3_main_group",
+   "class": "OpenCabinet",
+   "pos": [
+    3.91,
+    -0.2,
+    1.85
+   ]
+  },
+  {
+   "name": "cab_4_main_group",
+   "class": "HingeCabinet",
+   "pos": [
+    4.65,
+    -0.4,
+    2.03
+   ]
+  },
+  {
+   "name": "stack_1_main_group_base",
+   "class": "Box",
+   "pos": [
+    0.5,
+    -0.265,
+    0.025
+   ]
+  },
+  {
+   "name": "stack_1_main_group_1",
+   "class": "Drawer",
+   "pos": [
+    0.5,
+    -0.3,
+    0.155
+   ]
+  },
+  {
+   "name": "stack_1_main_group_2",
+   "class": "Drawer",
+   "pos": [
+    0.5,
+    -0.3,
+    0.365
+   ]
+  },
+  {
+   "name": "stack_1_main_group_3",
+   "class": "Drawer",
+   "pos": [
+    0.5,
+    -0.3,
+    0.575
+   ]
+  },
+  {
+   "name": "stack_1_main_group_4",
+   "class": "Drawer",
+   "pos": [
+    0.5,
+    -0.3,
+    0.785
+   ]
+  },
+  {
+   "name": "stack_2_main_group_base",
+   "class": "Box",
+   "pos": [
+    1.25,
+    -0.265,
+    0.025
+   ]
+  },
+  {
+   "name": "stack_2_main_group_1",
+   "class": "HingeCabinet",
+   "pos": [
+    1.25,
+    -0.3,
+    0.365
+   ]
+  },
+  {
+   "name": "stack_2_main_group_2",
+   "class": "PanelCabinet",
+   "pos": [
+    1.25,
+    -0.3,
+    0.785
+   ]
+  },
+  {
+   "name": "dishwasher_main_group",
+   "class": "Dishwasher",
+   "pos": [
+    2.075,
+    -0.325,
+    0.445
+   ]
+  },
+  {
+   "name": "stack_3_main_group_base",
+   "class": "Box",
+   "pos": [
+    2.575,
+    -0.265,
+    0.025
+   ]
+  },
+  {
+   "name": "stack_3_main_group_1",
+   "class": "SingleCabinet",
+   "pos": [
+    2.575,
+    -0.3,
+    0.47
+   ]
+  },
+  {
+   "name": "stack_4_main_group_base",
+   "class": "Box",
+   "pos": [
+    3.91,
+    -0.265,
+    0.025
+   ]
+  },
+  {
+   "name": "stack_4_main_group_1",
+   "class": "SingleCabinet",
+   "pos": [
+    3.91,
+    -0.3,
+    0.365
+   ]
+  },
+  {
+   "name": "stack_4_main_group_2",
+   "class": "Drawer",
+   "pos": [
+    3.91,
+    -0.3,
+    0.785
+   ]
+  }
+ ],
+ "dropped_accessories": [
+  "dish_rack",
+  "oil_bottle",
+  "soap_dispenser",
+  "toaster",
+  "toaster_oven",
+  "knife_block",
+  "digital_scale",
+  "paper_towel",
+  "electric_kettle",
+  "stand_mixer",
+  "blender",
+  "coffee_machine",
+  "glass_cup",
+  "glass_cup_2",
+  "glass_cup_3"
+ ],
+ "licenses": {
+  "code": "MIT (RoboCasa)",
+  "assets": "CC BY 4.0 (RoboCasa)"
+ },
+ "files": 49,
+ "bytes": 21475419
+}
