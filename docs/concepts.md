@@ -10,6 +10,25 @@ synapse changes using only what its two neurons and, sometimes, a broadcast sign
 Where trained models are useful -- seeing, reading -- they are plugged in from
 outside as **codecs**, frozen. The brain is the part that never trains.
 
+## Two primitives: a point and a machine
+
+Everything in the brain is built from two objects. A **content** is a point on one
+sphere: every item, episode or key is a unit vector in the brain's workspace width,
+and two contents are as alike as the angle between them is small. A **machine** moves
+the contents in time: each region is at any moment in one of a few **modes**
+(encoding or recalling, the slot a cycle stands at, default or executive, a gate open
+or closed); an **event** moves it to another mode; a transition fires only if its
+**guard** holds (a comparison of codes against a threshold the region's law derives)
+and performs an **action** on the contents (a write, a replay, a decay). Regions are
+such machines side by side, some nested, and the neuromodulators are scalars
+broadcast to every guard and rate. A tick is one turn of the outer loop; a saved
+brain is its modes and its contents; an observation reports one or the other.
+
+A brain holds many episodes from the first tick, and every recall makes two choices:
+*which* episode the cue belongs to (limited by what the episodes share, not by how
+many there are) and *what* that episode held (limited by the episode's load). The
+laws behind both are in the series' first volume.
+
 ## Regions
 
 A region is a piece of the brain with typed inputs and outputs and its own way of

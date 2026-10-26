@@ -18,6 +18,10 @@ certified number.
   buffer capacity, the cortical store's capacity and horizon, the brace's lead, the
   striatum's time constant), each checked against a simulation of its store.
 - `start_body` says why a body did not start.
+- **The two primitives named** (docs/concepts.md; UBI-2, UBI-10, UBI-11): a brain is
+  contents on one sphere and machines of a few modes over it; a tick is one turn of
+  the outer loop; a saved state holds the contents and the modes; an observable is
+  one or the other. No code changed: `state.py` already saves both.
 - The interface specification, draft 0.1, written beside the code (not yet published).
 
 ## 0.13.0.dev1
