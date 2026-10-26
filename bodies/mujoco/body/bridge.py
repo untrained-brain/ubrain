@@ -34,6 +34,11 @@ import worlds
 __all__ = ["BodyServer", "main"]
 
 CHASE_W, CHASE_H = 640, 360          # the follow camera's frame size
+#: The follow camera's views (for people watching; never in a reply). `follow` is behind and
+#: low (the open corridor's); `above` looks along the rooms from 60 degrees up -- indoors the low
+#: view ends inside a wall (2026-10-27, measured in the bedroom), from above the walls are lines
+CHASE_VIEWS = {"follow": {"distance": 3.6, "azimuth": 15.0, "elevation": -18.0},
+               "above": {"distance": 6.0, "azimuth": 90.0, "elevation": -60.0}}
 
 
 class BodyServer:
@@ -42,11 +47,14 @@ class BodyServer:
     def __init__(self, host: str = "127.0.0.1", port: int = 0, robot: str | RobotSpec = "g1",
                  entry: str | None = None, seed: int = 0, head_camera: bool = False,
                  viewer: bool = False, gallery=None, record_chase: str | None = None,
-                 chase_every: int = 2, world=None, keep_line: bool = False):
+                 chase_every: int = 2, world=None, keep_line: bool = False, chase_view: str = "follow"):
         self.spec = robots.get(robot)
         # the follow camera's recording (for videos; never in a reply): raw RGB frames
         # appended to <record_chase>.rgb, their ticks and size in <record_chase>.json
         self._chase_path, self._chase_every = record_chase, max(1, int(chase_every))
+        if chase_view not in CHASE_VIEWS:
+            raise ValueError(f"chase view {chase_view!r}: one of {sorted(CHASE_VIEWS)}")
+        self._chase_view = chase_view
         self._chase_ticks: list[int] = []
         self._chase_file = None
         self.sim = MujocoSim(self.spec, entry, seed=seed, head_camera=head_camera, gallery=gallery, world=world)
@@ -185,7 +193,7 @@ class BodyServer:
             return protocol.error(f"{type(e).__name__}: {e}"), False
 
     def _record_chase(self) -> None:
-        frame = self.sim.render_chase(CHASE_W, CHASE_H)
+        frame = self.sim.render_chase(CHASE_W, CHASE_H, **CHASE_VIEWS[self._chase_view])
         if self._chase_file is None:
             self._chase_file = open(self._chase_path + ".rgb", "wb")
         self._chase_file.write(np.ascontiguousarray(frame).tobytes())
@@ -283,6 +291,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--record-chase", default=None, metavar="PATH",
                     help="record a camera following the robot (for videos): PATH.rgb + PATH.json")
     ap.add_argument("--chase-every", type=int, default=2, help="record every N ticks (2: 25 fps)")
+    ap.add_argument("--chase-view", default="follow", choices=sorted(CHASE_VIEWS),
+                    help="the follow camera's view: follow (behind, low) or above (60 degrees up, for rooms)")
     ap.add_argument("--world", default=None, choices=worlds.WORLDS,
                     help="a world from worlds/ (rooms, doors, things); default: the bare scene")
     ap.add_argument("--keep-line", action="store_true",
@@ -293,7 +303,8 @@ def main(argv: list[str] | None = None) -> int:
     gallery = sorted(str(f) for f in Path(a.gallery).glob("*.png")) if a.gallery else None
     srv = BodyServer(a.host, a.port, robot=a.robot, entry=a.entry, seed=a.seed, head_camera=a.head_camera,
                      viewer=a.viewer, gallery=gallery, record_chase=a.record_chase,
-                     chase_every=a.chase_every, world=a.world, keep_line=a.keep_line)
+                     chase_every=a.chase_every, world=a.world, keep_line=a.keep_line,
+                     chase_view=a.chase_view)
     print(f"body {srv.digest} ({SIMULATOR}/{srv.spec.name}) serving on {srv.host}:{srv.port} "
           f"(mujoco {srv.manifest['mujoco']}, menagerie {srv.manifest['menagerie_commit'][:8]})", flush=True)
     try:

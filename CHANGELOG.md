@@ -5,7 +5,16 @@ change between them. Each region is certified against the law it was built to
 follow before it ships; a version adds regions or capabilities, and never moves a
 certified number.
 
-## 0.19.0.dev1 (in development)
+## 0.20.0.dev1 (in development)
+
+- The `companion` profile gains working memory: the prefrontal buffer (gamma_m 0.75, the measured
+  decay) holds a list of goals (`goal_item`, `recall_goal`, `goal_clear` -> `goal_memory`,
+  `goal_remembered`). On the gallery companion's body, 36 lists of 2-12 goals: recall within 0.7 SD
+  of the buffer's law at every length, the span saturating near eight.
+- `start_body(chase_view="above")`: the body's follow camera from 60 degrees up (for rooms; the low
+  view ends inside walls indoors). Never seen by the brain.
+
+## 0.19.0.dev1
 
 - **Region instances**: a wiring may name `base@tag` (`hippocampus.episode@route`) -- a second
   copy of a region, the same code and certifying laws, its own state and ports.
