@@ -170,6 +170,8 @@ class MujocoSim:
             raise RuntimeError(f"model lacks site {self.spec.imu_site!r}")
         self.has_head_camera = head_camera
         self._renderer = None
+        from body.skills import Navigator
+        self.navigator = Navigator(self)                 # the body's navigation skills (W4)
         self.reset(seed)
 
     # -- state -------------------------------------------------------------

@@ -25,7 +25,7 @@ def test_hello_carries_identity_and_layout(server):
         assert h["control_hz"] == 50
         assert h["manifest_digest"] == server.digest
         assert h["proprio_dim"] == 70 and h["contact_dim"] == 12
-        assert [p["name"] for p in h["primitives"]] == ["stand", "pose", "sway", "walk", "walk_offset"]
+        assert [p["name"] for p in h["primitives"]] == ["stand", "pose", "sway", "walk", "walk_offset", "to_door", "to_wall", "turn_left", "turn_right", "turn_around", "door_left", "door_right"]
 
 
 def test_reset_and_act_round_trip(server):

@@ -47,7 +47,8 @@ def test_a_scheduled_push_moves_the_body_and_never_appears_in_a_reply(server):
     for r in pushed:
         text = json.dumps(r)
         assert not any(word in text for word in PRIVILEGED)
-        assert set(r) == {"type", "tick", "proprio", "upright", "contact", "image", "tone", "manifest_digest"}
+        assert set(r) == {"type", "tick", "proprio", "upright", "contact", "image", "tone", "manifest_digest",
+                          "skill"}                          # W4: which skill runs, and whether it is done
 
 
 def test_reset_clears_the_schedule(server):

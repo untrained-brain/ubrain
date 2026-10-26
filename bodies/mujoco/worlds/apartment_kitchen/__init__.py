@@ -32,16 +32,17 @@ KITCHEN = HERE / "kitchen_L001_S002"
 XML = KITCHEN / "kitchen.xml"
 
 # the kitchen's own frame: x 0..5.6 along the counters, y 0 (counter wall) .. -3.0 (front)
-KX = A.ROOMS[-1].x1                    # it starts where the study ends
+KX = A.LINE[-1].x1                     # it starts where the study ends
 KY = 1.5                               # its y 0..-3 becomes 1.5..-1.5, the apartment's width
 KZ = 0.001                             # above the scene's floor
 K_LEN = 5.6
 REMOVE = ("wall_left_room_main", "wall_left_backing_room_main")   # the side the doorway replaces
 APPLIANCES = ("Sink", "Dishwasher", "Stove", "Microwave", "FridgeBottomFreezer")
 
-ROOMS = A.ROOMS + (Room("kitchen", KX, -A.HALF_W, KX + K_LEN, A.HALF_W),)
+LINE = A.LINE + (Room("kitchen", KX, -A.HALF_W, KX + K_LEN, A.HALF_W),)
+ROOMS = LINE + A.SIDE_ROOMS
 JUNCTIONS = tuple(Junction(f"door_{a.name}_{b.name}", a.x1, 0.0, (a.name, b.name))
-                  for a, b in zip(ROOMS, ROOMS[1:]))
+                  for a, b in zip(LINE, LINE[1:])) + A.SIDE_JUNCTIONS
 
 
 def _appliances(kitchen: Path = KITCHEN, views: str = "worlds/apartment_kitchen/views") -> tuple[Thing, ...]:
@@ -90,7 +91,7 @@ SPEC = WorldSpec(
 
 def make(kitchen_dir: Path, views: str) -> WorldSpec:
     """The same world around another exported kitchen (a style or layout under trial):
-    measurement only -- the registered world is SPEC."""
+    for trials only -- the world in the registry (WORLDS) is SPEC."""
     kitchen_dir = Path(kitchen_dir)
     return WorldSpec(name=f"apartment_kitchen:{kitchen_dir.name}", doc=SPEC.doc, package=SPEC.package,
                      rooms=ROOMS, things=A.SPEC.things + _appliances(kitchen_dir, views), junctions=JUNCTIONS,

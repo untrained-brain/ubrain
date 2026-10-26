@@ -37,6 +37,15 @@ PRIMITIVES: tuple[Primitive, ...] = (
     Primitive(2, "sway", 2, "stand plus a sinusoidal waist-yaw offset: params = (amplitude radians, period ticks)"),
     Primitive(3, "walk", 3, "the frozen locomotion policy: params = (vx m/s, vy m/s, yaw rate rad/s)"),
     Primitive(4, "walk_offset", 32, "walk plus a per-joint offset (radians): params = (vx, vy, wz, 29 offsets)"),
+    # W4 (2026-10-27): navigation skills on the same gait (body/skills.py): the brain picks
+    # which and in what order, the body steers
+    Primitive(5, "to_door", 0, "walk straight through the next door ahead, stop 0.9 m past it"),
+    Primitive(6, "to_wall", 0, "walk straight, stop 1.0 m before the wall ahead"),
+    Primitive(7, "turn_left", 0, "turn on the spot a quarter to the left"),
+    Primitive(8, "turn_right", 0, "turn on the spot a quarter to the right"),
+    Primitive(9, "turn_around", 0, "turn on the spot half a turn"),
+    Primitive(10, "door_left", 0, "walk on to the next door on the left, turn, go through it"),
+    Primitive(11, "door_right", 0, "walk on to the next door on the right, turn, go through it"),
 )
 
 LEGS = np.arange(12)          # the policy's 12 actuators come first, in its order
@@ -61,6 +70,10 @@ def _gait(ctl, tick: int) -> PolicyGait:
 def targets(ctl, p: Primitive, params: np.ndarray, tick: int) -> np.ndarray:
     """Joint targets before clipping. `ctl` is the body's Controller: it gives
     the home targets and resolves actuator names."""
+    from body.skills import SKILLS
+    if p.name in SKILLS:                                  # a skill: its walk velocity, on the gait
+        vel = np.array(ctl.sim.navigator.command(p.name, tick))
+        return targets(ctl, PRIMITIVES[3], vel, tick)
     if p.name in ("walk", "walk_offset"):
         sim = ctl.sim
         g = _gait(ctl, tick)

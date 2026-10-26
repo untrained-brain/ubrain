@@ -40,6 +40,7 @@ MODEL_FILES = (
     "bridge.py",
     "robot.py",
     "worldspec.py",
+    "skills.py",
 )
 
 # What the digest is keyed on. `platform` is reported but excluded on purpose.

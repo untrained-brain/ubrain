@@ -15,10 +15,11 @@ from body.worldspec import truth, world_digest
 
 def test_the_apartment_builds_rooms_doors_and_things():
     w = worlds.get("apartment")
-    assert [r.name for r in w.rooms] == ["hall", "living", "study"]
-    assert len(w.things) == 21 and len(w.slots) == 15 and len(w.junctions) == 2
-    hung = [t for t in w.things if t.room]                         # day 0: the first fifteen
-    assert [t.index for t in hung] == list(range(15)) and all(w.room_of(t.x, t.y) == t.room for t in hung)
+    assert [r.name for r in w.rooms] == ["hall", "living", "study", "bedroom", "bath"]
+    assert len(w.things) == 21 and len(w.slots) == 19 and len(w.junctions) == 4
+    hung = [t for t in w.things if t.room]                         # day 0: the first nineteen
+    assert [t.index for t in hung] == list(range(19)) and all(w.room_of(t.x, t.y) == t.room for t in hung)
+    assert [t.room for t in hung][15:] == ["bedroom", "bedroom", "bath", "bath"]
     sim = MujocoSim("g1", world="apartment", head_camera=True)
     for name in ("wall_left", "door_hall_living_l", "floor_study", "thing0", "thing14"):
         assert mujoco.mj_name2id(sim.model, mujoco.mjtObj.mjOBJ_GEOM, name) >= 0, name
@@ -40,7 +41,7 @@ def test_the_truth_goes_to_the_experimenter_not_into_the_manifest():
         with BodyClient("127.0.0.1", srv.port) as c:
             h = c.hello
             assert h["world"]["name"] == "apartment" and len(h["world"]["things"]) == 21
-            assert len(h["world"]["slots"]) == 15 and h["world"]["schedule"]["0"] == list(range(15))
+            assert len(h["world"]["slots"]) == 19 and h["world"]["schedule"]["0"] == list(range(19))
             assert "things" not in json.dumps(h["manifest"])            # the brain's record has no truth
     finally:
         srv.shutdown()
@@ -49,7 +50,8 @@ def test_the_truth_goes_to_the_experimenter_not_into_the_manifest():
 
 def test_the_kitchen_is_the_fourth_room():
     w = worlds.get("apartment_kitchen")
-    assert [r.name for r in w.rooms] == ["hall", "living", "study", "kitchen"] and len(w.junctions) == 3
+    assert [r.name for r in w.rooms] == ["hall", "living", "study", "kitchen", "bedroom", "bath"]
+    assert len(w.junctions) == 5
     names = [t.name for t in w.things if t.kind == "appliance"]
     assert set(names) == {"sink", "dishwasher", "stove", "microwave", "fridge"}
     assert all(w.room_of(t.x, t.y) == "kitchen" for t in w.things if t.kind == "appliance")
@@ -80,7 +82,7 @@ def test_the_change_schedule_rehangs_the_pictures_at_reset():
     from body.worldspec import arrangement
     w = worlds.get("apartment")
     d0, d3 = arrangement(w, 0), arrangement(w, 3)
-    assert d0 == list(range(15)) and len(set(d3)) == 15 and d3 != d0 and arrangement(w, 3) == d3
+    assert d0 == list(range(19)) and len(set(d3)) == 19 and d3 != d0 and arrangement(w, 3) == d3
     sim = MujocoSim("g1", world="apartment")
     gid = lambda i: mujoco.mj_name2id(sim.model, mujoco.mjtObj.mjOBJ_GEOM, f"thing{i}")
     sim.reset(3)

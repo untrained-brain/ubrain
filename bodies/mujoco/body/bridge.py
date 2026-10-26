@@ -113,6 +113,7 @@ class BodyServer:
             "image": None,
             "tone": bool(self._heard),
             "manifest_digest": self.digest,
+            "skill": self.sim.navigator.status(),         # which skill runs and whether it is done (W4)
         }
         if want_image:
             h, w = (image_size or [224, 224])

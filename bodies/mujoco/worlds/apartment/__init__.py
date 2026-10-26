@@ -33,16 +33,36 @@ FIRST, STEP = 2.0, 1.2               # a picture's place in its room: the first 
 SIDE, YAW, Z, HALF = 0.65, 0.6, 1.05, 0.45     # the gallery's panel geometry
 FLOORS = {"hall": (0.55, 0.50, 0.45), "living": (0.45, 0.52, 0.60), "study": (0.52, 0.58, 0.45)}
 
-ROOMS = tuple(Room(name, X0 + i * ROOM_LEN, -HALF_W, X0 + (i + 1) * ROOM_LEN, HALF_W)
-              for i, name in enumerate(("hall", "living", "study")))
-_FILES = sorted(PICTURES.glob("*.png"))                  # all 21: fifteen hang on a given day
-N_SLOTS = len(ROOMS) * PER_ROOM
+LINE = tuple(Room(name, X0 + i * ROOM_LEN, -HALF_W, X0 + (i + 1) * ROOM_LEN, HALF_W)
+             for i, name in enumerate(("hall", "living", "study")))
+# W4 (2026-10-27): two side rooms, so a route has choices -- a bedroom through a door in the
+# living room's left wall, a bath through a door in the study's right wall
+SIDE_W, SIDE_D = 4.0, 3.5                     # along the line, and deep
+SIDE_DOORS = (("bedroom", "living", +1.0, X0 + 1.5 * ROOM_LEN), ("bath", "study", -1.0, X0 + 2.5 * ROOM_LEN))
+SIDE_ROOMS = tuple(Room(name, x - SIDE_W / 2, HALF_W if side > 0 else -HALF_W - SIDE_D,
+                  x + SIDE_W / 2, HALF_W + SIDE_D if side > 0 else -HALF_W)
+             for name, _, side, x in SIDE_DOORS)
+ROOMS = LINE + SIDE_ROOMS
+_FILES = sorted(PICTURES.glob("*.png"))                  # all 21: nineteen hang on a given day
+N_LINE = len(LINE) * PER_ROOM
+SIDE_PER = 2                                             # pictures on a side room's far wall
+N_SLOTS = N_LINE + len(SIDE_ROOMS) * SIDE_PER
 
 
 def _slot(k: int) -> Slot:
-    room = ROOMS[k // PER_ROOM]
-    side = 1.0 if k % 2 == 0 else -1.0
-    return Slot(room.x0 + FIRST + STEP * (k % PER_ROOM), side * SIDE, Z, side * YAW)
+    if k < N_LINE:
+        room = LINE[k // PER_ROOM]
+        side = 1.0 if k % 2 == 0 else -1.0
+        return Slot(room.x0 + FIRST + STEP * (k % PER_ROOM), side * SIDE, Z, side * YAW)
+    i, j = divmod(k - N_LINE, SIDE_PER)                   # a side room's far wall, facing the door
+    name, _, side, x = SIDE_DOORS[i]
+    room = SIDE_ROOMS[i]
+    far = room.y1 - 0.05 if side > 0 else room.y0 + 0.05
+    return Slot(x + (-0.9 if j == 0 else 0.9), far, Z, -side * np.pi / 2)
+
+
+def _slot_room(k: int) -> str:
+    return LINE[k // PER_ROOM].name if k < N_LINE else SIDE_ROOMS[(k - N_LINE) // SIDE_PER].name
 
 
 SLOTS = tuple(_slot(k) for k in range(N_SLOTS))
@@ -50,9 +70,9 @@ SLOTS = tuple(_slot(k) for k in range(N_SLOTS))
 
 def schedule(seed: int) -> list[int]:
     """The change schedule (2026-10-26, stage 2): which picture hangs in each slot on day
-    `seed`. Day 0 is the first fifteen in order (the layout of W1-W3); every other day a
-    seeded choice of fifteen of the 21, in a seeded order -- days differ, so a night has
-    something to keep and a morning something new."""
+    `seed`. Day 0 is the first nineteen in order (the line's fifteen as in W1-W3, then the
+    side rooms' four); every other day a seeded choice of nineteen of the 21, in a seeded
+    order -- days differ, so a night has something to keep and a morning something new."""
     if int(seed) == 0:
         return list(range(N_SLOTS))
     rng = np.random.default_rng([20261026, int(seed)])
@@ -66,15 +86,19 @@ def _things() -> tuple[Thing, ...]:
     for i, f in enumerate(_FILES):
         k = day0.get(i)
         sl = SLOTS[k] if k is not None else Slot(0.0, 0.0, -10.0, 0.0)
-        room = ROOMS[k // PER_ROOM].name if k is not None else ""
+        room = _slot_room(k) if k is not None else ""
         out.append(Thing(index=i, name=f.stem.split("_", 1)[1], kind="picture", room=room,
                          x=sl.x, y=sl.y, z=sl.z, yaw=sl.yaw, picture=f.name,
                          file=f"scenes/gallery_cc0/{f.name}"))
     return tuple(out)
 
 
-JUNCTIONS = tuple(Junction(f"door_{a.name}_{b.name}", a.x1, 0.0, (a.name, b.name))
-                  for a, b in zip(ROOMS, ROOMS[1:]))
+LINE_JUNCTIONS = tuple(Junction(f"door_{a.name}_{b.name}", a.x1, 0.0, (a.name, b.name))
+                       for a, b in zip(LINE, LINE[1:]))
+SIDE_JUNCTIONS = tuple(Junction(f"door_{via}_{name}", x, side * HALF_W, (via, name))
+                       for name, via, side, x in SIDE_DOORS)
+JUNCTIONS = LINE_JUNCTIONS + SIDE_JUNCTIONS
+FLOORS["bedroom"], FLOORS["bath"] = (0.60, 0.50, 0.55), (0.50, 0.60, 0.62)
 
 
 def _box(parent, name, pos, size, rgba, collide=True):
@@ -93,17 +117,28 @@ def build(mjspec, spec: "WorldSpec", end_wall: bool = True) -> None:
     mjspec.visual.headlight.diffuse = [spec.light[1]] * 3
     wb = mjspec.worldbody
     wall = (0.85, 0.85, 0.82, 1.0)
-    x_end = ROOMS[-1].x1
-    length = x_end - X0
-    for s, sign in (("left", 1.0), ("right", -1.0)):             # the long side walls
-        _box(wb, f"wall_{s}", (X0 + length / 2, sign * (HALF_W + WALL_T), WALL_H / 2),
-             (length / 2, WALL_T, WALL_H / 2), wall)
+    x_end = LINE[-1].x1
+    for s, sign in (("left", 1.0), ("right", -1.0)):             # the long side walls, a gap per side door
+        gaps = sorted(x for _, _, side, x in SIDE_DOORS if side == sign)
+        cuts = [X0] + [v for x in gaps for v in (x - DOOR_HALF, x + DOOR_HALF)] + [x_end]
+        for k in range(0, len(cuts), 2):
+            a, b = cuts[k], cuts[k + 1]
+            _box(wb, f"wall_{s}" if k == 0 else f"wall_{s}{k // 2}", ((a + b) / 2, sign * (HALF_W + WALL_T), WALL_H / 2),
+                 ((b - a) / 2, WALL_T, WALL_H / 2), wall)
+        for x in gaps:
+            _box(wb, f"wall_{s}_lintel{int(x)}", (x, sign * (HALF_W + WALL_T), WALL_H - 0.2),
+                 (DOOR_HALF, WALL_T, 0.2), wall)
+    for (name, _, side, x), r in zip(SIDE_DOORS, SIDE_ROOMS):          # the side rooms' own walls
+        far = r.y1 + WALL_T if side > 0 else r.y0 - WALL_T
+        _box(wb, f"wall_{name}_far", (x, far, WALL_H / 2), (SIDE_W / 2 + WALL_T, WALL_T, WALL_H / 2), wall)
+        for e, xe in (("a", r.x0 - WALL_T), ("b", r.x1 + WALL_T)):
+            _box(wb, f"wall_{name}_{e}", (xe, (r.y0 + r.y1) / 2, WALL_H / 2), (WALL_T, SIDE_D / 2, WALL_H / 2), wall)
     _box(wb, "wall_back", (X0 - WALL_T, 0.0, WALL_H / 2), (WALL_T, HALF_W + 2 * WALL_T, WALL_H / 2), wall)
     if end_wall:
         _box(wb, "wall_end", (x_end + WALL_T, 0.0, WALL_H / 2), (WALL_T, HALF_W + 2 * WALL_T, WALL_H / 2), wall)
     jamb = (HALF_W - DOOR_HALF) / 2
     for j in spec.junctions:                                    # cross walls with a doorway
-        if j.x > x_end + 1e-6:
+        if j.x > x_end + 1e-6 or abs(j.y) > 1e-6:               # (side doors are gaps in the long walls)
             continue
         for s, sign in (("l", 1.0), ("r", -1.0)):
             _box(wb, f"{j.name}_{s}", (j.x, sign * (DOOR_HALF + jamb), WALL_H / 2),
@@ -112,8 +147,8 @@ def build(mjspec, spec: "WorldSpec", end_wall: bool = True) -> None:
     for r in spec.rooms:                                        # a floor colour per room (visual only)
         if r.name not in FLOORS:
             continue
-        _box(wb, f"floor_{r.name}", ((r.x0 + r.x1) / 2, 0.0, 0.001), ((r.x1 - r.x0) / 2, HALF_W, 0.001),
-             (*FLOORS[r.name], 1.0), collide=False)
+        _box(wb, f"floor_{r.name}", ((r.x0 + r.x1) / 2, (r.y0 + r.y1) / 2, 0.001),
+             ((r.x1 - r.x0) / 2, (r.y1 - r.y0) / 2, 0.001), (*FLOORS[r.name], 1.0), collide=False)
     for t in spec.things:                                       # the pictures (visual only)
         if t.picture is None:
             continue

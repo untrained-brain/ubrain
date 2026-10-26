@@ -22,7 +22,7 @@ def test_codebook_is_the_robots_and_indexed_in_order():
     assert by_name("sway", G1).n_params == 2
     assert by_name("walk", G1).n_params == 3
     assert by_name("walk_offset", G1).n_params == 32
-    assert G1.param_counts == [0, 29, 2, 3, 32]
+    assert G1.param_counts == [0, 29, 2, 3, 32, 0, 0, 0, 0, 0, 0, 0]   # W4: seven skills
     with pytest.raises(KeyError):
         by_name("reach", G1)
 
