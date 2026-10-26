@@ -5,7 +5,13 @@ change between them. Each region is certified against the law it was built to
 follow before it ships; a version adds regions or capabilities, and never moves a
 certified number.
 
-## 0.16.0.dev1 (in development)
+## 0.17.0.dev1 (in development)
+
+- **A body can live in a world** (the MuJoCo body 0.9.0: `worlds/`, a `WorldSpec` beside the
+  robot -- rooms, doors, things and their truth for the experimenter, never the brain):
+  `start_body(world="apartment")`; `start_body_for` relaunches the world a saved brain names.
+
+## 0.16.0.dev1
 
 - **The `companion` profile**: the explorer's cerebellum under the attender's memory
   system with the striatum behind it, for a brain that lives in one body for days --

@@ -39,6 +39,7 @@ MODEL_FILES = (
     "protocol.py",
     "bridge.py",
     "robot.py",
+    "worldspec.py",
 )
 
 # What the digest is keyed on. `platform` is reported but excluded on purpose.
@@ -55,6 +56,8 @@ KEYED = (
     "entry",
     "numpy",
     "gallery",
+    "world",
+    "world_digest",
 )
 
 
@@ -120,9 +123,12 @@ def licenses(spec: RobotSpec) -> dict:
     return out
 
 
-def manifest(robot: str | RobotSpec = "g1", entry: str | None = None, gallery=None) -> dict:
+def manifest(robot: str | RobotSpec = "g1", entry: str | None = None, gallery=None, world=None) -> dict:
     """The body's identity as a plain dict (JSON-serialisable)."""
+    import worlds
+    from body.worldspec import world_digest
     spec = robots.get(robot)
+    wspec = worlds.get(world)
     return {
         "body_version": BODY_VERSION,
         "simulator": SIMULATOR,
@@ -136,8 +142,10 @@ def manifest(robot: str | RobotSpec = "g1", entry: str | None = None, gallery=No
         "entry": entry or spec.entry,
         "numpy": np.__version__,
         "gallery": gallery_digest(gallery),
+        "world": wspec.name if wspec is not None else "none",
+        "world_digest": world_digest(wspec),
         "platform": platform.platform(),
-        "licenses": licenses(spec),
+        "licenses": licenses(spec) | ({f"world:{k}": v for k, v in wspec.licenses.items()} if wspec else {}),
     }
 
 

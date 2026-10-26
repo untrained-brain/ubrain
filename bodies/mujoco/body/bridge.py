@@ -28,6 +28,8 @@ from body.primitives import Controller
 from body.robot import RobotSpec
 from body.sensors import contact_dim, contact_forces, proprio_dim, proprio_layout, proprioception
 from body.sim import CONTROL_HZ, SIMULATOR, MujocoSim, gallery_layout
+from body.worldspec import truth
+import worlds
 
 __all__ = ["BodyServer", "main"]
 
@@ -40,16 +42,16 @@ class BodyServer:
     def __init__(self, host: str = "127.0.0.1", port: int = 0, robot: str | RobotSpec = "g1",
                  entry: str | None = None, seed: int = 0, head_camera: bool = False,
                  viewer: bool = False, gallery=None, record_chase: str | None = None,
-                 chase_every: int = 2):
+                 chase_every: int = 2, world=None):
         self.spec = robots.get(robot)
         # the follow camera's recording (for videos; never in a reply): raw RGB frames
         # appended to <record_chase>.rgb, their ticks and size in <record_chase>.json
         self._chase_path, self._chase_every = record_chase, max(1, int(chase_every))
         self._chase_ticks: list[int] = []
         self._chase_file = None
-        self.sim = MujocoSim(self.spec, entry, seed=seed, head_camera=head_camera, gallery=gallery)
+        self.sim = MujocoSim(self.spec, entry, seed=seed, head_camera=head_camera, gallery=gallery, world=world)
         self.ctl = Controller(self.sim)
-        self.manifest = manifest(self.spec, self.sim.entry, gallery=self.sim.gallery)
+        self.manifest = manifest(self.spec, self.sim.entry, gallery=self.sim.gallery, world=self.sim.world)
         self.digest = manifest_digest(self.manifest)
         self._sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -90,6 +92,9 @@ class BodyServer:
             "gallery": [{"index": i, "file": Path(f).name, "x": x, "y": y}
                         for i, (f, (x, y, _)) in enumerate(zip(self.sim.gallery,
                                                                gallery_layout(len(self.sim.gallery))))],
+            # the world's truth (rooms, things, doors): for the experimenter that scores
+            # the brain; ubrain's manifest never carries it
+            "world": truth(self.sim.world),
         }
 
     def state(self, want_contact: bool = False, want_image: bool = False,
@@ -255,13 +260,15 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--record-chase", default=None, metavar="PATH",
                     help="record a camera following the robot (for videos): PATH.rgb + PATH.json")
     ap.add_argument("--chase-every", type=int, default=2, help="record every N ticks (2: 25 fps)")
+    ap.add_argument("--world", default=None, choices=worlds.WORLDS,
+                    help="a world from worlds/ (rooms, doors, things); default: the bare scene")
     ap.add_argument("--gallery", default=None,
                     help="a folder of .png pictures to stand along the walking line (the gallery scene)")
     a = ap.parse_args(argv)
     gallery = sorted(str(f) for f in Path(a.gallery).glob("*.png")) if a.gallery else None
     srv = BodyServer(a.host, a.port, robot=a.robot, entry=a.entry, seed=a.seed, head_camera=a.head_camera,
                      viewer=a.viewer, gallery=gallery, record_chase=a.record_chase,
-                     chase_every=a.chase_every)
+                     chase_every=a.chase_every, world=a.world)
     print(f"body {srv.digest} ({SIMULATOR}/{srv.spec.name}) serving on {srv.host}:{srv.port} "
           f"(mujoco {srv.manifest['mujoco']}, menagerie {srv.manifest['menagerie_commit'][:8]})", flush=True)
     try:

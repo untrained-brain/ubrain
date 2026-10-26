@@ -108,18 +108,19 @@ def _add_gallery(mjspec, images) -> None:
 
 
 def load_model(spec: RobotSpec, entry: str | None = None,
-               head_camera: bool = False, gallery=None) -> mujoco.MjModel:
+               head_camera: bool = False, gallery=None, world=None) -> mujoco.MjModel:
     """The compiled model. With `head_camera`, the menagerie XML is loaded as an
     MjSpec and a forward-looking camera named HEAD_CAMERA is added to the
     spec's head_camera_body before compiling (the course's trick, re-done here).
     With `gallery` (a list of image files), picture panels stand along the walking
-    line (`_add_gallery`); without it the model is the default scene's."""
+    line (`_add_gallery`); with `world` (a `WorldSpec`), the world builds itself into
+    the model (`worlds/`); without either the model is the default scene's."""
     entry = entry or spec.entry
     rob = mm.get(spec.menagerie)
     known = {e.name for e in rob.entry_points}
     if entry not in known:
         raise ValueError(f"{entry!r} is not an entry of {spec.menagerie!r}; have {sorted(known)}")
-    if not head_camera and not gallery:
+    if not head_camera and not gallery and world is None:
         model = rob.model(entry)
     else:
         rob.model(entry)  # warms the asset cache so xml() resolves
@@ -133,6 +134,8 @@ def load_model(spec: RobotSpec, entry: str | None = None,
             cam.fovy = spec.head_camera_fovy
         if gallery:
             _add_gallery(mjspec, list(gallery))
+        if world is not None:
+            world.build(mjspec, world)
         model = mjspec.compile()
     model.opt.timestep = PHYSICS_DT
     return model
@@ -143,11 +146,14 @@ class MujocoSim:
     home keyframe; `step(ctrl)` advances one control tick."""
 
     def __init__(self, robot: str | RobotSpec = "g1", entry: str | None = None,
-                 seed: int = 0, head_camera: bool = False, gallery=None):
+                 seed: int = 0, head_camera: bool = False, gallery=None, world=None):
+        import worlds
         self.spec = robots.get(robot)
         self.robot, self.entry = self.spec.name, entry or self.spec.entry
         self.gallery = [str(g) for g in (gallery or [])]
-        self.model = load_model(self.spec, self.entry, head_camera=head_camera, gallery=self.gallery)
+        self.world = worlds.get(world)
+        self.model = load_model(self.spec, self.entry, head_camera=head_camera, gallery=self.gallery,
+                                world=self.world)
         self.data = mujoco.MjData(self.model)
         self.key_home = mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_KEY, self.spec.keyframe)
         if self.key_home < 0:
