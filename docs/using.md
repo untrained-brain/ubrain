@@ -26,7 +26,7 @@ find-links = ["/path/to/ubrain/wheels"]
 Then add ubrain and check it:
 
 ```bash
-uv add "ubrain==0.14.0.dev1"
+uv add "ubrain==0.15.0.dev1"
 uv run python -c "import ubrain; print(ubrain.__version__)"
 ```
 
@@ -36,7 +36,7 @@ add another package. The extras, each only when you need it:
 
 | extra | what it brings | for |
 |---|---|---|
-| `vision` | torch, transformers (CLIP) | CLIP as a sense: `uv add "ubrain[vision]==0.14.0.dev1"` |
+| `vision` | torch, transformers (CLIP) | CLIP as a sense: `uv add "ubrain[vision]==0.15.0.dev1"` |
 | `game` | Gymnasium | a game as the body (`ubrain.bodies.gym`) |
 | `video` | imageio with ffmpeg | recording the robot examples as MP4 |
 | `plot` | matplotlib | the lab plots |
@@ -44,10 +44,10 @@ add another package. The extras, each only when you need it:
 **With pip**, in a virtual environment:
 
 ```bash
-pip install "ubrain==0.14.0.dev1" --find-links /path/to/ubrain/wheels
+pip install "ubrain==0.15.0.dev1" --find-links /path/to/ubrain/wheels
 ```
 
-(Version 0.14.0.dev1 is a pre-release, so name it exactly as above. When ubrain is on
+(Version 0.15.0.dev1 is a pre-release, so name it exactly as above. When ubrain is on
 PyPI, `pip install ubrain` will be enough.)
 
 ## 2. A brain in a few lines
@@ -202,7 +202,7 @@ manifest = manifest_from_hello_03(body.hello)
 
 `examples/g1_walker.py` shows the full loop.
 
-## 7. Save, load and watch a brain (since 0.14)
+## 7. Save, load and watch a brain (since 0.14; the file names what it needs since 0.15)
 
 A brain learns all its life, so its state is its knowledge. Save it, and load it
 against the same body (and the same codecs, if it has senses):
@@ -212,13 +212,37 @@ from ubrain import Brain
 from ubrain.state import read_header
 
 path = brain.save("player.ubrain.npz")
-print(read_header(path))                 # format, ubrain version, wiring, body, ticks, codecs
+print(read_header(path))                 # format, ubrain version, wiring, body, ticks, codecs, lineage
 again = Brain.load(path, body)           # continues bit for bit where `brain` stopped
 ```
 
-Loading refuses, with a `ubrain.state.StateError` saying why, a different body, a codec
-that is not the one the state was learned with, or a file of another schema.
-`examples/11_save_and_load.py` shows the continuation and every refusal.
+The file names everything the brain needs to run again: the body's own record (its
+versions, how it was launched, the release that holds it), every sense as the fitted
+sense itself (the codec's name, digest and licence, the mean and vocabulary), the
+wiring and its digest, and the brain's **lineage** -- the content digests of the
+states it was loaded from (`brain.lineage`). So a user with the file and the codec
+model gets the whole system back:
+
+```python
+from ubrain.bodies import start_body_for
+
+proc, body, manifest = start_body_for(path)       # THE body the file names, or a refusal saying which field differs
+brain = Brain.load(path, manifest, {"camera": clip})   # the codec model: the fitted sense is in the file
+```
+
+Loading refuses, with a `ubrain.state.StateError` saying why, a different body (naming
+the field that differs -- its MuJoCo version, its robot's digest -- and the release to
+fetch), a codec that is not the one the state was learned with, a region whose state
+changed between ubrain releases, or a file of an unknown schema; a schema-1 file (0.14)
+is migrated on load. `examples/11_save_and_load.py` shows the continuation, the senses
+coming back from the file, the lineage and every refusal.
+
+A saved brain describes itself: `python -m ubrain.card player.ubrain.npz` writes its
+model card (the body release, the codecs and licences, how to load it, its lineage,
+its datasheet), generated from the file, never typed. With the `hub` extra
+(`pip install ubrain[hub]`), `ubrain.extras.hub.push_state(path, "you/your-brain")`
+puts the file and its card on the Hugging Face Hub -- private by default -- and
+`pull_state` brings one back; the pool of saved brains is the Hub.
 
 A brain can also describe itself. `datasheet_text(brain)` lists its figures in closed
 form (an episode's capacity, the buffer's count, the cortex's capacity or horizon, the

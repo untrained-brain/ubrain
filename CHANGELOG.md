@@ -5,7 +5,29 @@ change between them. Each region is certified against the law it was built to
 follow before it ships; a version adds regions or capabilities, and never moves a
 certified number.
 
-## 0.14.0.dev1 (in development)
+## 0.15.0.dev1 (in development)
+
+- **A saved brain names what it needs** (`ubrain.state`, schema 2; UBI-11, UBI-8).
+  The file carries the body's own record (its versions, how it was launched, the
+  release that holds it), every sense as the fitted sense itself with its codec's
+  name, digest and licence, the wiring's digest, each region's state shape, the
+  state's content digest and the brain's **lineage** (`Brain.lineage`: the states it
+  was loaded from). `Brain.load` takes the codec model alone and rebuilds the sense
+  from the file; a refusal of the body names the field that differs and the release
+  to fetch; a region whose state changed between releases is refused naming both
+  versions; a schema-1 file is migrated on load. The class check is exact (a class
+  *defined* in ubrain, a bit generator from the list).
+- **`start_body_for(path)`** (`ubrain.bodies`): starts the body a saved brain was
+  learned on, as the file records, and refuses another.
+- **A model card from the file** (`ubrain.card`: `describe`, `model_card`,
+  `python -m ubrain.card`), and the **`hub` extra** (`ubrain.extras.hub`:
+  `push_state`, `pull_state`): saved brains on the Hugging Face Hub, private by
+  default, public refused before the launch.
+- The MuJoCo body reports its licences, carries `body.lock` (its manifest, digest
+  and release tag) and one version number (0.8.0; the digest moved with it, as every
+  body change moves it). The specification gains UBI-12, checkpoint (proposed).
+
+## 0.14.0.dev1
 
 - **Save and load a brain** (`ubrain.state`): `save(brain, path)`, `Brain.load`,
   `read_header`. A loaded brain continues bit for bit where the saved one stopped,

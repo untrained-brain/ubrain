@@ -44,6 +44,36 @@ def test_every_model_file_exists_and_a_byte_moves_the_package_digest(tmp_path, m
     assert M.package_digest() != before
 
 
+def test_licenses_are_reported_and_do_not_move_the_digest():
+    m = M.manifest()
+    lic = m["licenses"]
+    assert lic["body"] == "Apache-2.0" and lic["menagerie"] == "BSD-3-Clause"
+    assert lic["policy"].startswith("BSD-3-Clause")                  # robots/g1/policy/PROVENANCE.json
+    assert "licenses" not in M.KEYED
+    assert M.manifest_digest(dict(m, licenses={})) == M.manifest_digest(m)
+
+
+def test_one_version_number():
+    import tomllib
+    from body import __version__
+    pyproject = tomllib.loads((M.PACKAGE_DIR.parent / "pyproject.toml").read_text(encoding="utf-8"))
+    assert pyproject["project"]["version"] == __version__
+
+
+def test_body_lock_matches_the_live_body():
+    """body.lock is what a saved brain carries to fetch this body again; it must be
+    regenerated (python -m body.manifest --lock) whenever the digest moves."""
+    assert M.LOCK_FILE.is_file(), "run: uv run python -m body.manifest --lock"
+    on_disk = json.loads(M.LOCK_FILE.read_text(encoding="utf-8"))
+    live = M.lock()
+    assert on_disk["digest"] == live["digest"], "the body changed: regenerate body.lock"
+    assert on_disk["manifest"] == live["manifest"]
+    assert "platform" not in on_disk["manifest"]
+    assert on_disk["release"] == live["release"]
+    assert on_disk["release"]["tag"] == f"body-mujoco-{live['manifest']['body_version']}-{live['digest']}"
+    assert on_disk["environment"]["uv_lock_sha256"] == live["environment"]["uv_lock_sha256"]
+
+
 def test_robot_digest_covers_the_robot_package():
     g1 = robots.get("g1")
     files = M.robot_files(g1)

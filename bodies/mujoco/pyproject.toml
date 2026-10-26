@@ -13,7 +13,7 @@
 
 [project]
 name = "robot-mujoco"
-version = "0.4.0"
+version = "0.8.0"       # one number with body/__init__.py (keyed into the digest; bump both)
 license = "Apache-2.0"
 license-files = ["LICENSE", "NOTICE"]
 description = "The MuJoCo body for ubrain: menagerie robots, proprioception, motor primitives, a head camera, the tick bridge"

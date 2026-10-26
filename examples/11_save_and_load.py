@@ -11,12 +11,17 @@ from it that continues EXACTLY: run beside the brain that never stopped, on the
 same senses, it makes the same choices and ends in the same state, byte for byte.
 There is no law to predict here; the claim is identity, and it is checked as such.
 
-The file names what the brain was built from: its wiring, the body's manifest
-(name and digest) and a fingerprint of every codec plugged in. `read_header`
-shows that without rebuilding anything, and `load` refuses a body or a codec
-that is not the one the state was learned with (StateError, with the reason).
-The file is read with allow_pickle=False, and only ubrain's own classes are
-rebuilt from it, so loading a state runs no code of the file's choosing.
+The file names what the brain NEEDS, not only what it was: its wiring and the
+wiring's digest, the body's manifest with the body's own record (versions, launch,
+the release to fetch), every codec plugged in as the fitted sense itself (name,
+digest, licence, the mean and vocabulary), and the brain's lineage -- the states it
+was loaded from. `read_header` shows that without rebuilding anything; `load` takes
+the codec MODEL alone and rebuilds the sense from the file; and it refuses a body
+or a codec that is not the one the state was learned with (StateError, with the
+reason -- for a body, the field that differs). The file is read with
+allow_pickle=False, and only ubrain's own classes are rebuilt from it, so loading a
+state runs no code of the file's choosing. `python -m ubrain.card <file>` writes the
+brain's model card from the file.
 
 The learner is example 1's: the `player` profile on a three-armed bandit.
 """
@@ -106,6 +111,29 @@ def main() -> None:
         ref = [seer.tick({"recall": j})["remembered"] for j in range(5)]
         print(f"  the same codec: loaded; slots 0-4 recall {got}, the brain that never stopped {ref} "
               f"(items 0-4 were seen; a slip is the episode's own crosstalk, the same in both)")
+
+        print("\nthe file names what the brain needs (schema 2):")
+        hs = read_header(seer_path)
+        rec = hs["codecs"]["camera"]
+        print(f"  codec on 'camera': {rec['codec']['name']} ({rec['codec']['digest']}, licence {rec['codec']['license']}); "
+              f"the fitted sense is in the file: mean, vocabulary of {len(rec['items'])} items, d={rec['d']}")
+        from_model = load(seer_path, seer_body, {"camera": sense.codec})      # the model alone
+        from_sense = load(seer_path, seer_body, {"camera": sense})            # the fitted sense, as before
+        print(f"  loaded with the codec MODEL alone, the sense rebuilt from the file: "
+              f"identical to a load with the fitted sense {snapshot_bytes(from_model) == snapshot_bytes(from_sense)}")
+        print(f"  wiring {hs['wiring']['name']} ({hs['wiring_digest']}), content digest {hs['state_digest']}, "
+              f"lineage {hs['lineage']} (a first generation)")
+        for i in range(5, 10):                                                 # it lives on, then is saved again
+            from_model.tick({"camera": i})
+        gen2 = from_model.save(Path(tmp) / "observer.gen2.ubrain.npz")
+        gen3 = Brain.load(gen2, seer_body, {"camera": sense})
+        print("  saved again and loaded: lineage now "
+              + " -> ".join(e["state_digest"] for e in gen3.lineage) + f"  ({len(gen3.lineage)} ancestors)")
+        from ubrain.card import model_card
+        card = model_card(gen2, gen3)
+        print("  its model card (python -m ubrain.card <file>), first lines:")
+        for line in card.splitlines()[:12]:
+            print("    " + line)
     print(f"\nthe temporary directory is gone: {not Path(tmp).exists()}")
     print("\nTry: save the brain, keep only the file, and load it in a new Python session "
           "(Brain.load(path, manifest)): it picks up on the next trial as if never stopped.")

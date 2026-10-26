@@ -24,6 +24,15 @@ such machines side by side, some nested, and the neuromodulators are scalars
 broadcast to every guard and rate. A tick is one turn of the outer loop; a saved
 brain is its modes and its contents; an observation reports one or the other.
 
+A saved brain is the mind, and the mind alone: what it learned, on one body. Three
+things with three lifetimes meet in a running system -- the **brain state** (changes
+every tick; `Brain.save`/`load`), the **body release** (the body's code, weights,
+model and pinned environment; changes when the body changes; fetched by the name the
+state carries) and, when a *moment* rather than a life is kept, a **checkpoint** of
+both halves at one tick (planned). A state names the other two rather than copying
+them, and names its own **lineage**: the states it was loaded from. Versions of a
+brain are its lineage, not file names.
+
 A brain holds many episodes from the first tick, and every recall makes two choices:
 *which* episode the cue belongs to (limited by what the episodes share, not by how
 many there are) and *what* that episode held (limited by the episode's load). The
