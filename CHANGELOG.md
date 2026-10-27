@@ -5,7 +5,18 @@ change between them. Each region is certified against the law it was built to
 follow before it ships; a version adds regions or capabilities, and never moves a
 certified number.
 
-## 0.20.0.dev1 (in development)
+## 0.21.0.dev1 (in development)
+
+- `thalamus.relay` gains `reads`: every route's read off the bus at once (R x d, zeros where the
+  gate closed it) -- for a reader that does not know which route holds what it seeks.
+- `datasheet.relay_law(d, R, V, rho, alpha, arm)`: the relay's law (gated, open, coin), on the
+  datasheet's Gaussian decode (within 0.01 of the exact curve); the relay has datasheet rows.
+- The `companion` profile gains attention: the relay over the view's six fixations (`routes`),
+  opened by the thing sought (`seek`) -> `attention`, `opened`.
+- `start_body(record_pose=path)`: the body appends "tick x y yaw" every tick to the
+  experimenter's file, for scoring where the body went. Never sent to the brain (body 0.11.0).
+
+## 0.20.0.dev1
 
 - The `companion` profile gains working memory: the prefrontal buffer (gamma_m 0.75, the measured
   decay) holds a list of goals (`goal_item`, `recall_goal`, `goal_clear` -> `goal_memory`,

@@ -116,3 +116,20 @@ def test_the_follow_camera_records_frames_and_their_ticks(tmp_path):
     n = len(meta["ticks"])
     assert n == 4 and all(t % 2 == 0 for t in meta["ticks"])
     assert (tmp_path / "walk.rgb").stat().st_size == n * meta["width"] * meta["height"] * 3
+
+
+def test_the_pose_record_is_the_experimenters_and_never_a_reply(tmp_path):
+    """--record-pose: one "tick x y yaw" line per tick to the experimenter's file (for
+    scoring an arrival); the replies stay as they were."""
+    path = tmp_path / "pose.txt"
+    srv = BodyServer(port=0, seed=0, record_pose=str(path)).start()
+    try:
+        with BodyClient(srv.host, srv.port) as c:
+            c.reset(0)
+            replies = [c.act("walk", [0.5, 0.0, 0.0]) for _ in range(20)]
+    finally:
+        srv.shutdown()
+    rows = [line.split() for line in path.read_text(encoding="utf-8").splitlines()]
+    assert len(rows) == 20 and all(len(r) == 4 for r in rows)
+    assert [int(r[0]) for r in rows] == [r["tick"] for r in replies]
+    assert all("pose" not in json.dumps(r) for r in replies)

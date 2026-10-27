@@ -47,7 +47,8 @@ class BodyServer:
     def __init__(self, host: str = "127.0.0.1", port: int = 0, robot: str | RobotSpec = "g1",
                  entry: str | None = None, seed: int = 0, head_camera: bool = False,
                  viewer: bool = False, gallery=None, record_chase: str | None = None,
-                 chase_every: int = 2, world=None, keep_line: bool = False, chase_view: str = "follow"):
+                 chase_every: int = 2, world=None, keep_line: bool = False, chase_view: str = "follow",
+                 record_pose: str | None = None):
         self.spec = robots.get(robot)
         # the follow camera's recording (for videos; never in a reply): raw RGB frames
         # appended to <record_chase>.rgb, their ticks and size in <record_chase>.json
@@ -56,6 +57,9 @@ class BodyServer:
             raise ValueError(f"chase view {chase_view!r}: one of {sorted(CHASE_VIEWS)}")
         self._chase_view = chase_view
         self._chase_ticks: list[int] = []
+        # the experimenter's record of where the body stood (for scoring arrivals; never in a reply,
+        # as the follow camera): one "tick x y yaw" line per tick, appended to <record_pose>
+        self._pose_file = open(record_pose, "a", encoding="utf-8") if record_pose else None
         self._chase_file = None
         self.sim = MujocoSim(self.spec, entry, seed=seed, head_camera=head_camera, gallery=gallery, world=world)
         self.ctl = Controller(self.sim)
@@ -186,6 +190,10 @@ class BodyServer:
                     self._heard, self._tone_next = self._tone_next, False
                 if self._chase_path and self.sim.tick % self._chase_every == 0:
                     self._record_chase()
+                if self._pose_file is not None:
+                    x, y, yaw = self.sim.navigator.pose()
+                    self._pose_file.write(f"{self.sim.tick} {x:.4f} {y:.4f} {yaw:.4f}\n")
+                    self._pose_file.flush()
                 return self.state(msg.get("want_contact", False), msg.get("want_image", False),
                                   msg.get("image_size")), False
             return {"type": "bye"}, True
@@ -290,6 +298,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--viewer", action="store_true", help="show the body in MuJoCo's passive viewer")
     ap.add_argument("--record-chase", default=None, metavar="PATH",
                     help="record a camera following the robot (for videos): PATH.rgb + PATH.json")
+    ap.add_argument("--record-pose", default=None, metavar="PATH",
+                    help="append the body's pose to PATH every tick (the experimenter's record: tick x y yaw)")
     ap.add_argument("--chase-every", type=int, default=2, help="record every N ticks (2: 25 fps)")
     ap.add_argument("--chase-view", default="follow", choices=sorted(CHASE_VIEWS),
                     help="the follow camera's view: follow (behind, low) or above (60 degrees up, for rooms)")
@@ -304,7 +314,7 @@ def main(argv: list[str] | None = None) -> int:
     srv = BodyServer(a.host, a.port, robot=a.robot, entry=a.entry, seed=a.seed, head_camera=a.head_camera,
                      viewer=a.viewer, gallery=gallery, record_chase=a.record_chase,
                      chase_every=a.chase_every, world=a.world, keep_line=a.keep_line,
-                     chase_view=a.chase_view)
+                     chase_view=a.chase_view, record_pose=a.record_pose)
     print(f"body {srv.digest} ({SIMULATOR}/{srv.spec.name}) serving on {srv.host}:{srv.port} "
           f"(mujoco {srv.manifest['mujoco']}, menagerie {srv.manifest['menagerie_commit'][:8]})", flush=True)
     try:

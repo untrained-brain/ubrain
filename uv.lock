@@ -1275,7 +1275,7 @@ wheels = [
 
 [[package]]
 name = "transformers"
-version = "5.20.2"
+version = "5.21.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "huggingface-hub" },
@@ -1289,9 +1289,9 @@ dependencies = [
     { name = "tqdm" },
     { name = "typer" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/8c/4e/3cd6f08cc84ee612d40f3cdb1649475e7c997f2d5cbd95ade8780708af62/transformers-5.20.2.tar.gz", hash = "sha256:080871e061546d720be57f5846fce426f46b44d61574907cc7404c2cba49d180", size = 10225379, upload_time = "2026-10-19T17:46:03.092Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/f6/9d/59e6232df8761e2c82d52e0bef5382e830d1cd65f02f648712ccd7675e7b/transformers-5.21.0.tar.gz", hash = "sha256:43c971a3eb9ab68dc9dfff430f8ab8a0fba09af2f68b608fd70c6245d2ddb8e7", size = 10321727, upload_time = "2026-10-26T18:17:26.892Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/96/b6/724faefed06913dd3e42e0476fe2c42448675c42f687a12bf810aa098005/transformers-5.20.2-py3-none-any.whl", hash = "sha256:7ae75dbc1fb3922aff1b6c97b9e5479d6cf26fd86a8866bfb71324190479f807", size = 12844921, upload_time = "2026-10-19T17:45:59.293Z" },
+    { url = "https://files.pythonhosted.org/packages/73/fa/fb638d54bffff44700c8d487608c1f2872823e606fbd043b3c29c93236cf/transformers-5.21.0-py3-none-any.whl", hash = "sha256:8803a8712932aa3441c1e8bb340e66d5e3eca079fe65d9b717ede2f3ead01c79", size = 12978463, upload_time = "2026-10-26T18:17:23.647Z" },
 ]
 
 [[package]]
@@ -1351,25 +1351,25 @@ wheels = [
 
 [[package]]
 name = "ubrain"
-version = "0.20.0.dev1"
+version = "0.21.0.dev1"
 source = { registry = "wheels" }
 dependencies = [
     { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
     { name = "numpy", version = "2.5.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
 ]
 wheels = [
-    { path = "ubrain-0.20.0.dev1-cp311-cp311-macosx_10_9_x86_64.whl" },
-    { path = "ubrain-0.20.0.dev1-cp311-cp311-macosx_11_0_arm64.whl" },
-    { path = "ubrain-0.20.0.dev1-cp311-cp311-win_amd64.whl" },
-    { path = "ubrain-0.20.0.dev1-cp312-cp312-macosx_10_13_x86_64.whl" },
-    { path = "ubrain-0.20.0.dev1-cp312-cp312-macosx_11_0_arm64.whl" },
-    { path = "ubrain-0.20.0.dev1-cp312-cp312-win_amd64.whl" },
-    { path = "ubrain-0.20.0.dev1-cp313-cp313-macosx_10_13_x86_64.whl" },
-    { path = "ubrain-0.20.0.dev1-cp313-cp313-macosx_11_0_arm64.whl" },
-    { path = "ubrain-0.20.0.dev1-cp313-cp313-win_amd64.whl" },
-    { path = "ubrain-0.20.0.dev1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl" },
-    { path = "ubrain-0.20.0.dev1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl" },
-    { path = "ubrain-0.20.0.dev1-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl" },
+    { path = "ubrain-0.21.0.dev1-cp311-cp311-macosx_10_9_x86_64.whl" },
+    { path = "ubrain-0.21.0.dev1-cp311-cp311-macosx_11_0_arm64.whl" },
+    { path = "ubrain-0.21.0.dev1-cp311-cp311-win_amd64.whl" },
+    { path = "ubrain-0.21.0.dev1-cp312-cp312-macosx_10_13_x86_64.whl" },
+    { path = "ubrain-0.21.0.dev1-cp312-cp312-macosx_11_0_arm64.whl" },
+    { path = "ubrain-0.21.0.dev1-cp312-cp312-win_amd64.whl" },
+    { path = "ubrain-0.21.0.dev1-cp313-cp313-macosx_10_13_x86_64.whl" },
+    { path = "ubrain-0.21.0.dev1-cp313-cp313-macosx_11_0_arm64.whl" },
+    { path = "ubrain-0.21.0.dev1-cp313-cp313-win_amd64.whl" },
+    { path = "ubrain-0.21.0.dev1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl" },
+    { path = "ubrain-0.21.0.dev1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl" },
+    { path = "ubrain-0.21.0.dev1-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl" },
 ]
 
 [package.optional-dependencies]
@@ -1413,10 +1413,10 @@ vision = [
 
 [package.metadata]
 requires-dist = [
-    { name = "ubrain", specifier = "==0.20.0.dev1" },
-    { name = "ubrain", extras = ["game"], marker = "extra == 'game'", specifier = "==0.20.0.dev1" },
-    { name = "ubrain", extras = ["plot"], marker = "extra == 'plot'", specifier = "==0.20.0.dev1" },
-    { name = "ubrain", extras = ["video"], marker = "extra == 'video'", specifier = "==0.20.0.dev1" },
-    { name = "ubrain", extras = ["vision"], marker = "extra == 'vision'", specifier = "==0.20.0.dev1" },
+    { name = "ubrain", specifier = "==0.21.0.dev1" },
+    { name = "ubrain", extras = ["game"], marker = "extra == 'game'", specifier = "==0.21.0.dev1" },
+    { name = "ubrain", extras = ["plot"], marker = "extra == 'plot'", specifier = "==0.21.0.dev1" },
+    { name = "ubrain", extras = ["video"], marker = "extra == 'video'", specifier = "==0.21.0.dev1" },
+    { name = "ubrain", extras = ["vision"], marker = "extra == 'vision'", specifier = "==0.21.0.dev1" },
 ]
 provides-extras = ["vision", "game", "video", "plot"]
