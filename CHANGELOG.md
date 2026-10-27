@@ -15,6 +15,12 @@ certified number.
   opened by the thing sought (`seek`) -> `attention`, `opened`.
 - `start_body(record_pose=path)`: the body appends "tick x y yaw" every tick to the
   experimenter's file, for scoring where the body went. Never sent to the brain (body 0.11.0).
+- Known limit, measured on the G1 in the apartment: the relay's gate threshold and its read are
+  certified on white codes. On CLIP's codes of real views, unrelated fixations (walls, ceiling)
+  pass the gate far more often than `alpha`, and a read decodes to its nearest thing with no
+  "not here". Searching with it, the robot stopped right on 10 of 19 trips, against 15 for a
+  recogniser with measured confidence floors. A repaired gate and an absence decision are in
+  the works; until then, check a relay's finds against a floor of your own.
 
 ## 0.20.0.dev1
 
