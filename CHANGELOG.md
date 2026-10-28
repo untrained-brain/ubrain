@@ -5,7 +5,34 @@ change between them. Each region is certified against the law it was built to
 follow before it ships; a version adds regions or capabilities, and never moves a
 certified number.
 
-## 0.21.0.dev1 (in development)
+## 0.22.0.dev1 (in development) -- the plumbing tier of the circuits
+
+What already exists, exposed; no new law (every item a parity or a definition). A port map
+of 0.21 made by an application built on ubrain (16 regions, 15 region-to-region wires in 11
+profiles, seven regions read by none, the striatum fed an index) opened the work on the
+circuits -- the joins between regions certified by laws of their own; those laws arrive in
+0.23-0.25. This version:
+
+- `cerebellum.forward` has output ports: `prediction` (the predicted change of the 41 sensed
+  body variables, the Purkinje read on the last granule code) and `error` (its squared error
+  once the body has moved) -- FB-0027. Nothing is wired into them yet.
+- `basal_ganglia.striatum` outputs `delta`, the prediction error r - Q of the pairs credited
+  on a tick (None without an outcome) -- dopamine as a scalar a profile can broadcast (FB-0026).
+- `basal_ganglia.striatum` takes `entity`: with it wired, a decision is made FOR that entity
+  and an outcome credits that entity's pending choices only, so one brain deciding for many
+  entities in turn, their outcomes interleaved and late, learns exactly what one brain per
+  entity would (FB-0018; the credit the trader routed through internals, now a port). Unwired,
+  the region is as before.
+- `ubrain.portmap`: every region's ports, every region-to-region wire in the shipped
+  profiles, the islands; `python -m ubrain.portmap` prints it; `tests/test_portmap` pins the
+  islands as `KNOWN_ISLANDS`, so a profile that joins a region or a region left unjoined is a
+  deliberate edit (FB-0021).
+- The datasheet lists, per brain, every region-to-region wire with whether a law of the
+  CIRCUIT certifies it (none yet: "uncertified") and the regions no region reads (UBI-0,
+  principle 9: a brain of certified parts is never mistaken for a certified brain).
+- UBI-0 principle 9, the brain is synthesized and says so.
+
+## 0.21.0.dev1
 
 - `thalamus.relay` gains `reads`: every route's read off the bus at once (R x d, zeros where the
   gate closed it) -- for a reader that does not know which route holds what it seeks.
