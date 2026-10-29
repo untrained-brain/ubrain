@@ -5,7 +5,45 @@ change between them. Each region is certified against the law it was built to
 follow before it ships; a version adds regions or capabilities, and never moves a
 certified number.
 
-## 0.23.0.dev1 (in development) -- the corticostriatal path
+## 0.24.0.dev1 (in development) -- the whole route; predict, surprise, modulate
+
+The brain is wired from the senses to an action in one profile, and two more circuit laws
+reach it: the forward model of codes, whose surprise sees a change of the world's rules that
+novelty cannot, and the dopamine broadcast as what the hippocampus writes with.
+
+- **The route** (`ubrain.route`): the research engine's declaration of the path from the
+  senses to the body, promoted as data -- one row per wire, its path (data: codes; control:
+  scalars and flags), its loop (the tick, the episode, the night, the supervisor), its
+  evidence (measured live between its two parts; each part held alone; not built) and
+  ubrain's ports where ubrain has the wire.
+- **The `whole` profile**, the route's code half: the thalamus relays the sense's code; the
+  salience gate judges it; the prefrontal buffer holds the novel items and one of them as the
+  goal; the striatum values the relayed code with the goal bound in; the episodic store and
+  the striatum are handed over; the forward model predicts the next code from the present one
+  and the action taken; the mode controller attends on novelty and abandons a chunk on
+  surprise; the hippocampus writes the novel items at the prediction error's gain, ends the
+  episode in the default mode and replays it into the cortex, whose writing acetylcholine
+  switches. A test holds every wire of the profile to a wire of the route (the application's
+  cues aside) and refuses one the route says is not built. **Most of its wires are certified
+  part by part, not in the whole**: this profile is what the research engine measures next.
+  The port map's islands shrink from seven regions unread and eight unfed to four and four.
+- `cerebellum.forward` takes `state` (a code) and `action` (a choice): **the forward model of
+  codes**. The action is bound into the state, the context expanded by the granule layer and
+  read by the Purkinje map, learned by the delta rule; each tick the prediction made last tick
+  is judged against the code that arrived, `surprise` iff their cosine is below the spherical
+  null's 1 - alpha quantile, before the map learns. A test holds its surprise rate, driven one
+  measured step per two ticks, to the law the research engine measured, evaluated on the
+  region's own features. Out ports: `prediction` (now of the mode's width: 41 on the body, d
+  on codes), `error`, and `surprise` (a flag; None in the body mode).
+- `hippocampus.episode` takes `gain` (an event): each item is written at |gain|, the size of
+  the striatum's prediction error when `basal_ganglia.striatum.delta` is wired -- writing at
+  dopamine's gain lifts the recall of rare rewarded events and costs common ones, a trade the
+  research engine derived and measured, not a free gain. Unwired, or on a tick with no
+  outcome, the gain is 1 and the region is as before.
+- `thalamus.relay` with one route hands over one code (not a 1 x d batch), and its `passed`
+  and `read` carry the routes' sense, so the regions behind it clean up against it.
+
+## 0.23.0.dev1 -- the corticostriatal path
 
 The first circuit law reaches the brain: the striatum values a situation given as a CODE,
 never an index, and a goal code conditions it. An application no longer bins its situations

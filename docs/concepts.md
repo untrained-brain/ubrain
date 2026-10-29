@@ -79,6 +79,7 @@ parameters, and what feeds what. Ten ship with ubrain:
 | `player` | the striatum alone: situation and reward in, an action out |
 | `chooser` | the player's striatum plus the hippocampal store that acts, and the hand-over between them |
 | `corticostriatal` | the striatum on a situation CODE (through the granule expansion), the goal code bound into it: no table, no binning |
+| `whole` | the route's code half: every region on one path from the sense to an action -- relayed, judged, held, valued with the goal, handed over, predicted, written at dopamine's gain, replayed; most wires certified part by part, not yet in the whole (`ubrain.route` says which) |
 | `observer` | the hippocampus alone: an episode of items, recalled by slot |
 | `rememberer` | the observer plus the cortex: an ended episode is replayed into the slow store |
 | `holder` | the prefrontal buffer: a short list held in working memory, rehearsed when idle |
