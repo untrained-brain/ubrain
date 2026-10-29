@@ -46,7 +46,7 @@ learning. ubrain serves these today:
 | region | what it does | learns by |
 |---|---|---|
 | `hippocampus.episode` | writes the items of an episode into one vector, each bound to its slot; recalls a slot on a cue | one-shot binding (no learning rate) |
-| `basal_ganglia.striatum` | keeps a value per (situation, action); releases actions in proportion to value | the three-factor rule: Q <- Q + eta (r - Q) |
+| `basal_ganglia.striatum` | keeps a value per (situation, action); releases actions in proportion to value. Or, given the situation as a code: a value per action read on the code's granule expansion, conditioned by a goal code; the largest taken (in turn while exploring) | the three-factor rule: Q <- Q + eta (r - Q); on a code, w_a <- w_a + eta (r - Q) phi(z) |
 | `cerebellum.forward` | predicts, each tick, what the body's next state will be given the command | the delta rule on a sparse granule expansion |
 | `cerebellum.brace` | learns a timed counter-move to a predictable push heralded by a cue | an eligibility trace |
 | `cerebellum.adapt` | learns a counter-turn when walking is pushed sideways by a steady field, added to the turning command; a clamp stops the teaching signal | the delta rule, with one learning rate or two (a fast and a slow one: savings, spontaneous recovery) |
@@ -78,6 +78,7 @@ parameters, and what feeds what. Ten ship with ubrain:
 |---|---|
 | `player` | the striatum alone: situation and reward in, an action out |
 | `chooser` | the player's striatum plus the hippocampal store that acts, and the hand-over between them |
+| `corticostriatal` | the striatum on a situation CODE (through the granule expansion), the goal code bound into it: no table, no binning |
 | `observer` | the hippocampus alone: an episode of items, recalled by slot |
 | `rememberer` | the observer plus the cortex: an ended episode is replayed into the slow store |
 | `holder` | the prefrontal buffer: a short list held in working memory, rehearsed when idle |

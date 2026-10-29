@@ -5,7 +5,36 @@ change between them. Each region is certified against the law it was built to
 follow before it ships; a version adds regions or capabilities, and never moves a
 certified number.
 
-## 0.22.0.dev1 (in development) -- the plumbing tier of the circuits
+## 0.23.0.dev1 (in development) -- the corticostriatal path
+
+The first circuit law reaches the brain: the striatum values a situation given as a CODE,
+never an index, and a goal code conditions it. An application no longer bins its situations
+into a table (FB-0020), the situation is the striatum's input port (FB-0024), and the goal
+held elsewhere reaches the values (FB-0025).
+
+- `basal_ganglia.striatum` takes `situation` (a code, in place of `state`): its values are
+  Q(z, a) = w_a . phi(z), phi the cerebellum's granule expansion (a fixed random projection
+  to `d_g` units, the `s` largest kept, centred, unit norm; `features = "raw"` reads the code
+  itself), learned by the three-factor rule with phi as the eligibility, from zero. It takes
+  `context` (a goal code): the values are read on phi(z (*) g), the goal bound (`context =
+  "bind"`) or superposed (`"sum"`). It takes `explore` (a flag): while it is up the actions
+  are taken in turn, the schedule the values were measured under; while it is down the
+  largest value is taken. With `state` wired the region is the table it was, its saved state
+  unchanged.
+- `ubrain.datasheet.value_law(phi, X, P, Xt, Pt, eta, n)`: the expected reward of the greedy
+  choice between two actions after n learning steps each, for ANY feature map on a sample of
+  the world -- the expansion, the raw code, a binned table (the table is the code with one-hot
+  features) -- so which read suits a world is computed before a run. The raw code wins where
+  the reward is linear in the code, the expansion where it is not, a table of the prototypes
+  where the situations are a few clean ones; a bound goal pays where the rewards reverse with
+  it. The datasheet's striatum rows name it in code mode.
+- The `corticostriatal` profile: the striatum on a `situation` code, the `goal` bound into
+  it, `reward`, `explore`.
+- Driven through Brain on the research engine's worlds and generators, the code mode learns
+  its weights and scores its measured arm scores to 1e-12 (the expansion, the raw code, the
+  goal bound and summed); `value_law` is the engine's law to 1e-9.
+
+## 0.22.0.dev1 -- the plumbing tier of the circuits
 
 What already exists, exposed; no new law (every item a parity or a definition). A port map
 of 0.21 made by an application built on ubrain (16 regions, 15 region-to-region wires in 11
