@@ -5,7 +5,27 @@ change between them. Each region is certified against the law it was built to
 follow before it ships; a version adds regions or capabilities, and never moves a
 certified number.
 
-## 0.24.0.dev1 (in development) -- the whole route; predict, surprise, modulate
+## 0.24.0.dev2 (in development) -- found from anywhere; the brain's data structures audited
+
+No region's behaviour changes and no certified number moves.
+
+- **Found from anywhere.** When ubrain runs from its source tree, the research engine and the
+  MuJoCo body are now found by searching upward from the package, not at a fixed depth: the source
+  moved within its research repository (into `brains/`), and the next move will not break the
+  lookup. `start_body` finds `bodies/mujoco` wherever the package sits beside it. Installed from a
+  wheel, nothing changes.
+- **The brain's data structures, audited** (in the source tree; not shipped in the wheel). Brain
+  state should be codes, traces and weight matrices. An audit of every container a region keeps
+  found nine places where state is exact computer memory instead -- the striatum's pending choices
+  and eligibilities kept in dictionaries, episodic control's queue of pairs awaiting their outcome,
+  the cortex's index of keys and its exact replay buffer, the prefrontal buffer's exact copies of
+  its items, the salience gate's exact window -- storage no brain has, outside the capacity laws.
+  **Known limit:** these regions still keep that state; each is listed with the neural form that
+  will replace it (a decaying eligibility trace, a fading position-bound cycle, keys from the
+  hippocampus, the buffer's superposition, a fading trace for novelty), and each replacement will
+  arrive as a certified law in a later version.
+
+## 0.24.0.dev1 -- the whole route; predict, surprise, modulate
 
 The brain is wired from the senses to an action in one profile, and two more circuit laws
 reach it: the forward model of codes, whose surprise sees a change of the world's rules that
