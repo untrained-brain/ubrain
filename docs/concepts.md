@@ -53,7 +53,7 @@ learning. ubrain serves these today:
 | `cortex.store` | the slow store: items written under keys, a replayed episode written as one event, read back by cue or by index; consolidates on idle moments | Hebb's rule with passive decay |
 | `prefrontal.buffer` | working memory as persistent activity: a short list held by position, rehearsed in free moments, recalled by position | one-shot binding that fades with each write |
 | `prefrontal.silent` | working memory held in synapses instead: the cortical store at a fast decay | Hebb's rule with fast decay |
-| `salience.gate` | judges each item against the last few that arrived; novel items are flagged and passed on, familiar ones held back | none (a threshold set from a chosen false-alarm rate) |
+| `salience.gate` | judges each item against a fading trace of everything it has seen (since 0.25; a brain can keep a trace, not an exact list), forgetting gracefully rather than at a horizon; novel items are flagged and passed on, familiar ones held back. The exact window of the last few items stays for the noradrenaline world (`memory = "window"`) | none (a threshold set from a chosen false-alarm rate) |
 | `modes.controller` | the switch between an executive mode (a novel event is a demand: plan and act) and a default mode (idle; consolidation runs) | none (a rule) |
 | `hippocampus.episodic_control` | a memory that acts: each (situation, action, outcome) stored at once, the action with the best recalled outcome taken; says when it is confident | one-shot storage that slowly fades |
 | `control.handover` | takes memory's action while memory is confident, the striatum's otherwise | none (both learners learn on what was taken) |

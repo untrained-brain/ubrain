@@ -5,7 +5,29 @@ change between them. Each region is certified against the law it was built to
 follow before it ships; a version adds regions or capabilities, and never moves a
 certified number.
 
-## 0.24.0.dev2 (in development) -- found from anywhere; the brain's data structures audited
+## 0.25.0.dev1 (in development) -- salience remembers like a brain
+
+- **The salience gate keeps a fading trace** (`salience.gate`, `memory = "trace"`, the new default).
+  Until now the gate judged each item against an exact list of the last few items -- a computer queue no
+  brain has. It now keeps one fading superposition of everything it has seen, `t <- lam t + z`, and judges
+  an item familiar when its cosine with the trace passes a threshold set from a chosen false-alarm rate.
+  It is certified on its law, on a stream and inside the whole brain, where the exact list had no law
+  that held; the mode controller driven by it follows its law too. **What changes for you:** the gate is
+  a little weaker on the very recent past and forgets gracefully instead of at a horizon -- an item seen
+  30 events ago is still sometimes recognised, where the list had forgotten it completely. Parameters:
+  `lam` (the fade per item, default 0.95), `alpha` (the false-alarm rate) and `kappa` (the codec's
+  spectral factor, default 1 for white codes). The `attender`, `companion` and `whole` profiles use it;
+  example 08 now teaches it, its law against the measurement for fresh items, recent and old repeats.
+- **The exact window stays where its laws are**: `memory = "window"` keeps the earlier behaviour, and the
+  `modulated` profile (the noradrenaline world: a criterion noradrenaline sets every tick, a known set of
+  codes) names it. **Known limit:** the trace takes no `theta` knob, no `know` input and no
+  `remember = false`, and refuses them with an explanation: noradrenaline's laws and the known set's on
+  the trace are not certified yet.
+- The route's evidence is refreshed: nine wires are now measured inside the running whole brain.
+- **Breaking for saved profiles** that set `window` on the gate without `memory`: add `memory = "window"`
+  to keep the earlier gate, or remove `window` to take the trace.
+
+## 0.24.0.dev2 -- found from anywhere; the brain's data structures audited
 
 No region's behaviour changes and no certified number moves.
 

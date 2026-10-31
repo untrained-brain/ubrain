@@ -6,13 +6,13 @@ name = "ubrain-labs"
 version = "0.13.0"
 description = "Examples, labs and manual for ubrain, the Untrained Brain"
 requires-python = ">=3.11,<3.14"           # the versions ubrain is compiled for
-dependencies = ["ubrain==0.24.0.dev2"]
+dependencies = ["ubrain==0.25.0.dev1"]
 
 [project.optional-dependencies]
-vision = ["ubrain[vision]==0.24.0.dev2"]     # CLIP as a sense (torch, transformers)
-game = ["ubrain[game]==0.24.0.dev2"]         # Gymnasium games as a body: 04_blackjack.py, 05_frozenlake.py
-video = ["ubrain[video]==0.24.0.dev2"]       # g1_explorer.py / g1_bracing.py --record
-plot = ["ubrain[plot]==0.24.0.dev2"]         # lab_cerebellum.py --plot
+vision = ["ubrain[vision]==0.25.0.dev1"]     # CLIP as a sense (torch, transformers)
+game = ["ubrain[game]==0.25.0.dev1"]         # Gymnasium games as a body: 04_blackjack.py, 05_frozenlake.py
+video = ["ubrain[video]==0.25.0.dev1"]       # g1_explorer.py / g1_bracing.py --record
+plot = ["ubrain[plot]==0.25.0.dev1"]         # lab_cerebellum.py --plot
 
 [tool.uv]
 package = false
