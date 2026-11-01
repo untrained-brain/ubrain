@@ -5,7 +5,27 @@ change between them. Each region is certified against the law it was built to
 follow before it ships; a version adds regions or capabilities, and never moves a
 certified number.
 
-## 0.26.0.dev2 (in development) -- episodic control without a queue
+## 0.27.0.dev1 (in development) -- the cortex replays what the hippocampus holds
+
+- **A new region, `hippocampus.replay`.** It records each item it is given into one decaying,
+  role-bound trace. On every tick it offers one earlier experience: the hippocampus's read of it,
+  noisy as the hippocampus holds it, and the key it was encoded under. It also gives the present
+  item its key.
+- **The cortex under acetylcholine keeps no list of experiences** (`cortex.store` with `encoding`
+  wired). Until now it rewrote an exact copy of an earlier experience. It now encodes the present
+  under the hippocampus's key and rewrites the experience the hippocampus offers, at 1 - a, under that
+  experience's own key. It is certified on its law: recall follows the noisy-copy law, and a replay is
+  only as good as the hippocampus's read of it. In the certified world, the older memories recall
+  0.06 from a 2048-wide hippocampus and 0.14 from an 8192-wide one, against 0.17 with exact copies.
+  The `modulated` profile wires it (d_h 8192).
+- **Breaking:** a cortex with `encoding` wired now needs `key`, `replay` and `replay_key` from
+  `hippocampus.replay`, and is refused otherwise with an explanation. `modulated` states saved by 0.26
+  do not load (their wiring has no hippocampus): start a new brain.
+- **`recall i` is the experimenter's probe.** The cortex's list of the keys it used is documented as
+  the experimenter's bookkeeping for measuring what the store holds, not as the brain's memory. A
+  brain recalls by cue. It works as before.
+
+## 0.26.0.dev2 -- episodic control without a queue
 
 - **Episodic control keeps no list of pending pairs** (`hippocampus.episodic_control`). Until now the
   store kept every (situation, action) since the last outcome in a queue and wrote each at the outcome.
