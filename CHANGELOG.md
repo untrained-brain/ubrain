@@ -5,6 +5,32 @@ change between them. Each region is certified against the law it was built to
 follow before it ships; a version adds regions or capabilities, and never moves a
 certified number.
 
+
+## 0.29.0.dev1 -- the whole brain runs as the research engine's whole tick (2026-11-03)
+
+A part-by-part map found that the whole brain `Brain()` serves was not the research engine's whole
+tick, on which the laws in place were measured. This release brings it there, where the route allows.
+
+- **The prefrontal buffer never fills.** `clock = "tick"`: every tick ages it and takes the next
+  position of a ring of `slots`; an item present is written there. The whole: gamma_m 0.9, 128
+  positions. (Before, it filled after 16 novel items and dropped every later one.) A test holds it to
+  the research engine's buffer tick for tick.
+- **No discount without a clock.** Serotonin left the whole: its clock read a situation stream the
+  whole rarely has, and its patience still discounted every value, to 0.905 of the reward with no
+  stream and 0.37 with one. `attach("modulator", "serotonin")` is refused, saying why; serotonin stays
+  in the experts' profiles.
+- **The memory loop.** Acetylcholine's binary switch, and `cortex.store` `present = "none"`: a busy tick
+  encodes into the hippocampus, an idle tick replays one experience into the cortex (gamma 0.995 per
+  tick). `hippocampus.episode` `timing = "tag"`: an item waits one tick and is written at the
+  prediction error of the move made at it, as the research engine pairs them.
+- **The control path.** `modes.controller` `demand = "novel_or_surprise"` and `timing = "tick"` (the
+  plan's tick is the chunk's first step, a step ends at its own tick's surprise; k 6); a test holds it
+  to the research engine's controller tick for tick. Striatum eta 0.2, episodic control gamma 0.98.
+- Every new option defaults to the earlier behaviour: every other profile is bit for bit as before.
+- Not yet (they wait for the route): the episode written with every busy tick's situation, memory
+  acting only in executive mode, the episodic store keyed by the code, noradrenaline, the supervisor,
+  the night.
+
 ## 0.28.0.dev2 (in development) -- the whole brain explores: the Go race on codes
 
 - **The whole brain's striatum releases by the Go race on its values** (`release = "race"` in the `whole`

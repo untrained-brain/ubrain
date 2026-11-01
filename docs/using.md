@@ -26,7 +26,7 @@ find-links = ["/path/to/ubrain/wheels"]
 Then add ubrain and check it:
 
 ```bash
-uv add "ubrain==0.28.0.dev2"
+uv add "ubrain==0.29.0.dev1"
 uv run python -c "import ubrain; print(ubrain.__version__)"
 ```
 
@@ -36,7 +36,7 @@ add another package. The extras, each only when you need it:
 
 | extra | what it brings | for |
 |---|---|---|
-| `vision` | torch, transformers (CLIP) | CLIP as a sense: `uv add "ubrain[vision]==0.28.0.dev2"` |
+| `vision` | torch, transformers (CLIP) | CLIP as a sense: `uv add "ubrain[vision]==0.29.0.dev1"` |
 | `game` | Gymnasium | a game as the body (`ubrain.bodies.gym`) |
 | `video` | imageio with ffmpeg | recording the robot examples as MP4 |
 | `plot` | matplotlib | the lab plots |
@@ -44,10 +44,10 @@ add another package. The extras, each only when you need it:
 **With pip**, in a virtual environment:
 
 ```bash
-pip install "ubrain==0.28.0.dev2" --find-links /path/to/ubrain/wheels
+pip install "ubrain==0.29.0.dev1" --find-links /path/to/ubrain/wheels
 ```
 
-(Version 0.28.0.dev2 is a pre-release, so name it exactly as above. When ubrain is on
+(Version 0.29.0.dev1 is a pre-release, so name it exactly as above. When ubrain is on
 PyPI, `pip install ubrain` will be enough.)
 
 ## 2. A brain in a few lines
@@ -86,7 +86,7 @@ manifest must provide. Each profile ships with ubrain:
 | `player` | striatum | `situation` (event), `reward` (reward), `action` (choice) |
 | `chooser` | hippocampal store that acts + striatum + hand-over | the player's channels |
 | `corticostriatal` | striatum on a code | `situation` (vector or codec), `goal` (goal, the situation's width), `reward` (reward), `explore` (flag), `action` (choice) |
-| `whole` | the route, from the sense to an action | `camera` (codec), `reward` (reward), `place` (event: the situation's index, for the episodic store and serotonin), `goal_slot`, `recall`, `recollect` (events), `action` (choice), `memory`, `recollection` (command), `mode` (choice) |
+| `whole` | the route, from the sense to an action | `camera` (codec), `reward` (reward), `place` (event: the situation's index, for the episodic store), `goal_slot`, `recall`, `recollect` (events), `action` (choice), `memory`, `recollection` (command), `mode` (choice) |
 | `observer` | hippocampus | `camera` (codec), `recall` (event), `boundary` (event), `memory` (command), `remembered` (choice) |
 | `rememberer` | hippocampus + cortex | the observer's channels plus `recollect` (event), `recollection` (command), `recollected` (choice) |
 | `holder` | prefrontal buffer | `camera` (codec), `recall`, `idle`, `clear` (events), `memory` (command), `remembered` (choice) |
