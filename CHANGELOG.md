@@ -5,7 +5,17 @@ change between them. Each region is certified against the law it was built to
 follow before it ships; a version adds regions or capabilities, and never moves a
 certified number.
 
-## 0.27.0.dev1 (in development) -- the cortex replays what the hippocampus holds
+## 0.27.0.dev2 (in development) -- found by writing the manual
+
+- **A cortex under acetylcholine without its hippocampus is refused.** 0.27.0.dev1 meant to refuse it at
+  build time, but whether a port is wired is not visible then. Such a brain was accepted, and its cortex
+  never replayed. The cortex now raises at its first item if `key`, `replay` or `replay_key` is not wired.
+- **The `whole` profile's cortex consolidates.** Its cortex had acetylcholine wired without anything to
+  encode or replay, so it never stored anything (since 0.24). It is now fed by `hippocampus.replay`, as in
+  `modulated`: one experience per event, as the hippocampus holds it. The route carries the new wires.
+- The specification's counts and version stamps match this release (UBI-5, UBI-8, the README).
+
+## 0.27.0.dev1 -- the cortex replays what the hippocampus holds
 
 - **A new region, `hippocampus.replay`.** It records each item it is given into one decaying,
   role-bound trace. On every tick it offers one earlier experience: the hippocampus's read of it,
