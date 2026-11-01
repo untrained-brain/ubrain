@@ -5,7 +5,19 @@ change between them. Each region is certified against the law it was built to
 follow before it ships; a version adds regions or capabilities, and never moves a
 certified number.
 
-## 0.27.0.dev2 (in development) -- found by writing the manual
+## 0.27.0.dev3 (in development) -- the code and the specification agree
+
+- **A sum on a choice output is refused** when the brain is built (it used to keep the first term
+  silently).
+- **An empty port on a command channel reads as zeros** of the channel's width, never as
+  not-a-number, and a term of the wrong width is refused (a leading batch axis is allowed).
+- **The specification says what the code does:** a bare region name stands for its first declared
+  output port; the kind table lists `choice`; every input channel of the manifest is filled each tick;
+  the manifest is the body's, and the release lists the brain's ports.
+- Every public name has a docstring, except the body client's (it is the body's own file, documented
+  with the body's next release). `ubrain.state.snapshot_bytes` is public.
+
+## 0.27.0.dev2 -- found by writing the manual
 
 - **A cortex under acetylcholine without its hippocampus is refused.** 0.27.0.dev1 meant to refuse it at
   build time, but whether a port is wired is not visible then. Such a brain was accepted, and its cortex
