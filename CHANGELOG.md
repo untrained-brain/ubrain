@@ -5,7 +5,35 @@ change between them. Each region is certified against the law it was built to
 follow before it ships; a version adds regions or capabilities, and never moves a
 certified number.
 
-## 0.27.0.dev4 (in development) -- found by documenting every parameter
+## 0.28.0.dev1 (in development) -- the whole brain, `Brain()` (a preview)
+
+- **`Brain()` is the whole brain** (UBI-14, stage N.1): every region on the route, wired once and the
+  same in every copy. You choose a named **variant** (`standard`, d = 512; `small`, d = 128), which
+  changes sizes and never wiring, and attach streams by **port class**: `brain.attach("sense", "vision",
+  codec=camera)`, `brain.attach("reward")`, `brain.attach("action", n=4)`; `tick` takes and returns
+  them by address (`"sense.vision"`). With one sense the whole brain is the `whole` profile, bit for
+  bit. `ubrain.face` lists the classes and the variants.
+- **Several senses:** each sense is one route of the thalamic relay (up to the variant's `routes`); the
+  regions after it read the relay's new `merged` output (with one route its code; with more, the bus at
+  unit length), and the memories clean up against every sense's vocabulary bound to its route's key.
+- **Neuromodulators from outside:** a `modulator` stream (`"modulator.acetylcholine"`,
+  `"modulator.serotonin"`) is its region's level while it carries a value; absent, the region computes
+  its own (a new `given` port on both).
+- **The interior:** `brain.tap("region.port")` reads any output port as the last tick left it;
+  `tick(..., inject={"hippocampus.episode.recall": 3})` delivers a cue to one of the open cue ports;
+  `brain.describe()` lists the streams, the cue ports and every region's ports. An input class with no
+  stream reads its absent value, and the regions behind it rest.
+- A whole brain saves and loads without a manifest: `Brain.load(path, codecs={"sense.vision": camera})`.
+- A region port may read a **stack** of channels (a TOML list in a wiring); a width now travels down a
+  carried edge as it travels up, so codes without a codec still size the regions after them.
+- **A preview, and what it does not yet do:** the whole is not certified as a whole (the research
+  engine's next stage). In particular nothing in it explores: its striatum chooses the largest value
+  on codes, so on a task with one right action per picture it keeps what first paid (about one half in
+  `examples/00_whole_brain.py`). Not yet built: streams attached to a running brain, several agents,
+  `goal`, `taken`, and the body's classes (`body`, `cue`, `command`); each is refused with its stage.
+  Every profile is unchanged, bit for bit.
+
+## 0.27.0.dev4 -- found by documenting every parameter
 
 - **Watching the whole brain works.** `observe()`, `health()` and `monitor()` failed on any brain with
   the forward model of codes, the `whole` profile included. The forward model now reports its

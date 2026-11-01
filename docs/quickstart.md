@@ -12,7 +12,20 @@ cd ubrain
 
 There is nothing else to install: `uv run` builds an environment the first time.
 
-## 2. A brain that learns from reward
+## 2. The whole brain
+
+```bash
+uv run examples/00_whole_brain.py
+```
+
+`Brain()` is the whole brain, every region wired once and the same in every copy: you choose
+a variant (sizes, never wiring) and attach streams by class -- a sense through a codec, a
+reward, an action. The printout shows the reward rate rising from chance and a look inside.
+It is a preview: the whole is not yet certified as a whole, and nothing in it explores yet,
+so it settles near one half where one action per picture pays. The examples below use
+circuits, a few chosen regions each, as the laws were measured.
+
+## 3. A brain that learns from reward
 
 ```bash
 uv run examples/01_bandit.py
@@ -23,7 +36,7 @@ pays off with its own probability. Within a few thousand trials it has learned a
 value for every (situation, action) pair, and its choices follow those values. The
 printout sets what it learned beside what the world pays.
 
-## 3. A brain that remembers
+## 4. A brain that remembers
 
 ```bash
 uv run examples/02_memory.py
@@ -34,7 +47,7 @@ never fails; with 32 it mostly does. Before running anything, ubrain prints a
 **certificate**: the recall rate the law predicts at each load. The two columns
 agree.
 
-## 4. Plug in an AI model
+## 5. Plug in an AI model
 
 ```bash
 uv run --extra vision examples/03_clip_words.py
@@ -45,7 +58,7 @@ encoder as the brain's sense: the brain hears a sentence word by word and recall
 it. The CLIP checkpoint (about 600 MB) must be in your Hugging Face cache; if it is
 not, the example says how to fetch it.
 
-## 5. Let the brain play a game
+## 6. Let the brain play a game
 
 ```bash
 uv run --extra game examples/04_blackjack.py     # about a minute
@@ -62,7 +75,7 @@ taking the best. On FrozenLake the reward comes only at the goal, many moves aft
 first choice: crediting every move of an episode with how it ended finds the path, while
 crediting only the last move does not -- the printout shows both.
 
-## 6. The rest of the brain, on a laptop
+## 7. The rest of the brain, on a laptop
 
 ```bash
 uv run examples/06_working_memory.py      # a list in working memory, recall by position
@@ -77,7 +90,7 @@ uv run examples/12_monitor_and_datasheet.py   # a brain's datasheet, health, and
 Each prints, before it runs, what ubrain's laws predict, and then what the brain did. Where
 a figure has no closed form, the example says it is shown, not predicted.
 
-## 7. Put the brain in a robot
+## 8. Put the brain in a robot
 
 The body is in `bodies/mujoco`, with its own environment. Set it up once:
 
