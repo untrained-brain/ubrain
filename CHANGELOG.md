@@ -5,7 +5,19 @@ change between them. Each region is certified against the law it was built to
 follow before it ships; a version adds regions or capabilities, and never moves a
 certified number.
 
-## 0.27.0.dev3 (in development) -- the code and the specification agree
+## 0.27.0.dev4 (in development) -- found by documenting every parameter
+
+- **Watching the whole brain works.** `observe()`, `health()` and `monitor()` failed on any brain with
+  the forward model of codes, the `whole` profile included. The forward model now reports its
+  judgements, surprises and threshold. Health also checks a region added under a name of its own
+  (`salience.gate@x`).
+- **Settings are checked:** the striatum's `eta` (0 < eta <= 1), the cortex's `eta`, `gamma` and
+  `replay_eta`, and the episode's and the buffer's `slots`. A value outside the range is refused
+  when the brain is built, with the range.
+- `mute` says what it does and names the regions when it refuses; `datasheet.horizon` documents its -1;
+  kind-mismatch messages read "an event port".
+
+## 0.27.0.dev3 -- the code and the specification agree
 
 - **A sum on a choice output is refused** when the brain is built (it used to keep the first term
   silently).
