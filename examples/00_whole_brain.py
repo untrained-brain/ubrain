@@ -12,14 +12,15 @@ the present and the past -- you wire none of it.
 
 The world: one of four pictures is shown; each asks for its own action of four, and
 the right one pays 1. The pictures reach the brain as codes from a fixed random codec
-(any AI model would do). The printout shows the reward rate rising from chance
-(0.25), and a look inside through `tap`.
+(any AI model would do).
 
-What it does not do yet, and why: it settles near one half, not near one. The striatum
-in the whole chooses the largest value, and nothing in the whole explores, so in each
-picture it keeps the first action that paid. Its law was measured with an exploration
-schedule given from outside; what explores inside the whole brain is the next stage of
-the research engine, and until it is certified `Brain()` is a preview.
+The law, checked here: the striatum releases an action by the Go race, with probability
+in proportion to its value (floored at 0.001), so values at zero release every action
+alike -- the race explores what it has not learned -- and once learned, the expected
+reward is the right action's share of the values, averaged over the pictures. The
+research engine measured that law in the whole brain (the values law in place). The
+printout sets the reward the brain earned beside the law evaluated on the values it
+learned (at the middle of each block: the first block's earnings include the learning).
 """
 
 import numpy as np
@@ -27,6 +28,18 @@ import numpy as np
 from ubrain import Brain, GaussianCodes, Sense
 
 PICTURES, ACTIONS, TRIALS, BLOCK = 4, 4, 3000, 500
+FLOOR = 1e-3                                    # the race's floor on a value
+
+
+def race_law(brain, camera, right) -> float:
+    """The expected reward of the Go race on the striatum's values now: per picture, the
+    right action's floored value over the sum of all, averaged over the pictures."""
+    st = brain.regions["basal_ganglia.striatum"]
+    share = []
+    for p in range(PICTURES):
+        q = np.clip(st.W @ st.phi(camera([p])[0]), FLOOR, None)
+        share.append(q[right[p]] / q.sum())
+    return float(np.mean(share))
 
 
 def main() -> None:
@@ -37,20 +50,22 @@ def main() -> None:
     brain.attach("reward")
     brain.attach("action", n=ACTIONS)
     right = rng.permutation(ACTIONS)              # picture p asks for action right[p]
-    r, paid = None, []
+    r, paid, law = None, [], []
     for t in range(TRIALS):
         p = int(rng.integers(PICTURES))
         a = brain.tick({"sense.vision": p, "reward": r})["action"]
         r = float(a == right[p]) if a is not None else 0.0
         paid.append(r)
+        if t % BLOCK == BLOCK // 2:               # the law at the middle of each block
+            law.append(race_law(brain, camera, right))
     print(f"the whole brain, variant {brain.describe()['variant']!r}: "
           f"{len(brain.regions)} regions, wired by none of this script")
-    for b in range(0, TRIALS, BLOCK):
-        print(f"  trials {b:5d}-{b + BLOCK - 1:5d}: reward rate {np.mean(paid[b:b + BLOCK]):.2f}")
-    print(f"  chance: {1 / ACTIONS:.2f}; nothing in the whole explores yet, so it keeps what first paid")
+    print("  trials           earned   the race's law on the values (mid-block)")
+    for k, b in enumerate(range(0, TRIALS, BLOCK)):
+        print(f"  {b:5d}-{b + BLOCK - 1:5d}      {np.mean(paid[b:b + BLOCK]):.3f}    {law[k]:.3f}")
+    print(f"  chance: {1 / ACTIONS:.2f}")
     print(f"inside (tap): the mode {brain.tap('modes.controller.mode')}, "
-          f"acetylcholine {brain.tap('neuromodulator.acetylcholine.level')}, "
-          f"the striatum's last prediction error {brain.tap('basal_ganglia.striatum.delta')}")
+          f"acetylcholine {brain.tap('neuromodulator.acetylcholine.level')}")
 
 
 if __name__ == "__main__":

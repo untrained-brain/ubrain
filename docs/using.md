@@ -26,7 +26,7 @@ find-links = ["/path/to/ubrain/wheels"]
 Then add ubrain and check it:
 
 ```bash
-uv add "ubrain==0.28.0.dev1"
+uv add "ubrain==0.28.0.dev2"
 uv run python -c "import ubrain; print(ubrain.__version__)"
 ```
 
@@ -36,7 +36,7 @@ add another package. The extras, each only when you need it:
 
 | extra | what it brings | for |
 |---|---|---|
-| `vision` | torch, transformers (CLIP) | CLIP as a sense: `uv add "ubrain[vision]==0.28.0.dev1"` |
+| `vision` | torch, transformers (CLIP) | CLIP as a sense: `uv add "ubrain[vision]==0.28.0.dev2"` |
 | `game` | Gymnasium | a game as the body (`ubrain.bodies.gym`) |
 | `video` | imageio with ffmpeg | recording the robot examples as MP4 |
 | `plot` | matplotlib | the lab plots |
@@ -44,10 +44,10 @@ add another package. The extras, each only when you need it:
 **With pip**, in a virtual environment:
 
 ```bash
-pip install "ubrain==0.28.0.dev1" --find-links /path/to/ubrain/wheels
+pip install "ubrain==0.28.0.dev2" --find-links /path/to/ubrain/wheels
 ```
 
-(Version 0.28.0.dev1 is a pre-release, so name it exactly as above. When ubrain is on
+(Version 0.28.0.dev2 is a pre-release, so name it exactly as above. When ubrain is on
 PyPI, `pip install ubrain` will be enough.)
 
 ## 2. A brain in a few lines

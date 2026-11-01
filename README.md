@@ -65,13 +65,13 @@ find-links = ["/path/to/ubrain/wheels"]
 ```
 
 ```bash
-uv add "ubrain==0.28.0.dev1"
-# or with pip:  pip install "ubrain==0.28.0.dev1" --find-links /path/to/ubrain/wheels
+uv add "ubrain==0.28.0.dev2"
+# or with pip:  pip install "ubrain==0.28.0.dev2" --find-links /path/to/ubrain/wheels
 ```
 
 The whole brain needs no wiring: choose a variant, attach streams by port class (a preview in
 0.28: the whole is not yet certified as a whole; `examples/00_whole_brain.py` shows what it does
-and what it does not yet do):
+and the law beside it):
 
 ```python
 from ubrain import Brain, GaussianCodes, Sense
@@ -125,7 +125,7 @@ action = brain.tick({"situation": s, "reward": r})["action"]
 
 ## Status
 
-Pre-release, 0.28.0.dev1: sixteen regions in thirteen profiles. The cerebellum (a forward
+Pre-release, 0.28.0.dev2: sixteen regions in thirteen profiles. The cerebellum (a forward
 model, a timed brace, walking adaptation); the striatum (on an index, or on a situation code
 conditioned by a goal); the hippocampus (an episode, and a
 store that acts) and the hand-over from it to the striatum; the cortex's slow store; the

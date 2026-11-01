@@ -5,7 +5,21 @@ change between them. Each region is certified against the law it was built to
 follow before it ships; a version adds regions or capabilities, and never moves a
 certified number.
 
-## 0.28.0.dev1 (in development) -- the whole brain, `Brain()` (a preview)
+## 0.28.0.dev2 (in development) -- the whole brain explores: the Go race on codes
+
+- **The whole brain's striatum releases by the Go race on its values** (`release = "race"` in the `whole`
+  profile, and so in `Brain()`): an action with probability in proportion to its value floored at 0.001,
+  the release of the research engine's whole tick, on which the values law held in the whole brain.
+  Values at zero release every action alike, so the race tries what it has not learned; nothing outside
+  schedules it. On four pictures with one right action each, `examples/00_whole_brain.py` now earns
+  0.98 to 1.00 after its first block, within about 0.01 of the race's law on the values it learned (it
+  stayed near one half under 0.28.0.dev1's greedy choice).
+- The setting is the code-mode striatum's `release` (`"greedy"`, the default, as the corticostriatal
+  circuit was measured; or `"race"`); the datasheet names the race's law when it is set.
+- A state saved by an earlier release loads with the greedy choice it had (a region may now declare
+  attributes it added since, `_ADDED`, which the loader fills through the region's upgrade).
+
+## 0.28.0.dev1 -- the whole brain, `Brain()` (a preview)
 
 - **`Brain()` is the whole brain** (UBI-14, stage N.1): every region on the route, wired once and the
   same in every copy. You choose a named **variant** (`standard`, d = 512; `small`, d = 128), which

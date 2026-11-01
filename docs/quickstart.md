@@ -20,9 +20,10 @@ uv run examples/00_whole_brain.py
 
 `Brain()` is the whole brain, every region wired once and the same in every copy: you choose
 a variant (sizes, never wiring) and attach streams by class -- a sense through a codec, a
-reward, an action. The printout shows the reward rate rising from chance and a look inside.
-It is a preview: the whole is not yet certified as a whole, and nothing in it explores yet,
-so it settles near one half where one action per picture pays. The examples below use
+reward, an action. The striatum releases actions by the Go race on its values, so it tries
+what it has not learned and settles on what pays: the printout sets the reward it earned
+beside the race's law on the values it learned, and takes a look inside. It is a preview:
+the whole is not yet certified as a whole on standard bodies. The examples below use
 circuits, a few chosen regions each, as the laws were measured.
 
 ## 3. A brain that learns from reward
