@@ -5,7 +5,17 @@ change between them. Each region is certified against the law it was built to
 follow before it ships; a version adds regions or capabilities, and never moves a
 certified number.
 
-## 0.26.0.dev1 (in development) -- the striatum's credit as a synaptic tag
+## 0.26.0.dev2 (in development) -- episodic control without a queue
+
+- **Episodic control keeps no list of pending pairs** (`hippocampus.episodic_control`). Until now the
+  store kept every (situation, action) since the last outcome in a queue and wrote each at the outcome.
+  It now keeps their keys superposed in one fading trace, plus one number for the decay the store will
+  take, and writes them in a single step. Binding is linear, so this is the same write: bit for bit on a
+  bandit, and to rounding over an episode of several pairs. The measured T-maze and bandit runs are
+  reproduced exactly. States saved by 0.25 load (the queue becomes the trace).
+- The monitor reports a situation-code striatum's weights (it had tried to read a table it does not have).
+
+## 0.26.0.dev1 -- the striatum's credit as a synaptic tag
 
 - **The striatum keeps one tag per synapse** (`basal_ganglia.striatum` on a state table). Until now it
   kept every choice since the last outcome in an exact list. It now keeps one number per (state, action):
