@@ -5,7 +5,25 @@ change between them. Each region is certified against the law it was built to
 follow before it ships; a version adds regions or capabilities, and never moves a
 certified number.
 
-## 0.25.0.dev1 (in development) -- salience remembers like a brain
+## 0.26.0.dev1 (in development) -- the striatum's credit as a synaptic tag
+
+- **The striatum keeps one tag per synapse** (`basal_ganglia.striatum` on a state table). Until now it
+  kept every choice since the last outcome in an exact list. It now keeps one number per (state, action):
+  a choice sets its tag to 1, every tag fades by the patience each tick, and the outcome is learned once
+  by every tagged pair, `Q += eta (tag r - Q)`. It is certified on its law: the values settle at a derived
+  fixed point, the discounted reward the striatum's own choices earn, so serotonin's patience still
+  discounts. **What changes for you:** nothing, unless a pair is chosen twice before its outcome
+  (`credit = "episode"`): it is now credited once, with its latest copy, where the list credited every
+  copy. Its values then sit slightly higher than before, by an amount the law gives. Patience is read on
+  each tick; under a steady patience this is exactly the earlier behaviour.
+- **On a situation code** (`situation` wired; the `corticostriatal` and `whole` profiles) the pending
+  credit is a tag too: the chosen action's synapses keep the pattern they were used with, and the action
+  an eligibility. The updates are exactly the earlier ones. **Breaking:** `credit = "episode"` on a
+  situation code is now refused with an explanation. There several situations would share one action's
+  synapses, and that tag is not certified yet; no shipped profile used it. Use `credit = "last"`.
+- States saved by 0.25 load: the pending list becomes the tags.
+
+## 0.25.0.dev1 -- salience remembers like a brain
 
 - **The salience gate keeps a fading trace** (`salience.gate`, `memory = "trace"`, the new default).
   Until now the gate judged each item against an exact list of the last few items -- a computer queue no
