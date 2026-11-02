@@ -6,7 +6,40 @@ follow before it ships; a version adds regions or capabilities, and never moves 
 certified number.
 
 
-## 0.29.0.dev1 -- the whole brain runs as the research engine's whole tick (2026-11-03)
+## 0.30.0.dev1 -- the whole brain's laws checked in place; two ports for an observer (2026-11-02)
+
+The whole brain was run in the research engine's integration world (twelve places of two senses, goals
+that switch, remapped moves, fresh scenes; one sense, no goal input, 24 seeds at four settings), and the
+laws its parts were certified by were evaluated on the trace of its own run, within allowances
+calibrated on its own runs. `brain.datasheet()` now carries the outcome as `(whole)` rows:
+
+- **the buffer's law holds in place**, with and without memory;
+- **the striatum's values law holds in place without memory**; with memory given a situation index (it
+  acts on about 60% of moves) it falls short by about 0.008, of one sign at every setting -- inside the
+  allowance, but the calibration's bias was over the bound set before the run, so it is reported as not
+  held. The suspected cause is in the law (which moves the striatum takes depends on memory's
+  confidence), not in the striatum;
+- a pass says the parts learn by their laws on what the whole gives them, not that the whole behaves as
+  the research engine's whole: its salience judges about half as much novel and it plans about half as
+  often; memory acts more. The episode's, the cortex's, salience's and the modes' laws are not checked in
+  the whole yet.
+
+Added:
+
+- `basal_ganglia.striatum.features`: the pattern of this tick's decision (read-only; None without a
+  situation code).
+- `prefrontal.buffer.latest`: the buffer's read of the position it wrote last, not snapped to the
+  vocabulary. A state saved before 0.30 is upgraded to its newest held term.
+
+Fixed:
+
+- The `state` stream's values were documented reversed: 0 is idle (the default mode, replaying), 1 is
+  acting on the present. The code was right; the face's class table and the specification's row now say so.
+- The prefrontal buffer's datasheet row says "per tick" on the tick clock.
+- 0.29.0.dev1's date is 2026-11-02 (it was written as 2026-11-03).
+
+
+## 0.29.0.dev1 -- the whole brain runs as the research engine's whole tick (2026-11-02)
 
 A part-by-part map found that the whole brain `Brain()` serves was not the research engine's whole
 tick, on which the laws in place were measured. This release brings it there, where the route allows.
