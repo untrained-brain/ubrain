@@ -6,6 +6,40 @@ follow before it ships; a version adds regions or capabilities, and never moves 
 certified number.
 
 
+## 0.32.0.dev1 -- size by need, first stage; the interface's words (2026-11-03)
+
+A brain is sized by what the problem needs, not by its parts (UBI-20 section 6a). This release
+takes named sizes and says what each costs; sizing by needs follows one need at a time, each from
+the law its capacity is certified on.
+
+Added:
+
+- `Brain(size=...)`: a named size (`small`, `standard`, `large`); `variant=` is the older spelling of
+  the same thing. `large` is new: twice the standard workspace, about four times its memory and time
+  per tick.
+- `describe()["size"]`: the size's name, the named sizes with their widths, and whether the brain's
+  laws were checked on the whole brain at each (so far only `standard`; elsewhere its capacities are
+  the laws' predictions).
+- `brain.cost(ticks=20)`: the memory, build time and time per tick of this brain's size on this
+  machine, measured on a copy; the brain itself is never built by it.
+- `Brain(needs={...})` takes the needs UBI-20 names (situations, actions, held, episodes, accuracy)
+  and, in this release, refuses each one it cannot yet size for, naming it.
+
+Changed:
+
+- `describe()["classes"]` lists only the interface's classes; `situation`, an input only this brain
+  takes for now, is listed under `implementation_classes`.
+- The brain speaks the interface's words, so that a program written for any brain reads its messages:
+  the classes' descriptions (no workspace, relay or neuromodulator), refusals in terms of sizes and
+  widths and "not built in this release" (no variants, workspaces or internal stage numbers), the
+  `source` observable's meaning. `Brain`'s own documentation leads with the whole brain; building a
+  circuit from a wiring and a manifest is described as this implementation's experts' layer.
+- A sense fitted again is refused at load naming the stream and saying what to pass instead.
+
+The programming manual (edition 0.2) is rewritten on the interface alone and is written against this
+release.
+
+
 ## 0.31.0.dev1 -- the programmer's model: one interface, any brain (2026-11-03)
 
 A program written against the interface (UBI-20, the programmer's model) is meant to run on any brain

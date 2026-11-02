@@ -65,8 +65,8 @@ find-links = ["/path/to/ubrain/wheels"]
 ```
 
 ```bash
-uv add "ubrain==0.31.0.dev1"
-# or with pip:  pip install "ubrain==0.31.0.dev1" --find-links /path/to/ubrain/wheels
+uv add "ubrain==0.32.0.dev1"
+# or with pip:  pip install "ubrain==0.32.0.dev1" --find-links /path/to/ubrain/wheels
 ```
 
 The whole brain needs no wiring: choose a variant, attach streams by port class (a preview in
@@ -125,7 +125,7 @@ action = brain.tick({"situation": s, "reward": r})["action"]
 
 ## Status
 
-Pre-release, 0.31.0.dev1: sixteen regions in thirteen profiles. The cerebellum (a forward
+Pre-release, 0.32.0.dev1: sixteen regions in thirteen profiles. The cerebellum (a forward
 model, a timed brace, walking adaptation); the striatum (on an index, or on a situation code
 conditioned by a goal); the hippocampus (an episode, and a
 store that acts) and the hand-over from it to the striatum; the cortex's slow store; the
