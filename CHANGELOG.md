@@ -6,6 +6,38 @@ follow before it ships; a version adds regions or capabilities, and never moves 
 certified number.
 
 
+## 0.31.0.dev1 -- the programmer's model: one interface, any brain (2026-11-03)
+
+A program written against the interface (UBI-20, the programmer's model) is meant to run on any brain
+that implements it -- this one, a later one, or a brain built another way -- as a program runs on any
+processor of one instruction set. This release serves that model on `Brain()`.
+
+Added:
+
+- `brain.describe()` is the capability query. Its architectural part -- `interface` (the contract
+  version), `implementation`, `classes`, `observables`, `guarantees`, `datasheet` -- answers on a brain
+  just constructed, before anything is attached, and never builds or changes the brain. What a program
+  must not depend on is below it: `instance` (variant, width, streams) and `interior` (the anatomy; None
+  until the first tick).
+- `brain.read(name)`: the observables, named by what they mean -- `novel`, `surprise`, `value`,
+  `prediction_error` (every implementation provides them), `source` and `held` (declared where
+  provided). A copy; the absent value before the first tick.
+- `basal_ganglia.striatum.values`: the values of the actions here, after this tick's credit and before
+  its choice (what `read("value")` serves).
+- A state file names the implementation, its version and the interface; a state written by another
+  implementation is refused with the reason.
+- `tests/test_ubi20.py`: the conformance suite on a standard world, through the interface alone.
+
+Changed:
+
+- `describe()`'s former keys moved: `variant`, `d`, `routes`, `streams` under `instance`; `wiring`,
+  `regions`, `cues` under `interior`.
+- A reward or a modulator's level outside [0, 1], or a situation index out of range, is refused at
+  `tick` naming the stream (it was taken as given).
+- `tap`, `datasheet` and `health` before the first tick read a built copy: reading no longer builds the
+  brain, so streams can still be attached after it.
+
+
 ## 0.30.0.dev1 -- the whole brain's laws checked in place; two ports for an observer (2026-11-02)
 
 The whole brain was run in the research engine's integration world (twelve places of two senses, goals

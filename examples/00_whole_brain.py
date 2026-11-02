@@ -58,7 +58,7 @@ def main() -> None:
         paid.append(r)
         if t % BLOCK == BLOCK // 2:               # the law at the middle of each block
             law.append(race_law(brain, camera, right))
-    print(f"the whole brain, variant {brain.describe()['variant']!r}: "
+    print(f"the whole brain, variant {brain.describe()['instance']['variant']!r}: "
           f"{len(brain.regions)} regions, wired by none of this script")
     print("  trials           earned   the race's law on the values (mid-block)")
     for k, b in enumerate(range(0, TRIALS, BLOCK)):
