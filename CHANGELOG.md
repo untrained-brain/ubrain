@@ -6,6 +6,23 @@ follow before it ships; a version adds regions or capabilities, and never moves 
 certified number.
 
 
+## 0.33.0.dev2 -- 0.33's memory checked in place in the whole brain (2026-11-03)
+
+No behaviour changes: the brain of 0.33.0.dev1, bit for bit. The datasheet's whole-brain rows now
+carry the check in place of 0.33's memory: `Brain()` run in the research engine's integration world
+(24 seeds at four noise and similarity settings), the laws evaluated on its own trace.
+
+Changed:
+
+- The datasheet's whole-brain row "the striatum's values law in place, with memory" reads "held"
+  (it read "not checked on this release"): on the moves memory leaves to it, the striatum learns by
+  its law. The one-signed shortfall 0.30 found with the index-keyed memory is gone.
+- A new whole-brain row, "memory's law in place", reads "held": how often memory acts on the
+  engaged ticks, and the reward of what it chooses, follow its store run on the recorded path with
+  every view drawn afresh. A store keyed by an index would miss how often it acts by 0.04 to 0.10.
+- The buffer's row and the values row without memory are re-checked on this release: held.
+
+
 ## 0.33.0.dev1 -- memory reads the code and acts when the brain is engaged (2026-11-03)
 
 The whole brain's episodic store now runs as the research engine's whole tick runs it, where its law
