@@ -6,6 +6,36 @@ follow before it ships; a version adds regions or capabilities, and never moves 
 certified number.
 
 
+## 0.33.0.dev1 -- memory reads the code and acts when the brain is engaged (2026-11-03)
+
+The whole brain's episodic store now runs as the research engine's whole tick runs it, where its law
+was measured in place: keyed by what the situation looks like, and acting only on the ticks the mode
+controller has engaged the brain.
+
+Changed:
+
+- `Brain()`: the episodic store's key is the situation's code bound to a code per action
+  (`unitary(z (*) u_a)`), so what it recalls generalises across views of a place through the code;
+  no index is attached or needed. It reads its votes on every tick and acts only on executive ticks
+  (`state` 1); every move still writes, whoever made it.
+- `Brain()`: the forward model and the mode controller step before memory; the forward model judges
+  last tick's prediction from the efference copy that arrives a tick late (`cerebellum.forward`
+  `timing = "judge_first"`), the same judgement on the same map as before, so this tick's surprise is
+  known before this tick's move.
+- The datasheet's whole-brain row for the striatum with memory reads "not checked on this release":
+  the in-place check of 0.30 was made on the index-keyed store.
+
+Removed:
+
+- The `situation` class (an index handed to memory, transitional since 0.28): attaching it is refused,
+  saying so. Give a discrete situation a code through a sense instead.
+
+Added (for circuits):
+
+- `hippocampus.episodic_control` takes `situation` (a code) in place of `state` (an index), and an
+  `idle` flag that keeps it from acting; with neither, it is the index store it was.
+- `cerebellum.forward` (codes) takes `timing = "judge_first"`.
+
 ## 0.32.0.dev1 -- size by need, first stage; the interface's words (2026-11-03)
 
 A brain is sized by what the problem needs, not by its parts (UBI-20 section 6a). This release
