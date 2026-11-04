@@ -6,6 +6,31 @@ follow before it ships; a version adds regions or capabilities, and never moves 
 certified number.
 
 
+## 0.34.0.dev1 -- the way in: a frozen codec is made a sense inside the brain (2026-11-04)
+
+`Brain.attach("sense", "vision", codec=clip)` now takes the codec alone, of any width. What
+`Sense.fit` did by hand, the brain now does inside, as a brain does to sensory cortex's output
+(`ubrain.way`):
+
+- **The stage** (certified): a fixed random projection to the brain's width, a set-point learned
+  as the running mean over a critical period of 1024 inputs and then held, so stored memories stay
+  aligned, and divisive normalisation to unit length.
+- **The record of known things** (a PREVIEW): a code past the criterion is recognised as the
+  nearest known thing, otherwise it is a new thing and enters the record. The criterion tightens as
+  the record grows. The record is the vocabulary every store cleans up against, and the stores
+  follow it from tick to tick as it grows. Its baseline is read from the bulk of the critical
+  period's pairs, so a small world that repeats itself does not push it out of reach. Its
+  familiarity rate is reported, never guaranteed: on real text codes, a view of a known thing is
+  recognised 97-100 % of the time, but a fresh sentence is taken for a known one 17-35 % of the
+  time, against 5 % set.
+- During the critical period the criterion is the uniform sphere's. While the set-point is young,
+  two things can be taken for one another; the period's entries are re-coded when it ends.
+- A saved brain keeps each sense's way in. `Brain.load(path, codecs={"sense.vision": clip})`
+  needs the codec model alone.
+
+Unchanged: a fitted `Sense` of the variant's width is still taken as it is, and circuits
+(`Brain(wiring, manifest)`) take fitted senses as before. Every certified number is unmoved.
+
 ## 0.33.0.dev2 -- 0.33's memory checked in place in the whole brain (2026-11-03)
 
 No behaviour changes: the brain of 0.33.0.dev1, bit for bit. The datasheet's whole-brain rows now
