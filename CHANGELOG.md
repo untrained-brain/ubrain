@@ -6,6 +6,30 @@ follow before it ships; a version adds regions or capabilities, and never moves 
 certified number.
 
 
+## 0.36.0.dev1 -- the senses bound to each other (2026-11-05)
+
+A whole brain with two senses or more now binds what it perceives together, as an association area
+does. A picture seen with a word recalls the word from the picture alone, and the picture from the
+word, with no training.
+
+- **`association.senses`** (PREVIEW): every tick, the senses present together are bound pairwise
+  into one store, a sum of pairs (so a partial cue still answers). Each absent sense is recalled
+  from the present ones, cleaned up against what of it was stored. `tap("association.senses.
+  recalled")` gives the recalled codes (one row per sense, a present sense its own), `index` their
+  place among the sense's stored codes, `confidence` the recall law's probability that the answer
+  is right, `pairs` the load.
+- **The law is the repaired one.** On review the earlier recall law was found to under-predict
+  by a few hundredths; two missing terms were derived and measured (an item's crosstalk never
+  lands on its own candidate; in a store read by several cues, mirror-image crosstalk), and the
+  law now matches the measurements on every store, with every class's bias within 0.008. The
+  confidence it reports is that law's.
+- **When it writes.** Only once every present sense's input stage has settled (a sense made
+  inside the brain re-codes its things during its critical period), and each co-occurrence once.
+- **Certified** for two senses, and for one filler with two roles read by one or both, at the
+  loads measured. Three senses or more is the same algebra and law, not yet measured. The store
+  has no forgetting yet: its load grows with every new co-occurrence.
+- **A brain with one sense is unchanged**, tick for tick.
+
 ## 0.35.0.dev1 -- the dentate gyrus: the first complete brain's way into memory (2026-11-05)
 
 The whole brain (`Brain()`) now keys its episodic store through the dentate gyrus, as the
