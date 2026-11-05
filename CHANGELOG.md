@@ -6,6 +6,28 @@ follow before it ships; a version adds regions or capabilities, and never moves 
 certified number.
 
 
+## 0.35.0.dev1 -- the dentate gyrus: the first complete brain's way into memory (2026-11-05)
+
+The whole brain (`Brain()`) now keys its episodic store through the dentate gyrus, as the
+hippocampus does. The way from a sense into memory is now the brain's own from end to end: the
+codec, the cortical stage, the record of known things, and the dentate.
+
+- **The dentate** (certified): a fixed sparse projection expands the situation code four-fold
+  into granule cells. The most driven few (about 2 %) stay active, feedback inhibition makes
+  the code zero-mean, and it is set to unit length. The store's key is that code bound to the
+  action's code, so the store is four times as wide.
+- **It separates.** Two views of one place meet at a lower key cosine than their codes do (about
+  0.46 against 0.74 at the measured point), and things of one kind meet near zero. On the
+  measured worlds, episodic control earns about one percent more reward per move. The store's
+  laws hold through it: memory's share of the moves and the reward of its choices.
+- **The hand-over** reads the keys' own spread: the crosstalk scale is ||x|| sqrt(2 k / d_dg),
+  with k measured on the store's key path when it is built.
+- **Saved brains** carry only the projection's seed and rebuild the matrix from it. A brain
+  saved before 0.35 loads without a dentate, as it was.
+- **In a profile:** `dentate = true` on `hippocampus.episodic_control` (a code-keyed store
+  only), with `d_dg` (default 4 d) and `s` (default d_dg * 24 / 1024). The `whole` profile turns
+  it on.
+
 ## 0.34.0.dev1 -- the way in: a frozen codec is made a sense inside the brain (2026-11-04)
 
 `Brain.attach("sense", "vision", codec=clip)` now takes the codec alone, of any width. What
