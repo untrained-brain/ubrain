@@ -6,6 +6,22 @@ follow before it ships; a version adds regions or capabilities, and never moves 
 certified number.
 
 
+## 0.44.0.dev1 -- language: knowledge read, recalled with its source (2026-11-07)
+
+- **`Language.read_knowledge(text, source=...)`** remembers a text's statements as knowledge, kept
+  with their source. A question that nothing a person said answers is looked up there and answered
+  as read: "What is the capital of France?" gives "i read that the capital of france is paris."
+  What a person told it still comes first.
+- **How it is stored:** one code per statement (its words, each once, weighted by rarity), its
+  text, its source. A question is accepted by how much of it a statement holds, and ranked by how
+  focused the statement is. Lists and a page's furniture ("related pages", "references") are not
+  kept as statements.
+- **Measured on all of Simple English Wikipedia** (2.2 million statements, 3.5 minutes to read,
+  2.5 s per question): of 10 everyday questions, 4 answered right, 1 partly, 5 wrong. The misses
+  come from words without their forms ("cat" and "cats") and from not knowing what a question asks
+  for ("who wrote" wants the writer). Still PREVIEW.
+
+
 ## 0.43.0.dev1 -- language: taught without an answer (2026-11-07)
 
 - **`Language.teach(line, who=...)`** takes a line in without replying: it is remembered as that
