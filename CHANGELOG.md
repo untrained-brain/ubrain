@@ -6,6 +6,36 @@ follow before it ships; a version adds regions or capabilities, and never moves 
 certified number.
 
 
+## 0.40.0.dev1 -- language: numbers, dates and the verb said back (2026-11-07)
+
+Found when the live brain was told its birthday ("Your birthday is 7am Nov. 7. 2026" came back as
+"my birthday is are nov."):
+
+- **Numbers are words now** ("7am", "2026", "7"); they had been dropped.
+- **An abbreviation keeps its period** ("nov.", "mr.", "dr."), so it no longer ends the sentence.
+- **The verb swaps with the person:** "am" and "are" swap only next to "i" and "you" ("you are a
+  robot" is said back as "i am a robot"; "we are friends" stays).
+- **Recall is stricter:** a statement must hold 0.7 of the question's words, weighted by their
+  salience (0.4 before), so "When is your birthday?" no longer answers with "my name is nuri"
+  because of "your" and "is" alone. A question about something it was never told gets no recall.
+- Text is now read differently, so a memory saved by 0.39 or earlier should be regrown from what
+  it read rather than reloaded. Still PREVIEW.
+
+
+## 0.39.0.dev1 -- language: a line may ask about what it just said (2026-11-07)
+
+Found in the first days of a live brain's conversation:
+
+- **"I am Hong. Who am I?" in one line now answers "you are hong."** A line's statements are
+  remembered before its question is asked, and the question alone is the cue (so "I like cats.
+  What do I have?" does not answer with the cats).
+- **"What's your name?"** The contracted question words (what's, where's, who's, when's, why's,
+  how's) mark the missing slot like their full forms. Told "Your name is Nuri.", it answers "my
+  name is nuri.": a language brain learns its name from someone telling it.
+- Replies to earlier conversations may differ from 0.38's where a line held both a statement and a
+  question. Still PREVIEW.
+
+
 ## 0.38.0.dev1 -- language: one conversation per person, saved exactly (2026-11-07)
 
 `Language` now keeps each person it talks with apart, and a saved language brain reloads exactly,
