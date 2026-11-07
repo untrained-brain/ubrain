@@ -6,6 +6,20 @@ follow before it ships; a version adds regions or capabilities, and never moves 
 certified number.
 
 
+## 0.42.0.dev1 -- language: it remembers who said what (2026-11-07)
+
+- **Source memory.** Every memory now records where it came from: something read, or something a
+  person said. When the brain speaks in its own words, it speaks in the voice it learned by
+  reading, so it no longer answers with the person's own earlier lines.
+- **Measured** on a fixed conversation (24 lines from a scripted person, 5 seeds, 95 replies in its
+  own words): replies that copied 4 words in a row from the person fell from 0.19 to none. Every
+  question about what the person had said was still answered right (4 of 4).
+- **The cost:** phrases learned from people no longer enter its own speech. What they tell it is
+  still remembered and recalled.
+- The memory's rows are 2 values wider (`2 d + 2`); a memory saved earlier still loads, with its
+  source unknown. Still PREVIEW.
+
+
 ## 0.41.0.dev1 -- language: a correction overrides what it corrects (2026-11-07)
 
 - **The latest of equally good memories is recalled.** Told "Your birthday is 7am Nov. 7." and later
