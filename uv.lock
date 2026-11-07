@@ -1344,25 +1344,25 @@ wheels = [
 
 [[package]]
 name = "ubrain"
-version = "0.40.0.dev1"
+version = "0.41.0.dev1"
 source = { registry = "wheels" }
 dependencies = [
     { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
     { name = "numpy", version = "2.5.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
 ]
 wheels = [
-    { path = "ubrain-0.40.0.dev1-cp311-cp311-macosx_10_9_x86_64.whl" },
-    { path = "ubrain-0.40.0.dev1-cp311-cp311-macosx_11_0_arm64.whl" },
-    { path = "ubrain-0.40.0.dev1-cp311-cp311-win_amd64.whl" },
-    { path = "ubrain-0.40.0.dev1-cp312-cp312-macosx_10_13_x86_64.whl" },
-    { path = "ubrain-0.40.0.dev1-cp312-cp312-macosx_11_0_arm64.whl" },
-    { path = "ubrain-0.40.0.dev1-cp312-cp312-win_amd64.whl" },
-    { path = "ubrain-0.40.0.dev1-cp313-cp313-macosx_10_13_x86_64.whl" },
-    { path = "ubrain-0.40.0.dev1-cp313-cp313-macosx_11_0_arm64.whl" },
-    { path = "ubrain-0.40.0.dev1-cp313-cp313-win_amd64.whl" },
-    { path = "ubrain-0.40.0.dev1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl" },
-    { path = "ubrain-0.40.0.dev1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl" },
-    { path = "ubrain-0.40.0.dev1-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl" },
+    { path = "ubrain-0.41.0.dev1-cp311-cp311-macosx_10_9_x86_64.whl" },
+    { path = "ubrain-0.41.0.dev1-cp311-cp311-macosx_11_0_arm64.whl" },
+    { path = "ubrain-0.41.0.dev1-cp311-cp311-win_amd64.whl" },
+    { path = "ubrain-0.41.0.dev1-cp312-cp312-macosx_10_13_x86_64.whl" },
+    { path = "ubrain-0.41.0.dev1-cp312-cp312-macosx_11_0_arm64.whl" },
+    { path = "ubrain-0.41.0.dev1-cp312-cp312-win_amd64.whl" },
+    { path = "ubrain-0.41.0.dev1-cp313-cp313-macosx_10_13_x86_64.whl" },
+    { path = "ubrain-0.41.0.dev1-cp313-cp313-macosx_11_0_arm64.whl" },
+    { path = "ubrain-0.41.0.dev1-cp313-cp313-win_amd64.whl" },
+    { path = "ubrain-0.41.0.dev1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl" },
+    { path = "ubrain-0.41.0.dev1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl" },
+    { path = "ubrain-0.41.0.dev1-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl" },
 ]
 
 [package.optional-dependencies]
@@ -1406,10 +1406,10 @@ vision = [
 
 [package.metadata]
 requires-dist = [
-    { name = "ubrain", specifier = "==0.40.0.dev1" },
-    { name = "ubrain", extras = ["game"], marker = "extra == 'game'", specifier = "==0.40.0.dev1" },
-    { name = "ubrain", extras = ["plot"], marker = "extra == 'plot'", specifier = "==0.40.0.dev1" },
-    { name = "ubrain", extras = ["video"], marker = "extra == 'video'", specifier = "==0.40.0.dev1" },
-    { name = "ubrain", extras = ["vision"], marker = "extra == 'vision'", specifier = "==0.40.0.dev1" },
+    { name = "ubrain", specifier = "==0.41.0.dev1" },
+    { name = "ubrain", extras = ["game"], marker = "extra == 'game'", specifier = "==0.41.0.dev1" },
+    { name = "ubrain", extras = ["plot"], marker = "extra == 'plot'", specifier = "==0.41.0.dev1" },
+    { name = "ubrain", extras = ["video"], marker = "extra == 'video'", specifier = "==0.41.0.dev1" },
+    { name = "ubrain", extras = ["vision"], marker = "extra == 'vision'", specifier = "==0.41.0.dev1" },
 ]
 provides-extras = ["vision", "game", "video", "plot"]

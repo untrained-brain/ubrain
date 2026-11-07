@@ -6,6 +6,16 @@ follow before it ships; a version adds regions or capabilities, and never moves 
 certified number.
 
 
+## 0.41.0.dev1 -- language: a correction overrides what it corrects (2026-11-07)
+
+- **The latest of equally good memories is recalled.** Told "Your birthday is 7am Nov. 7." and later
+  "Your birthday is 7am November 7 2026.", it answers with the second. Two statements that both
+  hold the whole question are a tie (a share above 1 is crosstalk, so shares are capped at 1), and
+  the newer one wins. An older statement that matches better still wins.
+- **Known limit, not yet fixed:** speaking in its own words it can repeat what the person said
+  earlier, since nothing in its memory says who said what. Still PREVIEW.
+
+
 ## 0.40.0.dev1 -- language: numbers, dates and the verb said back (2026-11-07)
 
 Found when the live brain was told its birthday ("Your birthday is 7am Nov. 7. 2026" came back as
