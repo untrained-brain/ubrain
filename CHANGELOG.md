@@ -6,6 +6,14 @@ follow before it ships; a version adds regions or capabilities, and never moves 
 certified number.
 
 
+## 0.43.0.dev1 -- language: taught without an answer (2026-11-07)
+
+- **`Language.teach(line, who=...)`** takes a line in without replying: it is remembered as that
+  person's, and its statements become the newest for recall, so a correction overrides what it
+  corrects. ("Your birthday is November 7 2026." taught, "When is your birthday?" answers with it.)
+- Still PREVIEW.
+
+
 ## 0.42.0.dev1 -- language: it remembers who said what (2026-11-07)
 
 - **Source memory.** Every memory now records where it came from: something read, or something a
