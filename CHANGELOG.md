@@ -6,6 +6,16 @@ follow before it ships; a version adds regions or capabilities, and never moves 
 certified number.
 
 
+## 0.44.0.dev2 -- language: reading survives a failed allocation (2026-11-08)
+
+- **A fix.** If memory ran out while new words were being learned, the words were already
+  registered but had no codes, and every later read failed. New words are now registered only
+  after their codes exist, so a failure leaves the memory as it was.
+- **A memory saved after such a failure loads and reads again.** The stranded words load with a
+  count of zero, which is what they had: they were never counted.
+- No number moves: the same text read gives the same memory as before.
+
+
 ## 0.44.0.dev1 -- language: knowledge read, recalled with its source (2026-11-07)
 
 - **`Language.read_knowledge(text, source=...)`** remembers a text's statements as knowledge, kept
