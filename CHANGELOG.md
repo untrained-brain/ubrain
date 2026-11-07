@@ -6,6 +6,26 @@ follow before it ships; a version adds regions or capabilities, and never moves 
 certified number.
 
 
+## 0.38.0.dev1 -- language: one conversation per person, saved exactly (2026-11-07)
+
+`Language` now keeps each person it talks with apart, and a saved language brain reloads exactly,
+so a brain that lives for days can be stopped and started without losing anything.
+
+    lang.talk("I live in Seoul.", who="hong")
+    lang.talk("I live in Busan.", who="mina")
+    lang.talk("Where do I live?", who="hong")      # "you live in seoul."
+    lang.save("brain/"); Language.load("brain/")   # the memory and every conversation
+
+- **`talk(line, who=...)`**: each person has their own conversation over the one shared memory of
+  words. What a person told it is recalled for that person. `people()` lists them.
+- **`save(directory)` / `load(directory)`** store the memory and every conversation as plain arrays
+  (no pickle). After a reload the brain says exactly what it would have said without the stop. A
+  0.37 memory file (`.npz`) still loads.
+- **Memories are stored at half precision** from the moment they are written, which is why a
+  reload is exact. Answers can differ slightly from 0.37's on the same text.
+- Still PREVIEW: no law of the language path is certified yet.
+
+
 ## 0.37.0.dev1 -- language: words read, remembered, and said back (2026-11-07)
 
 ubrain can now be talked to in words. `Language` reads text, remembers every word-to-word transition
