@@ -6,6 +6,40 @@ follow before it ships; a version adds regions or capabilities, and never moves 
 certified number.
 
 
+## 0.37.0.dev1 -- language: words read, remembered, and said back (2026-11-07)
+
+ubrain can now be talked to in words. `Language` reads text, remembers every word-to-word transition
+once, and answers in its own words. When asked about something you told it, it recalls what you
+said and says it back from its side:
+
+    from ubrain import Language
+    lang = Language()
+    lang.read(open("stories.txt").read())
+    lang.talk("I have a red ball.")
+    lang.talk("What do I have?")          # "you have a red ball."
+
+- **A new tier, PREVIEW.** `Language` is built and works, but no law of it is certified yet, and
+  it states no guarantee (`Language.tier == "preview"`). It is the first part whose code ships
+  certified by no law at all; the promotion record now gives every promoted package its tier.
+  It is not on the brain's tick: text is turn by turn, and the text ports join `Brain()` once the
+  laws are certified.
+- **Nothing is trained.** Each word has an innate code drawn from its spelling. The context is the
+  last four words bound to the clock's positions, beside a slow drift of the story's salient
+  words. Every transition read is one permanent memory. Speaking is a race among the words that
+  followed the nearest memories. A question recalls the statement that holds most of its words.
+- **The conversation's frame is stated, not learned:** your line is read as `you said, "..."`, the
+  answer comes as `i said, "...`, and I and you are swapped by a fixed table. A reply never reads
+  the turn it answers (no echo). Its own answers are not remembered.
+- **Saving needs no pickle:** `save` and `load` use plain arrays, so a shared memory file cannot
+  run code when loaded.
+- **Known limits:** no morphology yet ("like" and "likes" are unrelated words); its own words drift
+  from the subject; it cannot reason and knows only what it has read. 4.4 million transitions
+  (TinyStories' validation stories, 19 MB) take 4.5 GB at width 256, and about 0.1 s per word said.
+- **Also:** the data-structure audit now also sees dataclass fields and tuple assignments; the two
+  containers it newly found are classified (a declaration and the merge's senses), and the
+  language memory's are listed with the neural form that should replace each.
+
+
 ## 0.36.0.dev1 -- the senses bound to each other (2026-11-05)
 
 A whole brain with two senses or more now binds what it perceives together, as an association area

@@ -6,6 +6,16 @@ the world. A saved brain names the body it needs by the release tag
 `body-mujoco-<version>-<digest>` (see `body.lock`). Any change to those files moves the
 digest; the version moves with it.
 
+## 0.12.0, 2026-11-07
+
+- `support` (a harness, the experimenter's; `--support` on the bridge, `MujocoSim(support=True)`): the robot's
+  root is held at its home pose with zero velocity after every physics substep, like an infant in supported
+  sitting. The limbs move without the body's balance at stake: with the arms raised forward into the head
+  camera's view (hand-eye babbling, the research project's XXVI.1) the free-standing body falls and the supported
+  one does not (a test holds both). The brain is not told of the support; it can infer it, since the pelvis
+  IMU's gyro then reads zero. The manifest records it as
+  `harness: "support"` (combined with `keep-line` as `keep-line+support`), so a supported body has its own digest.
+
 ## 0.11.0 (`body-mujoco-0.11.0-ccee1f8e95c7`), 2026-10-27
 
 - `--record-pose PATH`: the bridge appends `tick x y yaw` every tick to a file for the

@@ -48,7 +48,7 @@ class BodyServer:
                  entry: str | None = None, seed: int = 0, head_camera: bool = False,
                  viewer: bool = False, gallery=None, record_chase: str | None = None,
                  chase_every: int = 2, world=None, keep_line: bool = False, chase_view: str = "follow",
-                 record_pose: str | None = None):
+                 record_pose: str | None = None, support: bool = False):
         self.spec = robots.get(robot)
         # the follow camera's recording (for videos; never in a reply): raw RGB frames
         # appended to <record_chase>.rgb, their ticks and size in <record_chase>.json
@@ -61,14 +61,16 @@ class BodyServer:
         # as the follow camera): one "tick x y yaw" line per tick, appended to <record_pose>
         self._pose_file = open(record_pose, "a", encoding="utf-8") if record_pose else None
         self._chase_file = None
-        self.sim = MujocoSim(self.spec, entry, seed=seed, head_camera=head_camera, gallery=gallery, world=world)
+        self.sim = MujocoSim(self.spec, entry, seed=seed, head_camera=head_camera, gallery=gallery, world=world,
+                             support=support)
         self.ctl = Controller(self.sim)
         # the experimenter's line-keeper (harness, 2026-10-26): while walking forward, a turn
         # rate that brings the body back to the line y = 0 along +x, from its TRUE pose --
         # privileged, the harness's; the brain never receives it, it only feels the turn
         self.keep_line = bool(keep_line)
         self.manifest = manifest(self.spec, self.sim.entry, gallery=self.sim.gallery, world=self.sim.world,
-                                 harness="keep-line" if self.keep_line else "none")
+                                 harness="+".join([h for h, on in (("keep-line", self.keep_line),
+                                                                   ("support", support)) if on]) or "none")
         self.digest = manifest_digest(self.manifest)
         self._sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -307,6 +309,8 @@ def main(argv: list[str] | None = None) -> int:
                     help="a world from worlds/ (rooms, doors, things); default: the bare scene")
     ap.add_argument("--keep-line", action="store_true",
                     help="the experimenter's line-keeper: hold the walk on y = 0 (harness, from the true pose)")
+    ap.add_argument("--support", action="store_true",
+                    help="the experimenter's support: the root held at its home pose (harness; supported sitting)")
     ap.add_argument("--gallery", default=None,
                     help="a folder of .png pictures to stand along the walking line (the gallery scene)")
     a = ap.parse_args(argv)
@@ -314,7 +318,7 @@ def main(argv: list[str] | None = None) -> int:
     srv = BodyServer(a.host, a.port, robot=a.robot, entry=a.entry, seed=a.seed, head_camera=a.head_camera,
                      viewer=a.viewer, gallery=gallery, record_chase=a.record_chase,
                      chase_every=a.chase_every, world=a.world, keep_line=a.keep_line,
-                     chase_view=a.chase_view, record_pose=a.record_pose)
+                     chase_view=a.chase_view, record_pose=a.record_pose, support=a.support)
     print(f"body {srv.digest} ({SIMULATOR}/{srv.spec.name}) serving on {srv.host}:{srv.port} "
           f"(mujoco {srv.manifest['mujoco']}, menagerie {srv.manifest['menagerie_commit'][:8]})", flush=True)
     try:

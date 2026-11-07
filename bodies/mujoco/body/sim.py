@@ -146,8 +146,13 @@ class MujocoSim:
     home keyframe; `step(ctrl)` advances one control tick."""
 
     def __init__(self, robot: str | RobotSpec = "g1", entry: str | None = None,
-                 seed: int = 0, head_camera: bool = False, gallery=None, world=None):
+                 seed: int = 0, head_camera: bool = False, gallery=None, world=None, support: bool = False):
+        """`support` (a harness, the experimenter's): the root is held at its home pose with zero velocity
+        after every physics substep -- an infinitely stiff support, like an infant in supported sitting --
+        so the limbs move without the body's balance at stake (XXVI.1, hand-eye babbling). The brain never
+        senses it as such; it only finds that it does not fall."""
         import worlds
+        self.support = bool(support)
         self.spec = robots.get(robot)
         self.robot, self.entry = self.spec.name, entry or self.spec.entry
         self.gallery = [str(g) for g in (gallery or [])]
@@ -181,6 +186,9 @@ class MujocoSim:
         mujoco.mj_resetDataKeyframe(self.model, self.data, self.key_home)
         self.data.ctrl[:] = self.home_ctrl
         mujoco.mj_forward(self.model, self.data)
+        if self.model.jnt_type[0] != mujoco.mjtJoint.mjJNT_FREE and getattr(self, "support", False):
+            raise RuntimeError("support needs the robot's root to be a free joint")
+        self._root_home = self.data.qpos[:7].copy()
         self.seed = int(seed)
         self.rng = np.random.default_rng(self.seed)
         self.tick = 0
@@ -201,6 +209,11 @@ class MujocoSim:
         self.data.ctrl[:] = ctrl
         for _ in range(SUBSTEPS):
             mujoco.mj_step(self.model, self.data)
+            if self.support:
+                self.data.qpos[:7] = self._root_home
+                self.data.qvel[:6] = 0.0
+        if self.support:
+            mujoco.mj_forward(self.model, self.data)
         self.tick += 1
 
     def push(self, force_xy: tuple[float, float] | None = None, magnitude: float = 50.0) -> np.ndarray:

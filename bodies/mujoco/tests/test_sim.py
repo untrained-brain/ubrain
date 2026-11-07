@@ -104,3 +104,20 @@ def test_head_camera_renders_or_is_skipped():
         assert img.std() > 1.0  # not a blank frame
     finally:
         s.close()
+
+
+def test_support_holds_the_root_and_keeps_raised_arms_up():
+    """The support harness (XXVI.1): the arms raised forward topple the free-standing body, never the supported one."""
+    from body.sim import MujocoSim
+    for support, falls in ((False, True), (True, False)):
+        s = MujocoSim("g1", seed=0, support=support)
+        act = {s.model.actuator(i).name: i for i in range(s.model.nu)}
+        ctrl = s.home_ctrl.copy()
+        for side in ("left", "right"):
+            ctrl[act[f"{side}_shoulder_pitch_joint"]] = -1.4
+        root = s.data.qpos[:7].copy()
+        for _ in range(150):
+            s.step(ctrl)
+        assert (not s.upright()) == falls
+        if support:
+            assert np.allclose(s.data.qpos[:7], root)
