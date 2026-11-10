@@ -6,10 +6,23 @@ follow before it ships; a version adds regions or capabilities, and never moves 
 certified number.
 
 
-## 0.44.0.dev2 -- language: reading survives a failed allocation (2026-11-08)
+## 0.45.0.dev1 -- language: a sentence taken in whole, a question answered from it or refused (2026-11-10)
+
+- **A statement is taken in, not answered.** "D saw E." gives "i took in that d saw e." Each sentence is held
+  as one code with its words bound to their positions, and settled back into its words before it is kept; a
+  sentence too long to settle is refused ("that was too much for me to take in at once") and not kept.
+- **A question is the sentence's pattern with a gap.** "D saw whom?" gives "e."; "Who saw E?" gives "d."; "Tom
+  gave whom a red ball?" gives "mary." The answer is read from the kept sentence at the gap.
+- **What position alone cannot answer is refused, never guessed.** A relative clause's pointer ("A met B who met
+  C ... Who met C?") and an inverted question ("What did Tom give Mary?") give "i don't know." Two question words
+  at once give "i don't know. ask me one thing at a time."
+- **Tested before it shipped.** On a stream of statements and questions: no wrong answer and no wrong sentence
+  kept; 190 of 193 answerable questions answered, the other 3 refused; every unanswerable one refused.
+- Still a preview: reading, knowledge and free talk carry no law yet.
+ -- language: reading survives a failed allocation (2026-11-08)
 
 - **A fix.** If memory ran out while new words were being learned, the words were already
-  registered but had no codes, and every later read failed. New words are now registered only
+  recorded but had no codes, and every later read failed. New words are now recorded only
   after their codes exist, so a failure leaves the memory as it was.
 - **A memory saved after such a failure loads and reads again.** The stranded words load with a
   count of zero, which is what they had: they were never counted.
