@@ -56,19 +56,17 @@ once per machine (about 600 MB).
 
 ## Use it in your own code
 
-ubrain ships as compiled wheels in `wheels/` (Windows, macOS, Linux; Python 3.11-3.13).
-Install it into your project from this folder -- with uv, record the folder in your
-project's `pyproject.toml` and add ubrain:
-
-```toml
-[tool.uv]
-find-links = ["/path/to/ubrain/wheels"]
-```
+ubrain is on PyPI as compiled wheels (Windows, macOS, Linux; Python 3.11-3.13). Every
+version is a pre-release until 1.0, so name the version (or allow pre-releases):
 
 ```bash
-uv add "ubrain==0.46.0.dev2"
-# or with pip:  pip install "ubrain==0.46.0.dev2" --find-links /path/to/ubrain/wheels
+uv add "ubrain==0.46.0.dev3"
+# or with pip:  pip install "ubrain==0.46.0.dev3"      (or: pip install --pre ubrain)
 ```
+
+The same wheels are in this repository's `wheels/` folder, for a machine without PyPI access
+(`pip install ubrain==0.46.0.dev3 --find-links /path/to/ubrain/wheels`). The robot, the
+examples and the docs are in the repository: https://github.com/untrained-brain/ubrain.
 
 The whole brain needs no wiring: choose a variant, attach streams by port class, tick it (a
 preview: the whole is not yet certified as a whole; `examples/01_whole_brain.py` shows what it
@@ -91,9 +89,9 @@ transformers), `ubrain[video]` (MP4 recording), `ubrain[plot]` (matplotlib).
 
 ## The manual
 
-- [Quickstart](docs/quickstart.md): install, run, what you are looking at
-- [Using ubrain in your own code](docs/using.md): install from the wheels, write your own
-- [Concepts](docs/concepts.md): regions, wiring, bodies, codecs and certificates
+- [Quickstart](https://github.com/untrained-brain/ubrain/blob/main/docs/quickstart.md): install, run, what you are looking at
+- [Using ubrain in your own code](https://github.com/untrained-brain/ubrain/blob/main/docs/using.md): install from the wheels, write your own
+- [Concepts](https://github.com/untrained-brain/ubrain/blob/main/docs/concepts.md): regions, wiring, bodies, codecs and certificates
 - The examples (`examples/`): each one short, meant to be copied, on the whole brain, ending
   with its check
 
@@ -115,7 +113,7 @@ action = brain.tick({"sense.vision": s, "reward": r})["action"]
 
 ## Status
 
-Pre-release, 0.46.0.dev2: the whole brain, `Brain()`, with seventeen regions. The cerebellum (a forward
+Pre-release, 0.46.0.dev3: the whole brain, `Brain()`, with seventeen regions. The cerebellum (a forward
 model, a timed brace, walking adaptation); the striatum (on an index, or on a situation code
 conditioned by a goal); the hippocampus (an episode, and a
 store that acts, keyed through the dentate gyrus) and the hand-over from it to the striatum; the cortex's slow store; the

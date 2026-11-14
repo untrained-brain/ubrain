@@ -6,6 +6,14 @@ follow before it ships; a version adds regions or capabilities, and never moves 
 certified number.
 
 
+## 0.46.0.dev3 -- on PyPI (2026-11-15)
+
+- **ubrain is on PyPI:** `uv add "ubrain==0.46.0.dev3"`, or `pip install --pre ubrain`. Compiled wheels only, under
+  the binary licence. The robot, the examples and the docs stay in the GitHub repository.
+- **Metadata only:** the same code as 0.46.0.dev2. The package now carries the current README, with the
+  whole-brain examples, and links to the repository, its docs, changelog and issues.
+
+
 ## 0.46.0.dev2 -- a body without a cue (2026-11-15)
 
 - **A fix.** In 0.46.0.dev1 a whole brain with a `body` but no `cue` stopped at its first tick: the brace region

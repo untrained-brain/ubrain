@@ -1,18 +1,18 @@
-# The ubrain labs: examples, documentation and the compiled ubrain package (wheels/).
-# `uv run examples/01_whole_brain.py` installs everything on first use.
+# The ubrain examples and documentation. ubrain itself comes from PyPI (the same wheel every
+# project uses: the course, your own code); `uv run examples/01_whole_brain.py` installs it on
+# first use. wheels/ holds the same files for a machine without PyPI access.
 
 [project]
 name = "ubrain-labs"
 version = "0.13.0"
 description = "Examples, labs and manual for ubrain, the Untrained Brain"
 requires-python = ">=3.11,<3.14"           # the versions ubrain is compiled for
-dependencies = ["ubrain==0.46.0.dev2"]
+dependencies = ["ubrain==0.46.0.dev3"]
 
 [project.optional-dependencies]
-vision = ["ubrain[vision]==0.46.0.dev2"]     # CLIP as a sense (torch, transformers)
-video = ["ubrain[video]==0.46.0.dev2"]       # MP4 recording of your own runs
-plot = ["ubrain[plot]==0.46.0.dev2"]         # plots of your own runs
+vision = ["ubrain[vision]==0.46.0.dev3"]     # CLIP as a sense (torch, transformers)
+video = ["ubrain[video]==0.46.0.dev3"]       # MP4 recording of your own runs
+plot = ["ubrain[plot]==0.46.0.dev3"]         # plots of your own runs
 
 [tool.uv]
 package = false
-find-links = ["wheels"]                      # the compiled ubrain package ships here
