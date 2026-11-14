@@ -6,6 +6,45 @@ follow before it ships; a version adds regions or capabilities, and never moves 
 certified number.
 
 
+## 0.46.0.dev1 -- the whole brain takes the body (2026-11-15, PREVIEW)
+
+- **Four new port classes for `Brain()`.**
+  - `body`: the body's proprioception, a vector of n.
+  - `cue`: an event to time, such as the tone before a push.
+  - `goal`: the walk the program wants, (vx, vy, wz).
+  - `command`: the walk the brain sends, the goal plus the cerebellum's timed counter-move.
+
+  Until now the Unitree G1 ran only on a profile (a circuit of chosen regions); now the whole brain drives it.
+- **Inside: the walker profile's certified cerebellum.** The forward model predicts the body; the brace learns the
+  counter-move on the cue. The forward model is the instance `cerebellum.forward@body`, because the whole's own
+  `cerebellum.forward` predicts the senses' codes. The efference copy is the goal, as the forward model was
+  measured.
+- **Held bit for bit to the walker profile.** On a recorded walking stream with tones, the whole brain's `command`
+  equals the walker's `walk`, byte for byte, every tick. The whole brain's choices are unchanged by attaching the
+  body. That is a PREVIEW claim: the whole does not disturb the certified circuit; it is not a certification of
+  the whole, which is the research engine's (stage N.5).
+- **`ubrain.bodies.g1.G1`.**
+  - `G1(hello).attach(brain)` attaches the body's streams.
+  - `G1.streams(state, goal)` turns a body state into a tick's inputs (and the head camera into `sense.vision`,
+    when a camera codec is given).
+  - `G1.act(outputs)` turns the command into the body's act request.
+
+  Helpers that are the program's, not senses:
+  - `upright(state)`, a reward;
+  - `push_direction(before, during)`, from the pelvis accelerometer;
+  - `privileged_contact(state)`: the feet's contact forces, which a real humanoid lacks.
+- **`examples/g1_whole.py`:** the whole brain walks the G1 and learns to brace. In 20 pushes of 250 N, each 0.2 s
+  after a tone, it falls on 3 of the first 6, then stays up for the remaining 14. The cerebellum's prediction
+  error falls from 85% to 24% of predicting no change.
+- **Known limits:**
+  - Adaptation is not in the whole yet (the `adapter` profile has it).
+  - A `goal` and `command` are a walk (n = 3).
+  - A whole brain still needs a sense and an action attached. It chooses only when what it senses is new or
+    surprising.
+  - Choosing a movement is the program's mapping from `action` to `goal`; no motor readout inside yet.
+  - Touch and push are not senses.
+
+
 ## 0.45.0.dev1 -- language: a sentence taken in whole, a question answered from it or refused (2026-11-10)
 
 - **Docs (2026-11-15):** the README tells Windows users to clone with `-c core.longpaths=true`; without it the

@@ -53,6 +53,7 @@ git clone -c core.longpaths=true https://github.com/untrained-brain/ubrain
 | `lab_cerebellum.py` | change the G1's cerebellum (sparseness, learning rates, the tone's trace) and measure it | the body |
 | `g1_bracing.py` | a tone, then a push: muted it falls every time; braced, the cerebellum learns to stay up | the body |
 | `g1_explorer.py` | the G1 walks past a gallery of photos and remembers what it saw | the body, `--extra vision`, the CLIP weights |
+| `g1_whole.py` | the WHOLE brain (`Brain()`) in the G1: body, tone, goal and command attached by `ubrain.bodies.g1`; it learns to brace (0.46, preview) | the body |
 
 The examples marked "nothing" or `--extra game` run headless on any laptop. "The body" means
 the robot, set up once (below); the robot examples take `--headless` when no window is
@@ -74,8 +75,8 @@ find-links = ["/path/to/ubrain/wheels"]
 ```
 
 ```bash
-uv add "ubrain==0.45.0.dev1"
-# or with pip:  pip install "ubrain==0.45.0.dev1" --find-links /path/to/ubrain/wheels
+uv add "ubrain==0.46.0.dev1"
+# or with pip:  pip install "ubrain==0.46.0.dev1" --find-links /path/to/ubrain/wheels
 ```
 
 The whole brain needs no wiring: choose a variant, attach streams by port class (a preview in
@@ -134,7 +135,7 @@ action = brain.tick({"situation": s, "reward": r})["action"]
 
 ## Status
 
-Pre-release, 0.45.0.dev1: seventeen regions in thirteen profiles. The cerebellum (a forward
+Pre-release, 0.46.0.dev1: seventeen regions in thirteen profiles. The cerebellum (a forward
 model, a timed brace, walking adaptation); the striatum (on an index, or on a situation code
 conditioned by a goal); the hippocampus (an episode, and a
 store that acts, keyed through the dentate gyrus) and the hand-over from it to the striatum; the cortex's slow store; the
