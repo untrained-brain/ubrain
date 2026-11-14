@@ -19,10 +19,23 @@ certified number.
     its first two; the blind twin in half.
   - `project_keep.py`: train, save, and demonstrate the loaded brain. In 10 pushes the loaded brain falls 0
     times, the fresh twin 3.
-  - `project_brace.py`: the tone's lead. Its prediction from the trace was falsified: lead 5 gives 7 falls, 10
+  - `project_brace.py`: the tone's lead. Its prediction from the trace failed: lead 5 gives 7 falls, 10
     gives 3, 20 gives 4, 40 gives 4, and no tone gives 14.
 - **One rule they found** (in `project_choose.py`): the whole brain explores only while its values are near
   zero, so make a wrong choice pay nothing. A reward that pays the wrong action half the time is never unlearned.
+- **The examples, rewritten (2026-11-15): the whole brain only.** Every example now uses `Brain()`; the circuit
+  examples are gone (they remain in this repository's history).
+  - Removed: 01_bandit to 12_monitor_and_datasheet, g1_walker, g1_bracing, g1_explorer, lab_cerebellum.
+  - One naming scheme: `NN_topic.py`, with `g1` in the name where the robot is needed.
+  - One shape: what it shows, the question, a twin, and a check. The last line is `CHECK PASS` or `CHECK FAIL`,
+    and the exit code says the same.
+  - The new set: `00_check_setup`, `01_whole_brain`, `02_ask`, `03_keep`, `04_g1_brace`, `05_g1_choose`,
+    `06_g1_keep`, `07_g1_lead`, `08_g1_vision`.
+  - The project examples of earlier the same day are renamed into it: project_choose became 05_g1_choose,
+    project_keep 06_g1_keep, project_brace 07_g1_lead.
+  - The docs (quickstart, using) were rewritten to match. The profiles stay in the package, as the experts'
+    layer, but no example uses them.
+
 
 
 ## 0.46.0.dev1 -- the whole brain takes the body (2026-11-15, PREVIEW)

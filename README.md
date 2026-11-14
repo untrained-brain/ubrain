@@ -17,9 +17,8 @@ model's codes: a **certificate**.
 ```bash
 git clone https://github.com/untrained-brain/ubrain
 cd ubrain
-uv run examples/01_bandit.py        # the striatum learns which action pays
-uv run examples/02_memory.py        # an episode in the hippocampus, against its certificate
-uv run --extra game examples/04_blackjack.py   # the same brain plays Blackjack
+uv run examples/01_whole_brain.py   # the whole brain learns which action each picture asks for
+uv run examples/03_keep.py          # save it, load it, and it continues exactly
 ```
 
 ([uv](https://docs.astral.sh/uv/) installs Python and the dependencies for you; numpy is the
@@ -34,37 +33,26 @@ git clone -c core.longpaths=true https://github.com/untrained-brain/ubrain
 
 (Prefer the clone to the ZIP download: Windows' own unzip has the same 260-character path limit.)
 
-| example | what you see | needs |
+Every example uses the whole brain, `Brain()`, and has the same shape: what it shows, the
+question, a twin (the same run with one thing changed), and a check -- its last line is
+`CHECK PASS` or `CHECK FAIL`, and its exit code says the same.
+
+| example | the question | needs |
 |---|---|---|
-| `check_setup.py` | is this computer ready for the robot examples? (2 minutes) | the body |
-| `01_bandit.py` | values learned from reward; choice that *matches* payoffs, as animals' does | nothing |
-| `02_memory.py` | one-shot memory of an episode; recall falls with load exactly as certified | nothing |
-| `03_clip_words.py` | CLIP plugged in as a sense: the brain hears a sentence and recalls it | `--extra vision`, the CLIP weights |
-| `04_blackjack.py` | a Gymnasium game as the body: the striatum and the hippocampal store learn Blackjack (about a minute) | `--extra game` |
-| `05_frozenlake.py` | the same brain on FrozenLake, and where a one-step learning rule stops | `--extra game` |
-| `06_working_memory.py` | a list held in working memory: recall by position follows the count law; rehearsal keeps it | nothing |
-| `07_consolidation.py` | the hippocampus replays its episodes into the cortex; the cortex holds hundreds where an episode holds a handful | nothing |
-| `08_attention.py` | the salience gate writes only what is novel, at the false-alarm rate it was set to; the modes switch | nothing |
-| `09_memory_and_habit.py` | memory acts from one experience, the striatum catches up and overtakes; the hand-over follows the better | nothing |
-| `10_neuromodulators.py` | noradrenaline sets what counts as novel, serotonin how long the striatum waits for a reward | nothing |
-| `11_save_and_load.py` | a brain saved and loaded continues exactly where it stopped; the file names what it needs (body release, senses, lineage), the sense comes back from the codec model alone, another body is refused; its model card | nothing |
-| `12_monitor_and_datasheet.py` | a brain's datasheet (its capacities in closed form), its health, and a brain watching a brain | nothing |
-| `g1_walker.py` | the brain in a Unitree G1 humanoid: it walks, predicts its body, learns to brace | the body |
-| `lab_cerebellum.py` | change the G1's cerebellum (sparseness, learning rates, the tone's trace) and measure it | the body |
-| `g1_bracing.py` | a tone, then a push: muted it falls every time; braced, the cerebellum learns to stay up | the body |
-| `g1_explorer.py` | the G1 walks past a gallery of photos and remembers what it saw | the body, `--extra vision`, the CLIP weights |
-| `g1_whole.py` | the WHOLE brain (`Brain()`) in the G1: body, tone, goal and command attached by `ubrain.bodies.g1`; it learns to brace (0.46, preview) | the body |
-| `project_choose.py` | a project start: the whole brain in the G1 learns which way to turn from a picture, against a blind twin; a check | the body |
-| `project_keep.py` | a project start: train the brace, save the brain, demonstrate the LOADED brain against a fresh twin; a check | the body |
-| `project_brace.py` | a project start: how long a warning can the cerebellum use? A sweep with a prediction written first -- and falsified; a check | the body |
+| `00_check_setup.py` | is this computer ready for the robot examples? (2 minutes) | the body |
+| `01_whole_brain.py` | does the whole brain learn which action each picture asks for? (twin: unrelated pictures) | nothing |
+| `02_ask.py` | what does the brain say about itself: describe, read, datasheet, health? | nothing |
+| `03_keep.py` | does a saved and loaded brain choose exactly what the original would? | nothing |
+| `04_g1_brace.py` | does the whole brain keep the G1 up when a tone warns of a push? (twin: no tone) | the body |
+| `05_g1_choose.py` | does it learn which way to turn from a picture? (twin: unrelated pictures) | the body |
+| `06_g1_keep.py` | trained, saved and loaded: does the demo brain stay up where a fresh one falls? | the body |
+| `07_g1_lead.py` | how long a warning can the cerebellum use? (a prediction written first, and it failed) | the body |
+| `08_g1_vision.py` | what does the brain call new, seeing through the head camera with CLIP? (twin: covered camera) | the body, `--extra vision`, the CLIP weights |
 
-The examples marked "nothing" or `--extra game` run headless on any laptop. "The body" means
-the robot, set up once (below); the robot examples take `--headless` when no window is
-wanted. "The CLIP weights" are fetched once per machine (about 600 MB; `03_clip_words.py`
-prints the command when they are missing).
-
-The robot body ships in this repository, in `bodies/mujoco` (its own environment: MuJoCo,
-the G1, the photo gallery). Set it up once with `cd bodies/mujoco && uv sync`.
+"The body" means the robot, set up once: it ships in this repository, in `bodies/mujoco`
+(its own environment: MuJoCo, the G1, the photo gallery); `cd bodies/mujoco && uv sync`.
+The robot examples take `--viewer` to watch in real time. "The CLIP weights" are fetched
+once per machine (about 600 MB).
 
 ## Use it in your own code
 
@@ -82,63 +70,52 @@ uv add "ubrain==0.46.0.dev2"
 # or with pip:  pip install "ubrain==0.46.0.dev2" --find-links /path/to/ubrain/wheels
 ```
 
-The whole brain needs no wiring: choose a variant, attach streams by port class (a preview in
-0.28: the whole is not yet certified as a whole; `examples/00_whole_brain.py` shows what it does
-and the law beside it):
+The whole brain needs no wiring: choose a variant, attach streams by port class, tick it (a
+preview: the whole is not yet certified as a whole; `examples/01_whole_brain.py` shows what it
+does and the law beside it):
 
 ```python
-from ubrain import Brain, GaussianCodes, Sense
-camera = Sense.fit(GaussianCodes(dim=64, seed=1), range(4), d=128)   # any AI model as the codec
+from ubrain import Brain, GaussianCodes
 brain = Brain(variant="small")
-brain.attach("sense", "vision", codec=camera)
+brain.attach("sense", "vision", codec=GaussianCodes(dim=64, seed=1))   # any frozen model as the codec
 brain.attach("reward")
 brain.attach("action", n=4)
 action = brain.tick({"sense.vision": 2, "reward": None})["action"]
 ```
 
-A circuit of chosen regions (a profile) is the experts' layer:
-
-```python
-from ubrain import Brain, Channel, Manifest, profile
-body = Manifest("my-app", "v1", (Channel("situation", "event", 3),
-                                 Channel("reward", "reward", 1),
-                                 Channel("action", "choice", 2)))
-brain = Brain(profile("player"), body)
-action = brain.tick({"situation": [1, 0, 0], "reward": None})["action"]
-```
+A robot: `ubrain.bodies.g1.G1(hello).attach(brain)` adds the body's streams (`body`, `cue`,
+`goal`, `command`); see `examples/04_g1_brace.py`.
 
 Extras, each installed only when you ask for it: `ubrain[vision]` (CLIP as a sense: torch,
-transformers), `ubrain[game]` (Gymnasium games as a body), `ubrain[video]` (MP4 recording),
-`ubrain[plot]` (matplotlib, for the lab plots).
-
-The full guide -- the ten profiles, your own anatomy, plugging in a model, playing a game,
-connecting a robot -- is [Using ubrain in your own code](docs/using.md).
+transformers), `ubrain[video]` (MP4 recording), `ubrain[plot]` (matplotlib).
 
 ## The manual
 
 - [Quickstart](docs/quickstart.md): install, run, what you are looking at
 - [Using ubrain in your own code](docs/using.md): install from the wheels, write your own
 - [Concepts](docs/concepts.md): regions, wiring, bodies, codecs and certificates
-- The examples (`examples/`): each one short, meant to be copied, and printing what the
-  law predicts beside what the brain did
+- The examples (`examples/`): each one short, meant to be copied, on the whole brain, ending
+  with its check
 
 ## Three layers
 
 | layer | what | examples |
 |---|---|---|
 | **codecs** (plug-in) | frozen AI models that turn the world into codes | CLIP (`ubrain[vision]`) |
-| **the brain** | regions wired by a profile, stepped one event at a time; numpy only | hippocampus, cortex, prefrontal cortex, striatum, cerebellum, salience, thalamus, neuromodulators |
+| **the brain** | `Brain()`: every region, wired once, stepped one tick at a time; numpy only | hippocampus, cortex, prefrontal cortex, striatum, cerebellum, salience, thalamus, neuromodulators |
 | **bodies** (plug-in) | anything that sends senses and takes actions | the MuJoCo G1 (over a small protocol), a Gymnasium game with discrete states (`ubrain.bodies.gym`) |
 
 ```python
-from ubrain import Brain, profile
-brain = Brain(profile("player"), body_manifest)
-action = brain.tick({"situation": s, "reward": r})["action"]
+from ubrain import Brain, GaussianCodes
+brain = Brain(variant="small")
+brain.attach("sense", "vision", codec=GaussianCodes(dim=64, seed=1))
+brain.attach("reward"); brain.attach("action", n=4)
+action = brain.tick({"sense.vision": s, "reward": r})["action"]
 ```
 
 ## Status
 
-Pre-release, 0.46.0.dev2: seventeen regions in thirteen profiles. The cerebellum (a forward
+Pre-release, 0.46.0.dev2: the whole brain, `Brain()`, with seventeen regions. The cerebellum (a forward
 model, a timed brace, walking adaptation); the striatum (on an index, or on a situation code
 conditioned by a goal); the hippocampus (an episode, and a
 store that acts, keyed through the dentate gyrus) and the hand-over from it to the striatum; the cortex's slow store; the

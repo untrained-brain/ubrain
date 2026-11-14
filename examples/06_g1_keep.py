@@ -1,16 +1,16 @@
-"""project_keep: train the whole brain in the G1, save it, and demonstrate the loaded brain -- a project start (0.46).
+"""06_g1_keep: train the whole brain in the G1, save it, demonstrate the loaded brain (needs: the body).
 
-    uv run examples/project_keep.py                   # train, save, then loaded vs fresh; the check
-    uv run examples/project_keep.py --viewer          # watch the demonstration
+    uv run examples/06_g1_keep.py
+    uv run examples/06_g1_keep.py --viewer
 
-The capstone's demonstration in one file: a brain's state is its knowledge, so the demo runs the SAVED brain,
-loaded, not a lucky live run.
+What it shows  a brain's state is its knowledge, so a demonstration runs the SAVED brain, loaded, not a
+               lucky live run.
 
-  train         20 pushes of 250 N from the front, each 0.2 s after a tone: the cerebellum learns to brace.
-  save          brain.save(path): one file; it names the body's streams and the sense's codec.
-  demonstrate   10 more pushes, twice on the same body: the LOADED brain and a FRESH twin (never trained).
-  the check     the loaded brain falls at most once; the fresh twin at least twice (it falls while nothing
-                is learned, as in examples/g1_whole.py: 3 of its first 6 pushes).
+The training   20 pushes of 250 N from the front, each 0.2 s after a tone: the cerebellum learns to brace.
+Saving         brain.save(path): one file; it names the body's streams and the sense's codec.
+The twin       10 more pushes, twice on the same body: the LOADED brain and a FRESH twin (never trained).
+The check      the loaded brain falls at most once; the fresh twin at least twice (it falls while nothing
+               is learned, as in examples/04_g1_brace.py: 3 of its first 6 pushes).
 """
 
 from __future__ import annotations

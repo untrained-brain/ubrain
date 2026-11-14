@@ -1,19 +1,17 @@
-"""project_choose: the whole brain in the G1 learns which way to turn -- a project start (0.46).
+"""05_g1_choose: the whole brain in the G1 learns which way to turn from a picture (needs: the body).
 
-    uv run examples/project_choose.py                 # 40 trials per brain, headless, then the check
-    uv run examples/project_choose.py --viewer        # watch it
+    uv run examples/05_g1_choose.py
+    uv run examples/05_g1_choose.py --viewer
 
-A capstone-shaped example: one question, a prediction written first, a twin, a measurement, a check.
-
-  the world     each trial (2 s) begins with a picture: GO LEFT or GO RIGHT. The brain chooses to turn left
-                or right (the program maps the action to the goal: walk at 0.3 m/s turning at +-0.6 rad/s).
-  the reward    1 if the robot really turned the way the picture asked, 0 if not. The program measures the
-                turn by integrating the torso gyro's z over the trial: a DETECTOR it owns (week 17's signal).
-  the question  does the whole brain learn to turn the way each picture asks?
-  the twin      the same brain shown one fixed picture: it cannot tell the trials apart, so it can be right
-                only half the time.
-  the check     over the last half: the brain that sees is right in more than 80% of trials; the blind
-                twin in less than 70%.
+The world      each trial (2 s) begins with a picture: GO LEFT or GO RIGHT. The brain chooses to turn left
+               or right (the program maps the action to the goal: walk at 0.3 m/s turning at +-0.6 rad/s).
+The reward     1 if the robot really turned the way the picture asked, 0 if not. The program measures the
+               turn by integrating the torso gyro's z over the trial: a DETECTOR it owns.
+The question   does the whole brain learn to turn the way each picture asks?
+The twin       the same brain shown a fresh, unrelated picture every trial: it engages, but nothing it
+               sees says which way to turn, so it can be right only half the time.
+The check      over the last half: the brain that sees is right in more than 80% of trials; the blind
+               twin in less than 70%.
 
 One rule every choice project needs (measured while writing this example): the whole brain explores only
 while its values are near zero. Once an action has paid, an action never tried is almost never tried (the Go
@@ -53,7 +51,7 @@ def run(body, trials: int, sees: bool, seed: int, viewer: bool) -> list[tuple[in
     state, rows, t0, tick = body.reset(0), [], time.perf_counter(), 0
     for _ in range(trials):
         asked = int(world.integers(2))                # 0 go left, 1 go right
-        picture = asked if sees else 2                # the blind twin always sees picture 2
+        picture = asked if sees else 100 + len(rows)  # the twin: a fresh, unrelated picture
         out = brain.tick(g1.streams(state, (0.3, 0.0, 0.0)) | {"sense.picture": picture, "reward": None})
         chose = int(out["action"]) if out["action"] is not None else int(world.integers(2))
         goal, turned = TURNS[chose], 0.0

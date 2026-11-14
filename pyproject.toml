@@ -1,5 +1,5 @@
 # The ubrain labs: examples, documentation and the compiled ubrain package (wheels/).
-# `uv run examples/01_bandit.py` installs everything on first use.
+# `uv run examples/01_whole_brain.py` installs everything on first use.
 
 [project]
 name = "ubrain-labs"
@@ -10,9 +10,8 @@ dependencies = ["ubrain==0.46.0.dev2"]
 
 [project.optional-dependencies]
 vision = ["ubrain[vision]==0.46.0.dev2"]     # CLIP as a sense (torch, transformers)
-game = ["ubrain[game]==0.46.0.dev2"]         # Gymnasium games as a body: 04_blackjack.py, 05_frozenlake.py
-video = ["ubrain[video]==0.46.0.dev2"]       # g1_explorer.py / g1_bracing.py --record
-plot = ["ubrain[plot]==0.46.0.dev2"]         # lab_cerebellum.py --plot
+video = ["ubrain[video]==0.46.0.dev2"]       # MP4 recording of your own runs
+plot = ["ubrain[plot]==0.46.0.dev2"]         # plots of your own runs
 
 [tool.uv]
 package = false

@@ -1,10 +1,10 @@
-"""check_setup: is this computer ready for the robot labs? (about 2 minutes)
+"""00_check_setup: is this computer ready for the robot examples? (about 2 minutes)
 
-    uv run examples/check_setup.py
+    uv run examples/00_check_setup.py
 
 Run it at home before the class. It checks Python and ubrain, finds the G1 body and its
-environment, starts the body, and lets the robot walk for 3 seconds. Every line ends in
-OK or in what to do.
+environment, starts the body, and lets the whole brain (Brain()) walk the robot for 3 seconds.
+Every line ends in OK or in what to do; the last line is the CHECK, as in every example.
 """
 
 from __future__ import annotations
@@ -47,18 +47,23 @@ def main() -> int:
     if not synced:
         return 1
     print("  starting the body and walking 3 s ...")
-    from ubrain import Brain, act_03, manifest_from_hello_03, profile, senses_from_state_03
+    from ubrain import Brain, GaussianCodes
     from ubrain.bodies import BodyClient, kill_tree, start_body
+    from ubrain.bodies.g1 import G1
     proc = None
     try:
         t0 = time.perf_counter()
         proc, port = start_body(echo=False)
         body = BodyClient("127.0.0.1", port)
-        m = manifest_from_hello_03(body.hello)
-        brain = Brain(profile("walker"), m)
+        g1 = G1(body.hello)
+        brain = Brain(variant="small")
+        brain.attach("sense", "cue", codec=GaussianCodes(dim=32, seed=3))
+        brain.attach("action", n=2)
+        g1.attach(brain)
         state = body.reset(0)
         for _ in range(150):
-            state = body.act(*act_03(m, brain.tick(senses_from_state_03(state) | {"goal": (0.5, 0.0, 0.0)})))
+            out = brain.tick(g1.streams(state, (0.5, 0.0, 0.0)) | {"sense.cue": 0})
+            state = body.act(*g1.act(out))
         body.close()
         good &= line("the G1 walks for 3 s", bool(state["upright"]), "send the full output to your teacher")
         print(f"      ({time.perf_counter() - t0:.0f} s including start-up)")
@@ -68,7 +73,8 @@ def main() -> int:
     finally:
         if proc is not None:
             kill_tree(proc)
-    print("\nREADY for the robot labs." if good else "\nNot ready yet: fix the PROBLEM lines above.")
+    print("\nREADY for the robot examples." if good else "\nNot ready yet: fix the PROBLEM lines above.")
+    print("CHECK", "PASS" if good else "FAIL")
     return 0 if good else 1
 
 

@@ -1,23 +1,21 @@
-"""project_brace: how long a warning can the cerebellum learn to use? -- a project start (0.46).
+"""07_g1_lead: how long a warning can the cerebellum use? A prediction, and it failed (needs: the body).
 
-    uv run examples/project_brace.py                  # four leads, a fresh brain each; the check
-    uv run examples/project_brace.py --leads 5 10 20 40 60
+    uv run examples/07_g1_lead.py
+    uv run examples/07_g1_lead.py --leads 5 10 20 40 60
 
-A capstone-shaped example: a question, a prediction written first from a law, a sweep, a check.
-
-  the question  a tone comes LEAD ticks before each push (250 N from the front). For which leads does the
-                whole brain's cerebellum learn to stay up?
-  the law       the brace keeps a fading trace of the tone, multiplied by tau = 0.9 every tick (week 16's
-                eligibility trace). After LEAD ticks the trace is 0.9^LEAD: 0.59 at 5, 0.35 at 10, 0.12 at 20,
-                0.015 at 40. A counter-move is learned in proportion to the trace when the push lands.
-  the prediction (written before the run) the falls rise with the lead; at 40 ticks the brain learns
-                little and falls about as often as one that hears no tone.
-  FALSIFIED     measured (20 pushes, a fresh brain each): lead 5: 7 falls; 10: 3; 20: 4; 40: 4; no tone: 14.
-                The SHORTEST lead is the worst and a 40-tick lead (trace 0.015) works nearly as well as 10.
-                So "the trace at the push" is not how this brace learns. Why? That is a project: read week
-                16's lab and ubrain's cerebellum.brace (tap its ports), predict again, measure again.
-  the twin      a brain with no tone at all (no cue stream).
-  the check     what the data does support: every lead has at least 5 falls fewer than the no-tone twin.
+The question   a tone comes LEAD ticks before each push (250 N from the front). For which leads does the
+               whole brain's cerebellum learn to stay up?
+The law        the brace keeps a fading trace of the tone, multiplied by tau = 0.9 every tick (an
+               eligibility trace). After LEAD ticks the trace is 0.9^LEAD: 0.59 at 5, 0.35 at 10, 0.12 at 20,
+               0.015 at 40. A counter-move is learned in proportion to the trace when the push lands.
+The prediction (written before the run) the falls rise with the lead; at 40 ticks the brain learns
+               little and falls about as often as one that hears no tone.
+It failed      measured (20 pushes, a fresh brain each): lead 5: 7 falls; 10: 3; 20: 4; 40: 4; no tone: 14.
+               The SHORTEST lead is the worst and a 40-tick lead (trace 0.015) works nearly as well as 10.
+               So "the trace at the push" is not how this brace learns. Why? That is a project: tap the
+               cerebellum.brace region's ports, predict again, measure again.
+The twin       a brain with no tone at all (no cue stream).
+The check      what the data does support: every lead has at least 5 falls fewer than the no-tone twin.
 """
 
 from __future__ import annotations
