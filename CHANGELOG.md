@@ -6,6 +6,15 @@ follow before it ships; a version adds regions or capabilities, and never moves 
 certified number.
 
 
+## 0.46.0.dev2 -- a body without a cue (2026-11-15)
+
+- **A fix.** In 0.46.0.dev1 a whole brain with a `body` but no `cue` stopped at its first tick: the brace region
+  wanted a cue that was never wired. Without a cue there is nothing to brace for, so the brace is now left out
+  and the `command` is the goal. A test holds it. Found by the course's twin experiment, in which one brain
+  hears the tone and one does not.
+- No number moves: with a cue, the whole brain is the walker bit for bit, as in dev1.
+
+
 ## 0.46.0.dev1 -- the whole brain takes the body (2026-11-15, PREVIEW)
 
 - **Four new port classes for `Brain()`.**
