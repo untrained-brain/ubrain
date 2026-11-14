@@ -1,0 +1,92 @@
+"""project_keep: train the whole brain in the G1, save it, and demonstrate the loaded brain -- a project start (0.46).
+
+    uv run examples/project_keep.py                   # train, save, then loaded vs fresh; the check
+    uv run examples/project_keep.py --viewer          # watch the demonstration
+
+The capstone's demonstration in one file: a brain's state is its knowledge, so the demo runs the SAVED brain,
+loaded, not a lucky live run.
+
+  train         20 pushes of 250 N from the front, each 0.2 s after a tone: the cerebellum learns to brace.
+  save          brain.save(path): one file; it names the body's streams and the sense's codec.
+  demonstrate   10 more pushes, twice on the same body: the LOADED brain and a FRESH twin (never trained).
+  the check     the loaded brain falls at most once; the fresh twin at least twice (it falls while nothing
+                is learned, as in examples/g1_whole.py: 3 of its first 6 pushes).
+"""
+
+from __future__ import annotations
+
+import argparse
+import tempfile
+import time
+from pathlib import Path
+
+import numpy as np
+
+from ubrain import Brain, GaussianCodes
+from ubrain.bodies import BodyClient, kill_tree, start_body
+from ubrain.bodies.g1 import G1, upright
+
+TRIAL, TONE_AT, DELAY, PUSH_N, VX = 200, 150, 10, 250.0, 0.4
+CODEC = dict(dim=32, seed=3)
+
+
+def fresh(g1: G1) -> Brain:
+    brain = Brain(variant="small", rng=np.random.default_rng(1))
+    brain.attach("sense", "cue", codec=GaussianCodes(**CODEC))
+    brain.attach("action", n=2)
+    g1.attach(brain)
+    return brain
+
+
+def pushes(body, g1: G1, brain: Brain, n: int, viewer: bool) -> list[bool]:
+    """n pushes after a tone; True where the robot stayed up."""
+    state, stayed, t0, tick = body.reset(0), [], time.perf_counter(), 0
+    for _ in range(n):
+        fell = False
+        for k in range(TRIAL):
+            out = brain.tick(g1.streams(state, (VX, 0.0, 0.0)) | {"sense.cue": 0})
+            if k == TONE_AT:
+                body._send({"type": "world", "tone": True,
+                            "push": {"force": [PUSH_N, 0.0], "delay": DELAY, "ticks": 5}})
+            state = body.act(*g1.act(out))
+            tick += 1
+            if viewer:
+                time.sleep(max(0.0, t0 + tick * 0.02 - time.perf_counter()))
+            if not upright(state):
+                fell = True
+                state = body.reset(0)
+                brain.body_reset()
+        stayed.append(not fell)
+    return stayed
+
+
+def main(argv=None) -> int:
+    ap = argparse.ArgumentParser(description="train, save, demonstrate the loaded brain")
+    ap.add_argument("--train", type=int, default=20)
+    ap.add_argument("--demo", type=int, default=10)
+    ap.add_argument("--viewer", action="store_true")
+    a = ap.parse_args(argv)
+    proc, port = start_body(viewer=a.viewer)
+    try:
+        with BodyClient("127.0.0.1", port) as body, tempfile.TemporaryDirectory() as tmp:
+            g1 = G1(body.hello)
+            brain = fresh(g1)
+            trained = pushes(body, g1, brain, a.train, False)
+            path = brain.save(Path(tmp) / "braced.ubrain.npz")
+            print(f"trained on {a.train} pushes: " + "".join("." if s else "X" for s in trained)
+                  + f"; saved {Path(path).stat().st_size / 1e6:.1f} MB")
+            loaded = Brain.load(path, codecs={"sense.cue": GaussianCodes(**CODEC)})
+            demo_loaded = pushes(body, g1, loaded, a.demo, a.viewer)
+            demo_fresh = pushes(body, g1, fresh(g1), a.demo, a.viewer)
+    finally:
+        kill_tree(proc)
+    fl, ff = sum(not s for s in demo_loaded), sum(not s for s in demo_fresh)
+    print("loaded brain: " + "".join("." if s else "X" for s in demo_loaded) + f"   falls {fl}")
+    print("fresh twin:   " + "".join("." if s else "X" for s in demo_fresh) + f"   falls {ff}")
+    ok = fl <= 1 and ff >= 2
+    print("CHECK", "PASS" if ok else "FAIL", f"(loaded falls {fl} <= 1; fresh falls {ff} >= 2)")
+    return 0 if ok else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

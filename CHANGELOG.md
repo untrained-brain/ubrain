@@ -13,6 +13,16 @@ certified number.
   and the `command` is the goal. A test holds it. Found by the course's twin experiment, in which one brain
   hears the tone and one does not.
 - No number moves: with a cue, the whole brain is the walker bit for bit, as in dev1.
+- **Three project starts (examples, 2026-11-15)**, each a question, a prediction, a twin, a measurement and
+  a check:
+  - `project_choose.py`: from a picture, which way to turn. The brain that sees is right in every trial after
+    its first two; the blind twin in half.
+  - `project_keep.py`: train, save, and demonstrate the loaded brain. In 10 pushes the loaded brain falls 0
+    times, the fresh twin 3.
+  - `project_brace.py`: the tone's lead. Its prediction from the trace was falsified: lead 5 gives 7 falls, 10
+    gives 3, 20 gives 4, 40 gives 4, and no tone gives 14.
+- **One rule they found** (in `project_choose.py`): the whole brain explores only while its values are near
+  zero, so make a wrong choice pay nothing. A reward that pays the wrong action half the time is never unlearned.
 
 
 ## 0.46.0.dev1 -- the whole brain takes the body (2026-11-15, PREVIEW)

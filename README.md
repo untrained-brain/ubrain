@@ -54,6 +54,9 @@ git clone -c core.longpaths=true https://github.com/untrained-brain/ubrain
 | `g1_bracing.py` | a tone, then a push: muted it falls every time; braced, the cerebellum learns to stay up | the body |
 | `g1_explorer.py` | the G1 walks past a gallery of photos and remembers what it saw | the body, `--extra vision`, the CLIP weights |
 | `g1_whole.py` | the WHOLE brain (`Brain()`) in the G1: body, tone, goal and command attached by `ubrain.bodies.g1`; it learns to brace (0.46, preview) | the body |
+| `project_choose.py` | a project start: the whole brain in the G1 learns which way to turn from a picture, against a blind twin; a check | the body |
+| `project_keep.py` | a project start: train the brace, save the brain, demonstrate the LOADED brain against a fresh twin; a check | the body |
+| `project_brace.py` | a project start: how long a warning can the cerebellum use? A sweep with a prediction written first -- and falsified; a check | the body |
 
 The examples marked "nothing" or `--extra game` run headless on any laptop. "The body" means
 the robot, set up once (below); the robot examples take `--headless` when no window is
