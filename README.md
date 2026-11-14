@@ -25,6 +25,15 @@ uv run --extra game examples/04_blackjack.py   # the same brain plays Blackjack
 ([uv](https://docs.astral.sh/uv/) installs Python and the dependencies for you; numpy is the
 only one.)
 
+**On Windows, clone with long paths on**, or the robot's kitchen world stops the checkout
+half-way ("Filename too long"):
+
+```bash
+git clone -c core.longpaths=true https://github.com/untrained-brain/ubrain
+```
+
+(Prefer the clone to the ZIP download: Windows' own unzip has the same 260-character path limit.)
+
 | example | what you see | needs |
 |---|---|---|
 | `check_setup.py` | is this computer ready for the robot examples? (2 minutes) | the body |

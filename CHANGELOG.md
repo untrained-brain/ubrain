@@ -8,6 +8,10 @@ certified number.
 
 ## 0.45.0.dev1 -- language: a sentence taken in whole, a question answered from it or refused (2026-11-10)
 
+- **Docs (2026-11-15):** the README tells Windows users to clone with `-c core.longpaths=true`; without it the
+  checkout of the robot's kitchen world fails part-way ("Filename too long"). Checked on a fresh clone: the setup
+  check, `g1_walker.py`, `g1_bracing.py` and `g1_explorer.py` all run on this version.
+
 - **A statement is taken in, not answered.** "D saw E." gives "i took in that d saw e." Each sentence is held
   as one code with its words bound to their positions, and settled back into its words before it is kept; a
   sentence too long to settle is refused ("that was too much for me to take in at once") and not kept.
