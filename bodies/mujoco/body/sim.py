@@ -2,7 +2,7 @@
 
 One brain event = one control tick at CONTROL_HZ (50 Hz). Physics runs at
 PHYSICS_DT (0.002 s), so a tick is SUBSTEPS (10) physics steps -- the course's
-numbers, recorded in robot_mujoco/CLAUDE.md. The model comes from the pinned
+numbers, recorded in the body's development notes. The model comes from the pinned
 `mujoco_menagerie` package through the robot's `RobotSpec` (`robots/`): which
 model, which scene entry, which keyframe is home, where the IMU site and the
 head camera sit. Nothing in this module names a robot.

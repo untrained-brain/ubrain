@@ -4,7 +4,7 @@ joints (legs 6+6, waist 3, arms 7+7; no head or hand joints), two IMUs, the
 foot sites, a forward head camera on the torso, and the codebook.
 
 The menagerie G1 declares position actuators with kp = 500 and critical
-damping on all 29 joints (robot_mujoco/CLAUDE.md, the course-derived facts).
+damping on all 29 joints (the body's development notes, the course-derived facts).
 Proprioception is 4 x 3 IMU + 29 qpos + 29 qvel = 70 numbers.
 
 Five primitives. `stand`, `pose` and `sway` hold or nudge the keyframe. `walk` is
@@ -12,8 +12,8 @@ the frozen trained locomotion policy (`gait.py`, Unitree's open-source G1 policy
 Phase XI.0, 2026-10-12): the body's pattern generator. `walk_offset` is the same
 gait with a 29-vector added to its targets, the channel through which the
 cerebellum's corrections reach the joints (XI.2, XI.3). A hand-built LIPM/ZMP walker
-was tried first and dropped as too fragile; it is in git history (b508f6b) and
-robot_mujoco/CLAUDE.md. `reach` (IK to a target) is still to come.
+was tried first and dropped as too fragile; it is in the research
+project's history. `reach` (IK to a target) is still to come.
 
 The targets function is the robot's: it knows which actuator is the waist yaw. For
 `walk` it also senses (pelvis gyro, IMU attitude, leg encoders; nothing

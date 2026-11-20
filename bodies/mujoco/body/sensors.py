@@ -2,7 +2,7 @@
 
 The proprioceptive vector is laid out by the robot's spec: its IMU sensors in
 order, then joint positions, then joint velocities (for the G1:
-4 x 3 + 29 + 29 = 70; robot_mujoco/CLAUDE.md, the sensor inventory).
+4 x 3 + 29 + 29 = 70; the body's development notes, the sensor inventory).
 Contact forces per foot (6 each) are a PRIVILEGE a real humanoid lacks:
 exported only when asked for, and flagged as such in the reply.
 

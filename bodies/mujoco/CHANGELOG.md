@@ -6,6 +6,12 @@ the world. A saved brain names the body it needs by the release tag
 `body-mujoco-<version>-<digest>` (see `body.lock`). Any change to those files moves the
 digest; the version moves with it.
 
+## 0.12.1 (`body-mujoco-0.12.1-1a4d3affd7bd`), 2026-11-20
+
+- Documentation only: three docstrings (`body/sensors.py`, `body/sim.py`, `robots/g1/__init__.py`) now refer to
+  "the body's development notes" instead of a file name. Nothing the body does or reports changed; the digest moves
+  because these are model files. A brain saved against 0.12.0 runs on 0.12.1 unchanged, but names the old tag.
+
 ## 0.12.0, 2026-11-07
 
 - `support` (a harness, the experimenter's; `--support` on the bridge, `MujocoSim(support=True)`): the robot's
