@@ -247,6 +247,7 @@ wheels = [
 name = "fonttools"
 version = "4.69.1"
 source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/06/7a/83dd380d74b56a57c3eafce90265035d8727469d05ca4d2942d14367a6c7/fonttools-4.69.1.tar.gz", hash = "sha256:d09a2ea8ed4c71ac52e789ba9313da3e26cee3f812400d7e8a8b3a38d0f98dfe", size = 3958958, upload_time = "2026-11-25T17:04:21.285Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/d3/32/d07b479e0180a5da8a1478fa1cc1042bda04c6afe489ee400161f552e2c3/fonttools-4.69.1-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:1b7a214d39cd38e9904c4302ef3f3987c72c1a36577d91c04efa718cb61252b2", size = 3745253, upload_time = "2026-11-25T17:02:12.827Z" },
     { url = "https://files.pythonhosted.org/packages/84/5a/110fe2738174bf5f8dabd5baa50aacba0cf6b85b7d8feda615082e65dd00/fonttools-4.69.1-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:02f39e7bafb18cdf77aa918501d8176c7abb085cf5caa8c6700daf37f80405a3", size = 3090638, upload_time = "2026-11-25T17:02:15.141Z" },
@@ -275,6 +276,7 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/ea/33/5721727271d8b8c4c14748653964c421d4e97ee98e83c8b08a55c30f304b/fonttools-4.69.1-cp313-cp313-win32.whl", hash = "sha256:2a77c569b5556ac9222bbec70330bf647f5d63279d70fc6a5b21dd13e36600db", size = 2891622, upload_time = "2026-11-25T17:03:00.932Z" },
     { url = "https://files.pythonhosted.org/packages/4e/ea/c23aa74379403076715fe3ba0b30528b0eed177c8003ad92c98fd881cafe/fonttools-4.69.1-cp313-cp313-win_amd64.whl", hash = "sha256:a1dedfe496cf57d0ff5f3874aaa87f618a61062e39d9cb6a8b809b87a8fe2ee9", size = 2966198, upload_time = "2026-11-25T17:03:02.559Z" },
     { url = "https://files.pythonhosted.org/packages/2b/e0/bc81080adbb5a9494cd5600406134b324e94f64506e41bab4b079e418ccc/fonttools-4.69.1-cp313-cp313-win_arm64.whl", hash = "sha256:6186fc88e6d2a899bf5dfc4a9f959beb4d19e6e8e1b0d64617909706851a03c9", size = 2920187, upload_time = "2026-11-25T17:03:04.662Z" },
+    { url = "https://files.pythonhosted.org/packages/43/ef/3575cacafe63d7d78b639e815bb3637cd0a66c6365efc5aed636a92cdb12/fonttools-4.69.1-py3-none-any.whl", hash = "sha256:20e9dfac71694d9eeae48bb53c877bdf43b914794d69a769940728a1929cc835", size = 1301769, upload_time = "2026-11-25T17:04:19.256Z" },
 ]
 
 [[package]]

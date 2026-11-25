@@ -6,6 +6,13 @@ follow before it ships; a version adds regions or capabilities, and never moves 
 certified number.
 
 
+## 0.49.0.dev2 -- a fix: the debugger's copy no longer changes the brain it inspects (2026-11-26)
+
+- **`ubrain.debug.clone` (and so `trace`) shared a whole brain's senses with the copy.** The whole brain fits its
+  senses online (the entorhinal and dentate mapping inside the brain), so ticking the copy changed the original:
+  `trace` was not read-only on a whole brain. Now only the frozen model a sense wraps is shared; the sense is copied.
+  Found by the debugger's own read-only test.
+
 ## 0.49.0.dev1 -- seeing inside: the debugger (2026-11-26)
 
 **PREVIEW**, numpy only. `ubrain.debug`, every tool read-only on the brain it inspects (a test holds a recorded brain
