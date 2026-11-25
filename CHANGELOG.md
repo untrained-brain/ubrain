@@ -6,6 +6,27 @@ follow before it ships; a version adds regions or capabilities, and never moves 
 certified number.
 
 
+## 0.47.0.dev1 -- the core's ports: select, agents, owner (2026-11-25)
+
+The brain becomes the controller of what plugs into it, and answers to its owner. Three new modules, all
+**PREVIEW** (built and tested; no law of them is certified yet), numpy only:
+
+- **`ubrain.select.Lexicon` (SELECT):** the brain names a thing it has received. It keeps each item (a sentence, a
+  picture's name, a body primitive) with its code, so a code the brain produces can be rendered as the item nearest
+  it. Nothing is trained; saved and loaded with the brain's files.
+- **`ubrain.agents.AgentPort`: other AI systems as the brain's subordinate modules.** An agent is anything with
+  `name` and `propose(request) -> {"text", ...}`. The brain calls one only when it asks, gives it the context it
+  chooses, and treats the reply as a proposal. Each agent carries a trust learned from outcomes
+  (`trust += eta * (outcome - expected)`), calls stop at the day's budget, and an agent that fails never breaks the
+  brain. ubrain ships no adapter for any hosted model and holds no key: an application brings its own adapter and
+  its own credentials.
+- **`ubrain.owner.Owner`: the person above the brain.** Commands (applied, never weighed), a policy (whether agents
+  may be called, the day's budget, actions the brain may never take on its own), a log of every command and
+  decision, and `state()` for a console. An application registers its own commands.
+- **Known limits:** the select matches in the space the caller gives it; the agent's trust is a running average,
+  not yet the certified law it will become; the owner's policy is checked where the application asks `may()`.
+
+
 ## 0.46.0.dev3 -- on PyPI (2026-11-15)
 
 - **ubrain is on PyPI:** `uv add "ubrain==0.46.0.dev3"`, or `pip install --pre ubrain`. Compiled wheels only, under
