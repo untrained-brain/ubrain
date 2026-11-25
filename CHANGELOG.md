@@ -6,6 +6,24 @@ follow before it ships; a version adds regions or capabilities, and never moves 
 certified number.
 
 
+## 0.48.0.dev1 -- the night: write-back (2026-11-26)
+
+The brain now sleeps, and its long-term store is written by its nights. **PREVIEW** (built and tested; its laws were
+measured in the research engine before release, and a parity test holds this code to that write), numpy only:
+
+- **`ubrain.night`:** by day, every episode the hippocampus ends is kept in a bounded day cache. A night writes each
+  cached episode into the long-term store one pair at a time under the **content key** (the slot's role bound to the
+  rest of its episode) and empties the cache. By day the store answers from part of an episode.
+- **`Brain.night()`** runs a night now; **`Brain.sleep_pressure`** is how full the day cache is (0 to 1); a full cache
+  forces a night on its own (a bounded postponement, like DRAM refresh). An application decides the rest (idle time,
+  its owner's word); nights may be as frequent as wanted: shorter days are recalled better.
+- **`Brain.recall_episode(known, slot)`:** the long-term store's answer for one slot of an episode, from the slots
+  one remembers.
+- The whole brain (`Brain()`) is now the whole profile plus the night: its actions are the profile's, bit for bit,
+  and its state adds the day cache. Saved and loaded with the brain (no format change).
+- Not yet: the refresh of old memories by the store itself (its pilots wrote confident false memories; its law
+  comes first).
+
 ## 0.47.0.dev1 -- the core's ports: select, agents, owner (2026-11-25)
 
 The brain becomes the controller of what plugs into it, and answers to its owner. Three new modules, all
