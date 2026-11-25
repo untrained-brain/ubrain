@@ -6,6 +6,19 @@ follow before it ships; a version adds regions or capabilities, and never moves 
 certified number.
 
 
+## 0.49.0.dev1 -- seeing inside: the debugger (2026-11-26)
+
+**PREVIEW**, numpy only. `ubrain.debug`, every tool read-only on the brain it inspects (a test holds a recorded brain
+equal to an unrecorded one, bit for bit):
+
+- **`FlightRecorder(brain, n)`:** the last `n` ticks (the senses, every output port summarised, the actions); cheap
+  enough to leave on, and dumped to a file before any recovery, so the evidence survives it.
+- **`trace(brain, senses)`:** why this decision. The tick is run on a copy, intact and then with each region muted;
+  the regions whose muting changes the actions are named responsible (activation patching, in interpretability's terms).
+- **`first_divergence(a, b)`:** the first state attribute or port at which two brains differ (two versions run on one
+  input log, or a brain before and after a change).
+- **`check(brain)`:** problems in the state: non-finite values, a norm past its bound (a runaway).
+
 ## 0.48.0.dev1 -- the night: write-back (2026-11-26)
 
 The brain now sleeps, and its long-term store is written by its nights. **PREVIEW** (built and tested; its laws were
