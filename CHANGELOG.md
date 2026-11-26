@@ -5,6 +5,21 @@ says what you can do that you could not before, and how. Install a version by na
 `uv add "ubrain==0.51.0.dev1"` (or `pip install --pre ubrain`).
 
 
+## 0.52.0.dev1 -- the brain acts even when nothing around it changes (2026-11-27)
+
+- **It no longer goes still in a world that stands still.** A sense adapts to what never changes, as an eye does to an
+  image held perfectly still, so a brain shown one unchanging picture saw nothing, and before this version it then did
+  nothing at all, ever, even where one act of its own would have changed the picture. Now, when no part of the brain
+  chooses, it makes a spontaneous act now and then, as a baby kicks before any kick has paid. That is how it finds
+  the act that works and starts learning. On the classic infant task (an act that makes a mobile move) every brain now
+  learns it, against fewer than half before.
+- **Nothing changes where the brain already chooses:** a spontaneous act comes only when no part chose, so in a
+  world that keeps giving it something to see, the brain does exactly what it did in 0.51.
+- **You can see it:** the whole brain has a new part, `motor.spontaneous`; `ubrain.observe.observe(brain)` shows its
+  rate and how many acts it has made on its own. A brain saved by 0.51 loads and continues exactly as it was, without
+  it.
+
+
 ## 0.51.0.dev1 -- the brain notices when its world has changed (2026-11-27)
 
 - **It switches context when its expectations keep failing.** When actions it expected to pay stop paying, often
