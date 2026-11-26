@@ -7,8 +7,8 @@ other dependency is numpy.
 
 ## 1. Install it into your project
 
-**From PyPI** (the simplest): `uv add "ubrain==0.47.0.dev1"`, or with pip
-`pip install "ubrain==0.47.0.dev1"`. Every version is a pre-release until 1.0, so name it (or
+**From PyPI** (the simplest): `uv add "ubrain==0.50.0.dev1"`, or with pip
+`pip install "ubrain==0.50.0.dev1"`. Every version is a pre-release until 1.0, so name it (or
 pass `--pre`). The rest of this section installs from the repository's `wheels/` folder
 instead, for a machine without PyPI access.
 
@@ -31,7 +31,7 @@ find-links = ["/path/to/ubrain/wheels"]
 Then add ubrain and check it:
 
 ```bash
-uv add "ubrain==0.47.0.dev1"
+uv add "ubrain==0.50.0.dev1"
 uv run python -c "import ubrain; print(ubrain.__version__)"
 ```
 
@@ -41,17 +41,17 @@ add another package. The extras, each only when you need it:
 
 | extra | what it brings | for |
 |---|---|---|
-| `vision` | torch, transformers (CLIP) | CLIP as a sense: `uv add "ubrain[vision]==0.47.0.dev1"` |
+| `vision` | torch, transformers (CLIP) | CLIP as a sense: `uv add "ubrain[vision]==0.50.0.dev1"` |
 | `video` | imageio with ffmpeg | recording the robot examples as MP4 |
 | `plot` | matplotlib | plots of your own runs |
 
 **With pip**, in a virtual environment:
 
 ```bash
-pip install "ubrain==0.47.0.dev1" --find-links /path/to/ubrain/wheels
+pip install "ubrain==0.50.0.dev1" --find-links /path/to/ubrain/wheels
 ```
 
-(Version 0.47.0.dev1 is a pre-release, so name it exactly as above. When ubrain is on
+(Version 0.50.0.dev1 is a pre-release, so name it exactly as above. When ubrain is on
 PyPI, `pip install ubrain` will be enough.)
 
 ## 2. The whole brain in a few lines

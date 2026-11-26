@@ -6,6 +6,28 @@ follow before it ships; a version adds regions or capabilities, and never moves 
 certified number.
 
 
+## 0.50.0.dev1 -- memory that outlasts the night reaches decisions, with its controller (2026-11-26)
+
+**PREVIEW.** The night now consolidates the memory that acts, and the brain knows when to let it go:
+- **`Brain.night()`** also empties episodic control's store (the hippocampal store of situation, action and outcome)
+  into a **long-term store held by the cortex**, under the same keys.
+- **By day episodic control votes from both:** its cache and the long-term store, which the cortex emits on a new
+  port, `cortex.store.long_term`, decaying slowly.
+- **Its controller:** each store predicts the outcome of the action taken by the sign of its own vote; while the
+  long-term store's predictions fail more often than the cache's (the world it learned has changed), episodic control
+  sends the cortex its own rate on a new port, `episodic_control.forget -> cortex.store.forget`, and the long-term
+  store forgets at that rate. Nothing is tuned: the rates are averaged at the cache's own rate.
+- **What it does,** measured in the research engine before release (its laws locked before the runs): the long-term
+  store pays while the world holds, costs nothing just after a change, and without the controller the cost after a
+  change comes back. In the whole brain on a task that reverses (8000 ticks, a night every 200): with nights and the
+  controller, reward just after the change matches a brain without nights, and is slightly higher while the world
+  holds and late; without the controller it falls near zero after the change.
+- **The organ check** (the release gate, no nights): 4 of 12 regions pass, as in 0.49; the cortex store now has a
+  consumer. With a night every 200 ticks the whole brain's late reward rises from 0.70 to 0.73, and muting the cortex
+  store costs reward in the right direction, within noise on that short task.
+- The whole brain's wiring digest changed (two wires). Saved brains from 0.49 load and continue: the new store
+  starts empty and the surprise rates at one half.
+
 ## 0.49.0.dev2 -- a fix: the debugger's copy no longer changes the brain it inspects (2026-11-26)
 
 - **`ubrain.debug.clone` (and so `trace`) shared a whole brain's senses with the copy.** The whole brain fits its

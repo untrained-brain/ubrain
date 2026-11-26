@@ -60,12 +60,12 @@ ubrain is on PyPI as compiled wheels (Windows, macOS, Linux; Python 3.11-3.13). 
 version is a pre-release until 1.0, so name the version (or allow pre-releases):
 
 ```bash
-uv add "ubrain==0.47.0.dev1"
-# or with pip:  pip install "ubrain==0.47.0.dev1"      (or: pip install --pre ubrain)
+uv add "ubrain==0.50.0.dev1"
+# or with pip:  pip install "ubrain==0.50.0.dev1"      (or: pip install --pre ubrain)
 ```
 
 The same wheels are in this repository's `wheels/` folder, for a machine without PyPI access
-(`pip install ubrain==0.47.0.dev1 --find-links /path/to/ubrain/wheels`). The robot, the
+(`pip install ubrain==0.50.0.dev1 --find-links /path/to/ubrain/wheels`). The robot, the
 examples and the docs are in the repository: https://github.com/untrained-brain/ubrain.
 
 The whole brain needs no wiring: choose a variant, attach streams by port class, tick it (a
@@ -113,13 +113,16 @@ action = brain.tick({"sense.vision": s, "reward": r})["action"]
 
 ## Status
 
-Pre-release, 0.47.0.dev1: the whole brain, `Brain()`, with seventeen regions. The cerebellum (a forward
+Pre-release, 0.50.0.dev1: the whole brain, `Brain()`, with seventeen regions. The cerebellum (a forward
 model, a timed brace, walking adaptation); the striatum (on an index, or on a situation code
 conditioned by a goal); the hippocampus (an episode, and a
 store that acts, keyed through the dentate gyrus) and the hand-over from it to the striatum; the cortex's slow store; the
 prefrontal cortex's working memory (active and silent); the salience gate and the mode
 controller; the thalamus; and three neuromodulators (acetylcholine, noradrenaline,
-serotonin). The regions are certified copies from a research engine in which every law is
+serotonin). It sleeps: a night writes the day's episodes into the long-term store (0.48), and
+the memory that acts is kept past the night and forgotten faster when the world it learned has
+changed (0.50). `ubrain.debug` shows inside a running brain (0.49). The regions are certified
+copies from a research engine in which every law is
 written down before it is measured; ubrain never changes a region's code by hand. How the
 engine is built is the subject of *The Untrained Brain Series*, Volume 2: *Building the
 Brain Engine* (in preparation).
