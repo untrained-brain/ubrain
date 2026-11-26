@@ -2,7 +2,21 @@
 
 ubrain is pre-release: every version is a `.dev` version, and the API may still change between them. Each entry
 says what you can do that you could not before, and how. Install a version by naming it:
-`uv add "ubrain==0.50.0.dev2"` (or `pip install --pre ubrain`).
+`uv add "ubrain==0.51.0.dev1"` (or `pip install --pre ubrain`).
+
+
+## 0.51.0.dev1 -- the brain notices when its world has changed (2026-11-27)
+
+- **It switches context when its expectations keep failing.** When actions it expected to pay stop paying, often
+  enough to be more than bad luck, the brain treats the world as changed. It starts a fresh context for its habits
+  and clears the long-term memory the old world wrote, so it learns the new rules instead of slowly unlearning the
+  old ones. Just after a change it now earns markedly more on the same task (0.86 against 0.68 before). Nothing to
+  call: it happens in `brain.tick()`.
+- **You can see it:** the whole brain has a new part, `prefrontal.supervisor`; `ubrain.observe.observe(brain)` shows
+  how often it has switched, and `ubrain.debug.trace` tests it with the other parts when it explains a
+  choice.
+- **Every new brain has it, whatever its size.** A brain saved by 0.50 loads and continues exactly as it was, without
+  the supervisor: a saved brain keeps the anatomy it was saved with.
 
 
 ## 0.50.0.dev2 -- the README and this page, rewritten for users (2026-11-26)
