@@ -5,6 +5,26 @@ says what you can do that you could not before, and how. Install a version by na
 `uv add "ubrain==0.51.0.dev1"` (or `pip install --pre ubrain`).
 
 
+## 0.54.0.dev1 -- an unchanging world no longer blinds a sense for life (2026-11-27)
+
+- **A sense's early period now ends on experience, not on time.** Each sense spends its first inputs learning what
+  its world looks like on average, then holds that. Until this version the period ended after a fixed number of
+  inputs. A brain shown one unchanging picture through the whole period therefore took that picture as its world's
+  average, and could never see it again: the picture coded to nothing, for life. The other things it then met also
+  lost much of their distinctness, so its memory of episodes held markedly less.
+- **Now an input that repeats what the sense already knows does not count toward the period.** The period ends only
+  after enough inputs that differ, as an animal reared in the dark keeps its critical period open. After a whole
+  period of one picture, the brain now recognises that picture far more often than before, and its memory of
+  episodes holds more, both by the amounts the law predicted before the measurement.
+- **Nothing changes in a world that varies:** there every input counts, and a sense behaves exactly as in 0.53, step
+  for step.
+- **Saved brains get the repair where it changes nothing they lived:** a brain saved by 0.53 or earlier whose sense
+  is still in its early period, and whose every input so far differed from the last, takes the new behaviour from its
+  next input, holding exactly what it held. That is where the two behaviours agree, so nothing it already saw is coded
+  differently. A sense whose period is over, or that has already counted a repeat, keeps the behaviour it lived with
+  and continues exactly.
+
+
 ## 0.53.0.dev1 -- a brain knows who it is (2026-11-27)
 
 - **Every brain is an individual.** A fresh `Brain()` is born with its own id and birth time. A saved state records
