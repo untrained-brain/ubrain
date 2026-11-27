@@ -7,8 +7,8 @@ other dependency is numpy.
 
 ## 1. Install it into your project
 
-**From PyPI** (the simplest): `uv add "ubrain==0.52.0.dev1"`, or with pip
-`pip install "ubrain==0.52.0.dev1"`. Every version is a pre-release until 1.0, so name it (or
+**From PyPI** (the simplest): `uv add "ubrain==0.53.0.dev1"`, or with pip
+`pip install "ubrain==0.53.0.dev1"`. Every version is a pre-release until 1.0, so name it (or
 pass `--pre`). The rest of this section installs from the repository's `wheels/` folder
 instead, for a machine without PyPI access.
 
@@ -31,7 +31,7 @@ find-links = ["/path/to/ubrain/wheels"]
 Then add ubrain and check it:
 
 ```bash
-uv add "ubrain==0.52.0.dev1"
+uv add "ubrain==0.53.0.dev1"
 uv run python -c "import ubrain; print(ubrain.__version__)"
 ```
 
@@ -41,17 +41,17 @@ add another package. The extras, each only when you need it:
 
 | extra | what it brings | for |
 |---|---|---|
-| `vision` | torch, transformers (CLIP) | CLIP as a sense: `uv add "ubrain[vision]==0.52.0.dev1"` |
+| `vision` | torch, transformers (CLIP) | CLIP as a sense: `uv add "ubrain[vision]==0.53.0.dev1"` |
 | `video` | imageio with ffmpeg | recording the robot examples as MP4 |
 | `plot` | matplotlib | plots of your own runs |
 
 **With pip**, in a virtual environment:
 
 ```bash
-pip install "ubrain==0.52.0.dev1" --find-links /path/to/ubrain/wheels
+pip install "ubrain==0.53.0.dev1" --find-links /path/to/ubrain/wheels
 ```
 
-(Version 0.52.0.dev1 is a pre-release, so name it exactly as above. When ubrain is on
+(Version 0.53.0.dev1 is a pre-release, so name it exactly as above. When ubrain is on
 PyPI, `pip install ubrain` will be enough.)
 
 ## 2. The whole brain in a few lines
@@ -150,6 +150,17 @@ Loading refuses, with a `ubrain.state.StateError` saying why, a codec that is no
 state was learned with, a region whose state changed between ubrain releases, or a file of an
 unknown schema. `examples/02_ask.py` and `03_keep.py` show both; `06_g1_keep.py` demonstrates a
 trained robot from its saved file.
+
+A loaded brain is the **same individual** going on (`brain.identity`: its id, birth and parent).
+To start another individual from a saved state, fork it; the copy records where it came from:
+
+```python
+twin = Brain.load(path, codecs={"sense.vision": GaussianCodes(dim=64, seed=1)}, fork=True, name="twin")
+twin.identity["parent"]      # {"id": ..., "state_digest": ..., "ticks": ...}
+```
+
+`ubrain.identity.Claim(directory)` keeps one running copy per individual, and refuses an older
+state going on as the same individual unless you roll it back on purpose (`rollback=True`).
 
 ## 6. Two rules every program needs
 

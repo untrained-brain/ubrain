@@ -5,6 +5,24 @@ says what you can do that you could not before, and how. Install a version by na
 `uv add "ubrain==0.51.0.dev1"` (or `pip install --pre ubrain`).
 
 
+## 0.53.0.dev1 -- a brain knows who it is (2026-11-27)
+
+- **Every brain is an individual.** A fresh `Brain()` is born with its own id and birth time. A saved state records
+  the individual it belongs to, so `brain.save(path)` and `Brain.load(path)` carry the same individual on. Two brains
+  with the same seed and the same experience are still two individuals: `brain.identity` tells them apart.
+- **A copy is a new individual, with its parent recorded.** `Brain.load(path, fork=True, name="twin")` starts a new
+  individual from a saved state. Its identity names the parent, the saved state's content digest and its tick count.
+  At the moment of forking, the fork's content is exactly its parent's.
+- **Name one born elsewhere:** `Brain(identity={"id": ..., "born": ...})`, for an application whose own record of the
+  birth is older than its brain's state.
+- **One running copy per individual:** `ubrain.identity.Claim(directory)`. `claim(brain)` refuses a second live process
+  running the same individual. It also refuses an older state going on as the same individual: that is a fork, or the
+  owner's explicit rollback, `claim(brain, rollback=True)`, which is recorded. Call `record(brain)` after each save and
+  `release(brain)` at exit.
+- **The state file is schema 3.** A file saved by 0.52 or earlier loads and continues exactly as before. It is given
+  an id that is the same every time that file is loaded, with its birth unknown and no parent.
+
+
 ## 0.52.0.dev1 -- the brain acts even when nothing around it changes (2026-11-27)
 
 - **It no longer goes still in a world that stands still.** A sense adapts to what never changes, as an eye does to an

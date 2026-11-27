@@ -10,8 +10,8 @@ model) as its senses, and any body (a simulated humanoid robot, a game) as its i
 ## Install
 
 ```bash
-uv add "ubrain==0.52.0.dev1"
-# or with pip:  pip install "ubrain==0.52.0.dev1"      (or: pip install --pre ubrain)
+uv add "ubrain==0.53.0.dev1"
+# or with pip:  pip install "ubrain==0.53.0.dev1"      (or: pip install --pre ubrain)
 ```
 
 Compiled wheels for Windows, macOS and Linux, Python 3.11-3.13; numpy is the only dependency.
@@ -113,7 +113,7 @@ one thing changed), and a check -- its last line is `CHECK PASS` or `CHECK FAIL`
 "The body" is the robot, set up once from this repository: `cd bodies/mujoco && uv sync` (MuJoCo, the
 G1, a photo gallery). The robot examples take `--viewer` to watch in real time. The wheels are also in
 this repository's `wheels/` folder, for a machine without PyPI access
-(`pip install ubrain==0.52.0.dev1 --find-links /path/to/ubrain/wheels`).
+(`pip install ubrain==0.53.0.dev1 --find-links /path/to/ubrain/wheels`).
 
 ## The manual
 
@@ -135,7 +135,7 @@ you run it what the brain will do with your model's codes: a certificate (`ubrai
 
 ## Status and licence
 
-Pre-release (0.52.0.dev1). The API may still change between versions; the [changelog](CHANGELOG.md)
+Pre-release (0.53.0.dev1). The API may still change between versions; the [changelog](CHANGELOG.md)
 says what changed and how to use it.
 
 Copyright 2026 Hong Jeong. The examples, documentation and profiles are under the Apache License 2.0

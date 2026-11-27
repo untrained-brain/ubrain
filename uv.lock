@@ -1422,25 +1422,25 @@ wheels = [
 
 [[package]]
 name = "ubrain"
-version = "0.52.0.dev1"
+version = "0.53.0.dev1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
     { name = "numpy", version = "2.5.5", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/65/ad/c9ef0634f0623c543be3fab71db1f1de68b3ef8636ddc01aee300b59ac95/ubrain-0.52.0.dev1-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:83e534071d19ea6028060276d0cae132894c807ae260bd642540bc35d33c3cab", size = 3316535, upload_time = "2026-11-26T21:25:36.874Z" },
-    { url = "https://files.pythonhosted.org/packages/eb/76/7e61409ff0bbadfa233a77b8ec08b9868337c98519d5024fd6be74d5094d/ubrain-0.52.0.dev1-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:bd711bf1c0f332809b224426aafab3f0035deee95352c4322502ed12d109f5fc", size = 3232251, upload_time = "2026-11-26T21:25:39.15Z" },
-    { url = "https://files.pythonhosted.org/packages/5c/2d/ef4fc39b01e309966f4dc41a33d0eec7b81aa731b4844529e9b91804d452/ubrain-0.52.0.dev1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:6222b77e44fefab236ccafc60ca74041ac6ba0b1a22f1737cd8e1c56c6046757", size = 21787590, upload_time = "2026-11-26T21:25:44.801Z" },
-    { url = "https://files.pythonhosted.org/packages/c0/fb/107b9dc5abbe5fabbffca4371644665fec507b9c09339af233287dc1e422/ubrain-0.52.0.dev1-cp311-cp311-win_amd64.whl", hash = "sha256:ea80528b914bfd6233678d0e3401d8fd21422b2fea75a2ffb465a9297057182a", size = 2838433, upload_time = "2026-11-26T21:25:48.21Z" },
-    { url = "https://files.pythonhosted.org/packages/50/6a/f43e5a0d52400026f1ce65415fef2f663002ba7111947c2edf075504df5d/ubrain-0.52.0.dev1-cp312-cp312-macosx_10_13_x86_64.whl", hash = "sha256:1e2ab941633f4dcfb5ad8a871c8c47959d3c6ed7bcaf0b639c68e4726eaa49c5", size = 3341967, upload_time = "2026-11-26T21:25:50.79Z" },
-    { url = "https://files.pythonhosted.org/packages/f1/53/a61b9250795500b99a14664515c95fb8c95f95e2491880a1c96b51aee567/ubrain-0.52.0.dev1-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:5c68d9b2bee7b2c2fe8a11f24214143011ca8168406f2a58be28aa7437b324ee", size = 3272183, upload_time = "2026-11-26T21:25:53.171Z" },
-    { url = "https://files.pythonhosted.org/packages/b4/b9/251b3149528168d1ddb556bfb9ddd4769bab9838eed52d181a110787f734/ubrain-0.52.0.dev1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:47453adedbbf10c76b146000be34b3f43638f4bd56dc446235e964ff3eb385f5", size = 21999028, upload_time = "2026-11-26T21:26:01.69Z" },
-    { url = "https://files.pythonhosted.org/packages/2c/9f/12138451130e2a0558cf0f5abdc4092daa7fe4f69a71042fccf34d41fc9a/ubrain-0.52.0.dev1-cp312-cp312-win_amd64.whl", hash = "sha256:bbb3650157d98bae64131e2f19b5b3f05b63d32533c6638a1795b00c0ce63dfc", size = 2739191, upload_time = "2026-11-26T21:26:05.007Z" },
-    { url = "https://files.pythonhosted.org/packages/91/9d/0a515223901b10058bafbcf998ffe5ead4734e0419350015c83123e49d2b/ubrain-0.52.0.dev1-cp313-cp313-macosx_10_13_x86_64.whl", hash = "sha256:c26b74f61328283df549c4afb3b1813f47f58890524397891fb4b825f7debdf2", size = 3311879, upload_time = "2026-11-26T21:26:07.605Z" },
-    { url = "https://files.pythonhosted.org/packages/8b/91/e0f553ace84e901bccb7a1f2dabdd79709d44ef5cb2df6dcb6033e7c87c2/ubrain-0.52.0.dev1-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:8752a7a853e6a25f7de5dcba2b463f50663796a41711ecd8e2c0c7af8ecd2d32", size = 3234460, upload_time = "2026-11-26T21:26:10.044Z" },
-    { url = "https://files.pythonhosted.org/packages/4a/7a/c03ed703e2f44b97e4ff804b83e8ac980c86d310916889461b80f9d0c684/ubrain-0.52.0.dev1-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:665cb6dcf52e2bacf1c0fe767d64a88a28ddf8b195bd301b3d5fc65bf50bdd5e", size = 21686027, upload_time = "2026-11-26T21:26:18.742Z" },
-    { url = "https://files.pythonhosted.org/packages/82/c3/6e0c49af148f5c58602dcf3e975287f9ad9ed8e1c4ee454c72c12418ac89/ubrain-0.52.0.dev1-cp313-cp313-win_amd64.whl", hash = "sha256:bb253edb7f6a8102d9bdd633fd55407343706a5aeec70a8f94f3bc6f875f9614", size = 2704357, upload_time = "2026-11-26T21:26:21.628Z" },
+    { url = "https://files.pythonhosted.org/packages/ce/a6/4fd634e7f9c870f484f672ef67636063d16e38340b59e1402f9196d2105a/ubrain-0.53.0.dev1-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:65f395a4c6199c885198a37a7e46e22f426926c7611ba2a54677a6902b79252c", size = 3370301, upload_time = "2026-11-27T09:04:39.246Z" },
+    { url = "https://files.pythonhosted.org/packages/ef/78/9302ade80ba1c7ef114a8fb6013d50bca0924d187f01d2d5b855dd91d087/ubrain-0.53.0.dev1-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:69e7764d02506c82cb891ec920dae93eef5f39927e2a10acd92fab812433600d", size = 3283040, upload_time = "2026-11-27T09:04:41.059Z" },
+    { url = "https://files.pythonhosted.org/packages/b6/79/0854b459cd64205b6cf0674fa7f6233ee510046c9f88d7fdc1942b91d2cc/ubrain-0.53.0.dev1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:23eea6db67b74aba473582d7eb06cf94047f1d4f3ed4f6d59eaa02701b291028", size = 22117057, upload_time = "2026-11-27T09:04:46.798Z" },
+    { url = "https://files.pythonhosted.org/packages/74/b4/623d950df1bc3c28de681c0efca8656ed19b821b99039d87c7b02016397c/ubrain-0.53.0.dev1-cp311-cp311-win_amd64.whl", hash = "sha256:db29374155fc7269feddc2ff80366fb9bcd6f32a52c9ac287b808d27540e1e2e", size = 2884827, upload_time = "2026-11-27T09:04:49.748Z" },
+    { url = "https://files.pythonhosted.org/packages/99/0d/ebba6f266f64454e41fc20d87fac8ceaf1049f7ac731a8fed090d6384c84/ubrain-0.53.0.dev1-cp312-cp312-macosx_10_13_x86_64.whl", hash = "sha256:a269b82b3ece2759ac2b71d3c0810aae94cbab46fb8434aa5624fdd1c580daab", size = 3397114, upload_time = "2026-11-27T09:04:51.972Z" },
+    { url = "https://files.pythonhosted.org/packages/79/76/740fa7407ddc078fde8b6207865569eb2b34dec4856f0469c43fd991d869/ubrain-0.53.0.dev1-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:958ac1f38b3d5628c58d223914e7ba80c4c2d8716511a90233532a07c1b43651", size = 3325638, upload_time = "2026-11-27T09:04:54.188Z" },
+    { url = "https://files.pythonhosted.org/packages/d6/b8/dd82b3db0573ea61266ba8f4a74683ddafb68a085913ec990f80bf51093e/ubrain-0.53.0.dev1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:30e313bc912acb02f6ce7f9dffec33728c91a328dcbbfed55ae85deb3ed39ab0", size = 22347259, upload_time = "2026-11-27T09:05:00.741Z" },
+    { url = "https://files.pythonhosted.org/packages/20/0c/5df6c1d02b61bf8d010fa4804c482271875659af6ea7bb809fb6fb51e757/ubrain-0.53.0.dev1-cp312-cp312-win_amd64.whl", hash = "sha256:be0a3f230fa5c90b0bae7b28cc8efa0f4751a01180fad7cab9b43e583f8094d6", size = 2784251, upload_time = "2026-11-27T09:05:03.462Z" },
+    { url = "https://files.pythonhosted.org/packages/ca/f2/5a3b778620be1c2b521b47f413cd080dbfc995356e1410fc51f2ad87cb14/ubrain-0.53.0.dev1-cp313-cp313-macosx_10_13_x86_64.whl", hash = "sha256:5f41e0f02faac9719874cb2a5f45930d9d2809f7e076bda4902ea9c484943a1b", size = 3366640, upload_time = "2026-11-27T09:05:05.786Z" },
+    { url = "https://files.pythonhosted.org/packages/18/7d/1f2992450092a9ceb6383559fb4842a5e034496880e4b67e7a5cdbdf7603/ubrain-0.53.0.dev1-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:ad199104e8dd0c628b1b20161a089e9946906cebd250638cc23ffa3b529873b8", size = 3287430, upload_time = "2026-11-27T09:05:08.243Z" },
+    { url = "https://files.pythonhosted.org/packages/bc/cb/1e75b46ff04fec92555b9ef20714ecb7b6aa8dfe918977c0f42eb0b04821/ubrain-0.53.0.dev1-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:80e92ed63c0ee3ba57dbd89fb557c09587df04fd07bb46aaf81d33916afaab5a", size = 22030739, upload_time = "2026-11-27T09:05:16.946Z" },
+    { url = "https://files.pythonhosted.org/packages/97/ae/f8b30f044957c7f9c7b6175947184e986d06132ac9bf68d157b201ae2285/ubrain-0.53.0.dev1-cp313-cp313-win_amd64.whl", hash = "sha256:afcc738d935a7f18cceec77fc3baf4f05a427824db3dce4c6eac1471cecd4022", size = 2749382, upload_time = "2026-11-27T09:05:19.913Z" },
 ]
 
 [package.optional-dependencies]
@@ -1478,9 +1478,9 @@ vision = [
 
 [package.metadata]
 requires-dist = [
-    { name = "ubrain", specifier = "==0.52.0.dev1" },
-    { name = "ubrain", extras = ["plot"], marker = "extra == 'plot'", specifier = "==0.52.0.dev1" },
-    { name = "ubrain", extras = ["video"], marker = "extra == 'video'", specifier = "==0.52.0.dev1" },
-    { name = "ubrain", extras = ["vision"], marker = "extra == 'vision'", specifier = "==0.52.0.dev1" },
+    { name = "ubrain", specifier = "==0.53.0.dev1" },
+    { name = "ubrain", extras = ["plot"], marker = "extra == 'plot'", specifier = "==0.53.0.dev1" },
+    { name = "ubrain", extras = ["video"], marker = "extra == 'video'", specifier = "==0.53.0.dev1" },
+    { name = "ubrain", extras = ["vision"], marker = "extra == 'vision'", specifier = "==0.53.0.dev1" },
 ]
 provides-extras = ["vision", "video", "plot"]
