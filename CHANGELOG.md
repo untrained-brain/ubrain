@@ -5,6 +5,26 @@ says what you can do that you could not before, and how. Install a version by na
 `uv add "ubrain==0.51.0.dev1"` (or `pip install --pre ubrain`).
 
 
+## 0.56.0.dev1 -- a brain can grow a new sense while it lives (2026-11-28)
+
+- **`brain.attach("sense", ...)` now works on a living brain.** Every whole brain is built with all the sense routes
+  its size allows (4 for `small`, 8 for `standard` and `large`), the unused ones closed. A sense attached later takes
+  the next free route: nothing is rebuilt, and nothing the brain has learned is lost. The new sense starts its own
+  early period then, as a newborn's would.
+- **While the new sense is silent, the brain perceives exactly what it did before,** and keeps everything it learned
+  (its later spontaneous acts differ, since the new sense took one draw from its generator). When the new sense speaks,
+  it is part of what the brain perceives, and the brain's old memories are cued a little less sharply while it does:
+  a familiar situation's code then matches the old one at about 0.71 if the brain had one sense before, about 0.81
+  with two, about 0.84 with three.
+- **One way of combining senses, whatever their number.** What the brain perceives is the sum of the senses that are
+  speaking this tick. Each sense's own mapping onto the brain's sphere keeps the senses apart.
+- **Fixed: a brain with several senses of its own fed its memories an out-of-date list of known things** while those
+  senses were still settling, and after a save and load it could continue slightly differently. Both are fixed.
+- **Saved whole brains from 0.55 or earlier cannot continue under 0.56** (their perception was formed another way).
+  Loading one raises an error that says so; start a fresh `Brain()` with the same identity
+  (`Brain(identity=...)`) and regrow it from your own record of its life. Circuits built from a profile load as before.
+
+
 ## 0.55.0.dev1 -- memory acts whenever it is sure, in any mode (2026-11-27)
 
 - **Memory is no longer barred when the brain is in its default mode.** Since 0.33 the whole brain's episodic memory
