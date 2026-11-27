@@ -9,6 +9,6 @@ plugs into trained AI models as senses and into bodies as its interface.
 - The examples (`examples/`) -- short, meant to be copied, all on the whole brain; each ends
   with its check
 
-This manual is for ubrain 0.54.0.dev1: the whole brain, `Brain()`, with seventeen regions, and the
+This manual is for ubrain 0.55.0.dev1: the whole brain, `Brain()`, with seventeen regions, and the
 MuJoCo G1 as its body. How the engine behind it is built is the subject of *The
 Untrained Brain Series*, Volume 2: *Building the Brain Engine*.

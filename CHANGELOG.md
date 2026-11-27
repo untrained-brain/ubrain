@@ -5,6 +5,21 @@ says what you can do that you could not before, and how. Install a version by na
 `uv add "ubrain==0.51.0.dev1"` (or `pip install --pre ubrain`).
 
 
+## 0.55.0.dev1 -- memory acts whenever it is sure, in any mode (2026-11-27)
+
+- **Memory is no longer barred when the brain is in its default mode.** Since 0.33 the whole brain's episodic memory
+  acted only on executive ticks. On the other ticks, about one in fourteen in a task where something is always asked,
+  habit decided instead, and habit is a little less reliable than a sure memory. Now memory acts whenever its votes
+  clear the hand-over's criterion, whatever the mode. The brain earns slightly more in every phase of the organ check:
+  1.000 / 0.870 / 1.000 (while the rules hold / just after they change / later), against 0.996 / 0.866 / 0.997.
+- **What it changes in the organ report:** the forward model and the mode controller no longer cost reward when
+  active ("no change" instead of "miscalibrated"). The salience gate, whose benefit came only through that bar, also
+  reads "no change". None of the three has a job that pays in that task yet. The modes still decide when the brain
+  consolidates and plans.
+- **Saved brains:** a whole brain saved by 0.54 or earlier has the bar lifted when it loads. Its state is unchanged;
+  from then on memory acts whenever it is sure.
+
+
 ## 0.54.0.dev1 -- an unchanging world no longer blinds a sense for life (2026-11-27)
 
 - **A sense's early period now ends on experience, not on time.** Each sense spends its first inputs learning what
