@@ -92,7 +92,8 @@ brain.attach("sense", "vision", codec=CLIP("image"))
 out = brain.tick({"sense.vision": frame})    # an (h, w, 3) uint8 image
 ```
 
-`examples/08_g1_vision.py` sees through the robot's head camera this way.
+The robot's head camera attaches this way too (`G1(hello, camera=CLIP("image"))`). (The example that
+asked what the brain calls new, 08_g1_vision, is retired in 0.58 with the salience gate; it returns with it.)
 
 ## 4. Connect the robot
 

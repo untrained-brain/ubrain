@@ -7,12 +7,12 @@ name = "ubrain-labs"
 version = "0.13.0"
 description = "Examples, labs and manual for ubrain, the Untrained Brain"
 requires-python = ">=3.11,<3.14"           # the versions ubrain is compiled for
-dependencies = ["ubrain==0.57.0.dev1"]
+dependencies = ["ubrain==0.58.0.dev1"]
 
 [project.optional-dependencies]
-vision = ["ubrain[vision]==0.57.0.dev1"]     # CLIP as a sense (torch, transformers)
-video = ["ubrain[video]==0.57.0.dev1"]       # MP4 recording of your own runs
-plot = ["ubrain[plot]==0.57.0.dev1"]         # plots of your own runs
+vision = ["ubrain[vision]==0.58.0.dev1"]     # CLIP as a sense (torch, transformers)
+video = ["ubrain[video]==0.58.0.dev1"]       # MP4 recording of your own runs
+plot = ["ubrain[plot]==0.58.0.dev1"]         # plots of your own runs
 
 [tool.uv]
 package = false

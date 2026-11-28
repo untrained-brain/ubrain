@@ -5,6 +5,54 @@ says what you can do that you could not before, and how. Install a version by na
 `uv add "ubrain==0.51.0.dev1"` (or `pip install --pre ubrain`).
 
 
+## 0.58.0.dev1 -- the whole brain rebuilt from the ground, and an amygdala (2026-11-28)
+
+**The whole brain now holds only organs that pass every test in the whole.** Each organ was tested by its own
+published paradigm, with the organ muted against intact. Seven organs of 0.57 kept their own laws but never reached an
+act: the salience gate, the prefrontal buffer, the forward model, the mode controller, the episode store,
+acetylcholine and the hippocampal replay trace. They are taken out of `Brain()`, together with the senses' binding,
+which nothing read. Each comes back one at a time, once something that chooses reads it and its paradigm shows the
+difference.
+
+- **Nothing you see changes.** The rebuilt brain acts exactly as the 0.57 brain did, act for act. This was checked
+  on two sizes and three seeds, with nights and reversals, with and without the amygdala.
+- **What is in it:** the thalamic relay, memory that acts (episodic control) and its hand-over, the striatum's values
+  and Go race, noradrenaline and the supervisor that ejects a context, the motor end, and the cortex's long-term
+  store that the night fills.
+- **Saved brains load onto the new anatomy.** A whole brain saved by 0.57 or earlier loads with the dropped regions
+  removed. Everything the rest learned is kept exactly. `brain.lineage[-1]["stripped"]` names what was dropped. Its
+  random choices from then on are new draws, so its acts are statistically the same, not identical.
+- **Retired with their organs.** Attaching any of these is refused with the reason:
+  - the `state` stream (it was the mode controller's);
+  - the `acetylcholine` modulator.
+
+  Also removed:
+  - the `memory`, `mode` and `recollection` outputs;
+  - the cue ports that recalled the episode, the buffer and the cortex.
+- **Observables:** `describe()["observables"][k]["carried"]` says whether this brain carries an observable. `novel`,
+  `surprise` and `held` are not carried in 0.58, so `read` gives their absent value.
+- **Sleep pressure** now measures episodic control's day: the outcomes it has stored since the last night, over its
+  own horizon. A night empties it into the long-term store, as before. No night is forced.
+- **Each region of the whole brain draws from its own random generator,** keyed by the brain's birth and the region's
+  name. It covers both the region's structure at birth and its choices. A region is the same whatever else the anatomy
+  holds, and muting one changes only what that region does. Before, one shared generator made a lesion move the acts
+  of regions it never touched. Circuits built from a profile keep one generator, as before.
+- **The 0.57 anatomy is kept as the `route` profile,** for research: `Brain(profile("route"), manifest)`.
+
+**An amygdala: what matters is remembered longer.**
+
+- **To use it:** call `brain.attach("modulator", "intensity")`, then pass `"modulator.intensity": x` (0 to 1) with
+  each reward. It says how intense the outcome was: a shock or a feast is 1, an ordinary outcome near 0.
+- **What it does:** the amygdala learns how intense each situation's outcomes are. It strengthens the memory the
+  brain acts on, as that memory is written, in proportion. Important situations' choices are kept longer; neutral ones
+  are crowded out a little, as in people.
+- **Measured in the research engine and on the whole brain:**
+  - With the amygdala muted, important situations' later accuracy falls, by 0.046 at 100 trials of delay in the
+    whole brain (about 4 standard errors).
+  - Neutral situations pay a little at short delays.
+  - All four of its laws held in the research engine.
+- **Without the stream there is no amygdala.**
+
 ## 0.57.0.dev1 -- the striatum can prepare its next act from a prediction (2026-11-28)
 
 - **New input `basal_ganglia.striatum.predicted`, off by default.** Wire it to a prediction of the present situation
@@ -18,8 +66,8 @@ says what you can do that you could not before, and how. Install a version by na
 - **Nothing changes unless you wire it.** `Brain()` does not wire it yet. In the whole brain on a random world the
   forward model's prediction is noise, and the striatum would read it as a confident one. Switching it on waits for a
   measure of how much a prediction should count.
-- The race rule is the research engine's `prep/race.py`, promoted unchanged and certified by PREP-CHO-01 to
-  PREP-ERR-01.
+- The race rule is promoted unchanged from the research engine, certified there by its seven laws of the prepared
+  race.
 
 
 ## 0.56.0.dev1 -- a brain can grow a new sense while it lives (2026-11-28)

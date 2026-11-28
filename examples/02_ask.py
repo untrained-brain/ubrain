@@ -6,7 +6,7 @@
 What it shows  a brain answers questions about itself, before and after it runs, and reading changes
                nothing:
                  describe()   its port classes, the observables read() serves, its guarantees
-                 read(name)   an observable as the last tick left it (value, novel, source, ...)
+                 read(name)   an observable as the last tick left it (value, prediction_error, source, ...)
                  datasheet()  its capacities, from the laws that certified its regions
                  health()     what it holds, against those laws
 The question   which datasheet rows does a larger variant change? (A variant sizes regions, never
@@ -35,7 +35,10 @@ def main(argv=None) -> int:
     before = brain.describe()
     print(f"implementation {before['implementation']}; interface {before['interface']}")
     print("port classes built:", ", ".join(before["classes"]))
-    print("observables read() serves:", ", ".join(before["observables"]))
+    carried = [k for k, o in before["observables"].items() if o.get("carried", True)]
+    print("observables read() serves:", ", ".join(carried))
+    print("not carried by this brain (read() gives their absent value):",
+          ", ".join(k for k in before["observables"] if k not in carried) or "none")
     rng = np.random.default_rng(0)
     right, r = rng.integers(4, size=4), None
     for _ in range(300):
@@ -43,7 +46,7 @@ def main(argv=None) -> int:
         act = brain.tick({"sense.vision": p, "reward": r})["action"]
         r = float(act == right[p]) if act is not None else 0.0
     print("after 300 ticks, read():")
-    for name in before["observables"]:
+    for name in carried:
         v = brain.read(name)
         print(f"  {name:18s} {v if not isinstance(v, np.ndarray) else f'array {v.shape}'}")
     print(f"the datasheet, variant {a.variant!r}:")

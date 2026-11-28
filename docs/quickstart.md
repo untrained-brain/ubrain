@@ -47,7 +47,6 @@ uv run examples/04_g1_brace.py     # a tone warns of a push; the cerebellum lear
 uv run examples/05_g1_choose.py    # a picture says which way to turn; it learns to (twin: unrelated pictures)
 uv run examples/06_g1_keep.py      # train, save, demonstrate the loaded brain (twin: a fresh brain)
 uv run examples/07_g1_lead.py      # how long a warning can it use? (a prediction that failed)
-uv run --extra vision examples/08_g1_vision.py   # the head camera through CLIP: what is new
 ```
 
 Add `--viewer` to watch in real time. The whole brain takes the robot through four streams,

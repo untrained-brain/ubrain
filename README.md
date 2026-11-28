@@ -10,8 +10,8 @@ model) as its senses, and any body (a simulated humanoid robot, a game) as its i
 ## Install
 
 ```bash
-uv add "ubrain==0.57.0.dev1"
-# or with pip:  pip install "ubrain==0.57.0.dev1"      (or: pip install --pre ubrain)
+uv add "ubrain==0.58.0.dev1"
+# or with pip:  pip install "ubrain==0.58.0.dev1"      (or: pip install --pre ubrain)
 ```
 
 Compiled wheels for Windows, macOS and Linux, Python 3.11-3.13; numpy is the only dependency.
@@ -55,9 +55,10 @@ brain.save("my_brain.ubrain")
 same = Brain.load("my_brain.ubrain", codecs={"sense.vision": GaussianCodes(dim=64, seed=1)})
 ```
 
-**Ask it.** `brain.read("value")`, `brain.read("surprise")`, `brain.read("novel")` and the other
-observables say what it values, what surprised it and what it found new; `brain.describe()` lists its
-parts; `brain.health()` checks it against its own laws.
+**Ask it.** `brain.read("value")`, `brain.read("prediction_error")`, `brain.read("source")` and the other
+observables say what it values, how its last outcome differed from what it expected, and which system chose;
+`brain.describe()` lists its parts and which observables it carries (0.58: `novel`, `surprise` and `held` return
+with their organs); `brain.health()` checks it against its own laws.
 
 **Look inside.** `ubrain.debug` explains a decision and checks the state, without changing the brain:
 
@@ -108,12 +109,11 @@ one thing changed), and a check -- its last line is `CHECK PASS` or `CHECK FAIL`
 | `05_g1_choose.py` | does it learn which way to turn from a picture? | the body |
 | `06_g1_keep.py` | trained, saved and loaded: does the demo brain stay up where a fresh one falls? | the body |
 | `07_g1_lead.py` | how long a warning can the cerebellum use? | the body |
-| `08_g1_vision.py` | what does the brain call new, seeing through the head camera with CLIP? | the body, `--extra vision` |
 
 "The body" is the robot, set up once from this repository: `cd bodies/mujoco && uv sync` (MuJoCo, the
 G1, a photo gallery). The robot examples take `--viewer` to watch in real time. The wheels are also in
 this repository's `wheels/` folder, for a machine without PyPI access
-(`pip install ubrain==0.57.0.dev1 --find-links /path/to/ubrain/wheels`).
+(`pip install ubrain==0.58.0.dev1 --find-links /path/to/ubrain/wheels`).
 
 ## The manual
 
@@ -135,7 +135,7 @@ you run it what the brain will do with your model's codes: a certificate (`ubrai
 
 ## Status and licence
 
-Pre-release (0.57.0.dev1). The API may still change between versions; the [changelog](CHANGELOG.md)
+Pre-release (0.58.0.dev1). The API may still change between versions; the [changelog](CHANGELOG.md)
 says what changed and how to use it.
 
 Copyright 2026 Hong Jeong. The examples, documentation and profiles are under the Apache License 2.0

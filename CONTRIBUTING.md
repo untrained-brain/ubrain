@@ -6,7 +6,7 @@ itself is distributed compiled; its source is not part of this repository.
 
 ```
 examples/   00_check_setup, 01_whole_brain, 02_ask, 03_keep, 04_g1_brace, 05_g1_choose,
-            06_g1_keep, 07_g1_lead, 08_g1_vision -- all on the whole brain, Brain(); each ends
+            06_g1_keep, 07_g1_lead -- all on the whole brain, Brain(); each ends
             with CHECK PASS or CHECK FAIL
 docs/       quickstart, using, concepts
 wheels/     the compiled ubrain package: Windows x64, macOS (Apple Silicon and Intel),

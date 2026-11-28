@@ -41,7 +41,19 @@ laws behind both are in the series' first volume.
 ## Regions
 
 A region is a piece of the brain with typed inputs and outputs and its own way of
-learning. ubrain serves these today:
+learning. ubrain serves these today, each certified on its own law and usable in a circuit (a wiring profile).
+
+The whole brain, `Brain()`, holds only the regions that pass every test in the whole: each changes what the brain
+does, shown by muting it in its own published paradigm. Since 0.58 they are:
+- the thalamic relay;
+- episodic control and the hand-over;
+- the striatum;
+- noradrenaline and the supervisor;
+- the motor end;
+- the cortex's long-term store;
+- the amygdala, when its stream is attached.
+
+The others come back into the whole one at a time, as something that chooses reads them.
 
 | region | what it does | learns by |
 |---|---|---|
