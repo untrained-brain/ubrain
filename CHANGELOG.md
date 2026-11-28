@@ -5,6 +5,23 @@ says what you can do that you could not before, and how. Install a version by na
 `uv add "ubrain==0.51.0.dev1"` (or `pip install --pre ubrain`).
 
 
+## 0.57.0.dev1 -- the striatum can prepare its next act from a prediction (2026-11-28)
+
+- **New input `basal_ganglia.striatum.predicted`, off by default.** Wire it to a prediction of the present situation
+  (in the whole brain, `cerebellum.forward.prediction`) and the striatum's Go race gets start levels: an act the
+  brain values on the predicted situation starts nearer its threshold. It wins more often and is released sooner. With
+  no prediction, or nothing valued on it, the race is the Go race as before. It needs a situation code and
+  `release = "race"`, and it raises an error otherwise.
+- **New output `basal_ganglia.striatum.rt`: the race's reaction time** when `predicted` is wired (in the race's own
+  time units), `None` otherwise. A task can now reward speed.
+- **`ubrain.regions.prepared(striatum, prediction)`** gives the start levels the striatum would use.
+- **Nothing changes unless you wire it.** `Brain()` does not wire it yet. In the whole brain on a random world the
+  forward model's prediction is noise, and the striatum would read it as a confident one. Switching it on waits for a
+  measure of how much a prediction should count.
+- The race rule is the research engine's `prep/race.py`, promoted unchanged and certified by PREP-CHO-01 to
+  PREP-ERR-01.
+
+
 ## 0.56.0.dev1 -- a brain can grow a new sense while it lives (2026-11-28)
 
 - **`brain.attach("sense", ...)` now works on a living brain.** Every whole brain is built with all the sense routes
